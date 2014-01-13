@@ -1,0 +1,74 @@
+﻿<legend>Alunos</legend>
+<br/>
+
+<div class="row">
+  <div class="col-lg-5">
+    <div class="input-group">
+      <input type="text" id="txtPesquisa" class="form-control" maxlength="100">
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Por Nome <span class="caret"></span></button>
+        <ul class="dropdown-menu pull-right">
+          <li><a onclick="find('name');">Por Nome</a></li>
+          <li><a onclick="find('cpf');">Por CPF</a></li>
+          <li><a onclick="find('registration');">Por Matrícula</a></li>
+          <li><a onclick="find('limpar');">Limpar Pesquisa</a></li>
+        </ul>
+      </div><!-- /btn-group -->
+    </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+<button class="btn btn-primary btn-large" data-toggle="modal" href="#full-width">Incluir Aluno</button>
+</div><!-- /.row -->
+
+
+<br/>
+
+<div class="row">
+    <div id="divStudents" class="col-md12">
+        <table id="tbStudents" class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Matricula</th>
+                    <th>CPF</th>
+                    <th>Data Inclusão</th>
+                    <th>Ativo</th>
+                 </tr>
+             </thead>            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+    <div id="full-width" class="modal container hide fade" tabindex="-1">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Full Width</h3>
+  </div>
+  <div class="modal-body">
+    <p>This modal will resize itself to the same dimensions as the container class.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sollicitudin ipsum ac ante fermentum suscipit. In ac augue non purus accumsan lobortis id sed nibh. Nunc egestas hendrerit ipsum, et porttitor augue volutpat non. Aliquam erat volutpat. Vestibulum scelerisque lobortis pulvinar. Aenean hendrerit risus neque, eget tincidunt leo. Vestibulum est tortor, commodo nec cursus nec, vestibulum vel nibh. Morbi elit magna, ornare placerat euismod semper, dignissim vel odio. Phasellus elementum quam eu ipsum euismod pretium.</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" data-dismiss="modal" class="btn">Close</button>
+    <button type="button" class="btn btn-primary">Save changes</button>
+  </div>
+</div>
+
+<script>
+    function find(por) {
+        
+        var pesquisa = $('#txtPesquisa').val();
+
+
+        if (por == 'limpar')
+            window.location = '#students';
+
+        if (pesquisa.length == 0)
+            return;
+
+        window.location = '#students/' + por + '/' + $('#txtPesquisa').val();
+    }
+
+</script>
