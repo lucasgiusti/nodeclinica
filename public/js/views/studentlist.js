@@ -5,6 +5,7 @@
     },
 
     render: function () {
+
         var students = this.model.models;
         var len = students.length;
         var startPos = (this.options.page - 1) * 8;
@@ -28,7 +29,7 @@
                 html += '<td>' + jsonObject._id + '</td>';
                 html += '<td><a href="#students/' + jsonObject._id + '">' + jsonObject.name + '</td>';
                 //html += '<td><a data-toggle="modal" href="#full-width">' + jsonObject.name + '</td>';
-                
+
                 html += '<td>' + jsonObject.registration + '</td>';
 
                 if (jsonObject.cpf != null)

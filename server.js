@@ -6,37 +6,56 @@ var application_root = __dirname,
     http = require('http'),
     mongoose = require('mongoose'),
     app = express(),
+    passport = require('passport'),
+    LocalStrategy = require('passport-local').Strategy,
     iz = require('iz'),
     ObjectID = require('mongodb').ObjectID;
+    passportLocalMongoose = require('passport-local-mongoose');
 
 
 //************************************************************
-
-
-
-
-//************************************************************
-
-//LOCAL
-//testando branch inclusao de aluno 2
-
-mongoose.connect('mongodb://localhost:27017/MongoLab-x');
-//************************************************************
-
 
 
 
 
 //************************************************************
 // Config
-app.configure(function () {
-    app.set('port', process.env.PORT || 3000);
-    app.use(express.logger('dev'));  /* 'default', 'short', 'tiny', 'dev' */
-    app.use(express.bodyParser()),
-    app.use(express.static(path.join(__dirname, 'public')));
-});
+    app.configure(function () {
+        app.set('port', process.env.PORT || 3000);
+        app.use(express.logger('dev'));  /* 'default', 'short', 'tiny', 'dev' */
+        app.use(express.bodyParser());
+        app.use(express.static(path.join(__dirname, 'public')));
+        app.use(express.cookieParser('your secret here'));
+        app.use(express.session());
+
+
+        app.use(function (req, res, next) {
+            if (req.method == 'POST' && req.url == '/login') {
+
+                if (req.body.rememberme) {
+                    var hour = 3600000;
+                    req.session.cookie.maxAge = 7 * 24 * hour; //1 week
+                } else {
+                    req.session.cookie.expires = false;
+                }
+            }
+            next();
+        });
+
+
+
+        app.use(passport.initialize());
+        app.use(passport.session());
+    });
 //************************************************************
 
+
+
+
+//************************************************************
+var connectionString = require('./models/conn');
+mongoose.connect(connectionString);
+//************************************************************
 
 
 
@@ -77,7 +96,44 @@ var Patient = new Schema({
 //************************************************************
 
 
+User.plugin(passportLocalMongoose);
 
+
+
+var UserModel = mongoose.model('users', User);
+var PatientModel = mongoose.model('patients', Patient);
+
+
+
+
+//************************************************************
+// AUTHENTICATION
+
+passport.use(new LocalStrategy(UserModel.authenticate()));
+passport.serializeUser(UserModel.serializeUser());
+passport.deserializeUser(UserModel.deserializeUser());
+
+
+var auth = function (req, res, next) {
+    if (!req.isAuthenticated())
+        res.send('401', { status: 401, error: 'Acesso Negado' });
+    else
+        next();
+};
+
+// List students by CPF
+app.get('/loggedtest', auth, function (req, res) {
+    res.send(200);
+});
+
+
+app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/signin.html?return=false' }));
+
+app.get('/logout', function (req, res) {
+    req.logout();
+    res.redirect('/signin.html');
+});
+//************************************************************
 
 
 
@@ -93,7 +149,7 @@ function putUser(res, user, id) {
     }
 
     var objectID = new ObjectID(id);
-    UserModel.findOne({ 'registration': user.registration, 'type': user.type, '_id': { $nin: [objectID] } }, function (err, u) {
+    UserModel.findOne({ 'registration': user.registration, 'type': user.type, '_id': { $nin: [objectID]} }, function (err, u) {
         if (!err) {
             if (u) {
                 console.log('Error updating user: a matricula ou registro ja existe');
@@ -105,7 +161,7 @@ function putUser(res, user, id) {
                     res.send('500', { status: 500, error: 'CPF invalido' });
                 }
 
-                UserModel.findOne({ 'cpf': user.cpf, 'type': user.type, '_id': { $nin: [objectID] } }, function (err, u) {
+                UserModel.findOne({ 'cpf': user.cpf, 'type': user.type, '_id': { $nin: [objectID]} }, function (err, u) {
                     if (!err) {
                         if (u) {
                             console.log('Error updating user: o CPF ja existe');
@@ -232,9 +288,9 @@ function putUser(res, user, id) {
 //}, 'my error type');
 
 
-var UserModel = mongoose.model('users', User);
-var PatientModel = mongoose.model('patients', Patient);
+
 //************************************************************
+
 
 
 
@@ -242,7 +298,7 @@ var PatientModel = mongoose.model('patients', Patient);
 // GET to READ STUDENTS
 
 // List students
-app.get('/students', function (req, res) {
+app.get('/students', auth, function (req, res) {
     var type = 'ALUNO';
     return UserModel.find({ 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
         if (!err) {
@@ -254,7 +310,7 @@ app.get('/students', function (req, res) {
 });
 
 // List students by Name
-app.get('/students/name/:name', function (req, res) {
+app.get('/students/name/:name', auth, function (req, res) {
     var name = req.params.name;
     var type = 'ALUNO';
     return UserModel.find({ 'name': { '$regex': name, $options: 'i' }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
@@ -267,7 +323,7 @@ app.get('/students/name/:name', function (req, res) {
 });
 
 // List students by CPF
-app.get('/students/cpf/:cpf', function (req, res) {
+app.get('/students/cpf/:cpf', auth, function (req, res) {
     var cpf = req.params.cpf;
     var type = 'ALUNO';
     return UserModel.find({ 'cpf': { '$regex': cpf }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
@@ -281,7 +337,7 @@ app.get('/students/cpf/:cpf', function (req, res) {
 
 
 // List students by Registration
-app.get('/students/registration/:registration', function (req, res) {
+app.get('/students/registration/:registration', auth, function (req, res) {
     var registration = req.params.registration;
     var type = 'ALUNO';
     return UserModel.find({ 'registration': registration, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
@@ -294,7 +350,7 @@ app.get('/students/registration/:registration', function (req, res) {
 });
 
 // Student by id
-app.get('/students/:id', function (req, res) {
+app.get('/students/:id', auth, function (req, res) {
     var id = req.params.id;
 
     return UserModel.findById(id, function (err, users) {
@@ -307,7 +363,7 @@ app.get('/students/:id', function (req, res) {
     });
 });
 
-app.put('/students/:id', function (req, res) {
+app.put('/students/:id', auth, function (req, res) {
     var id = req.params.id;
     var user = req.body;
     delete user._id;
@@ -329,7 +385,7 @@ app.put('/students/:id', function (req, res) {
 
 
 // List teachers
-app.get('/teachers', function (req, res) {
+app.get('/teachers', auth, function (req, res) {
     var type = 'PROFESSOR';
     return UserModel.find({ 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
         if (!err) {
@@ -341,7 +397,7 @@ app.get('/teachers', function (req, res) {
 });
 
 // List teachers by Name
-app.get('/teachers/name/:name', function (req, res) {
+app.get('/teachers/name/:name', auth, function (req, res) {
     var name = req.params.name;
     var type = 'PROFESSOR';
     return UserModel.find({ 'name': { '$regex': name, $options: 'i' }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
@@ -354,7 +410,7 @@ app.get('/teachers/name/:name', function (req, res) {
 });
 
 // List teachers by CPF
-app.get('/teachers/cpf/:cpf', function (req, res) {
+app.get('/teachers/cpf/:cpf', auth, function (req, res) {
     var cpf = req.params.cpf;
     var type = 'PROFESSOR';
     return UserModel.find({ 'cpf': { '$regex': cpf }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
@@ -368,7 +424,7 @@ app.get('/teachers/cpf/:cpf', function (req, res) {
 
 
 // List teachers by Registration
-app.get('/teachers/registration/:registration', function (req, res) {
+app.get('/teachers/registration/:registration', auth, function (req, res) {
     var registration = req.params.registration;
     var type = 'PROFESSOR';
     return UserModel.find({ 'registration': registration, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
@@ -381,7 +437,7 @@ app.get('/teachers/registration/:registration', function (req, res) {
 });
 
 // Teacher by id
-app.get('/teachers/:id', function (req, res) {
+app.get('/teachers/:id', auth, function (req, res) {
     var id = req.params.id;
 
 
@@ -407,7 +463,7 @@ app.get('/teachers/:id', function (req, res) {
 
 
 // List attendants
-app.get('/attendants', function (req, res) {
+app.get('/attendants', auth, function (req, res) {
     var type = 'ATENDENTE';
     return UserModel.find({ 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
         if (!err) {
@@ -419,7 +475,7 @@ app.get('/attendants', function (req, res) {
 });
 
 // List attendants by Name
-app.get('/attendants/name/:name', function (req, res) {
+app.get('/attendants/name/:name', auth, function (req, res) {
     var name = req.params.name;
     var type = 'ATENDENTE';
     return UserModel.find({ 'name': { '$regex': name, $options: 'i' }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
@@ -432,7 +488,7 @@ app.get('/attendants/name/:name', function (req, res) {
 });
 
 // List attendants by CPF
-app.get('/attendants/cpf/:cpf', function (req, res) {
+app.get('/attendants/cpf/:cpf', auth, function (req, res) {
     var cpf = req.params.cpf;
     var type = 'ATENDENTE';
     return UserModel.find({ 'cpf': { '$regex': cpf }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
@@ -446,7 +502,7 @@ app.get('/attendants/cpf/:cpf', function (req, res) {
 
 
 // List attendants by Registration
-app.get('/attendants/registration/:registration', function (req, res) {
+app.get('/attendants/registration/:registration', auth, function (req, res) {
     var registration = req.params.registration;
     var type = 'ATENDENTE';
     return UserModel.find({ 'registration': registration, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
@@ -459,7 +515,7 @@ app.get('/attendants/registration/:registration', function (req, res) {
 });
 
 // Attendant by id
-app.get('/attendants/:id', function (req, res) {
+app.get('/attendants/:id', auth, function (req, res) {
     var id = req.params.id;
 
 
@@ -484,7 +540,7 @@ app.get('/attendants/:id', function (req, res) {
 
 
 // List managers
-app.get('/managers', function (req, res) {
+app.get('/managers', auth, function (req, res) {
     var type = 'GESTOR';
     return UserModel.find({ 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
         if (!err) {
@@ -496,7 +552,7 @@ app.get('/managers', function (req, res) {
 });
 
 // List managers by Name
-app.get('/managers/name/:name', function (req, res) {
+app.get('/managers/name/:name', auth, function (req, res) {
     var name = req.params.name;
     var type = 'GESTOR';
     return UserModel.find({ 'name': { '$regex': name, $options: 'i' }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
@@ -509,7 +565,7 @@ app.get('/managers/name/:name', function (req, res) {
 });
 
 // List managers by CPF
-app.get('/managers/cpf/:cpf', function (req, res) {
+app.get('/managers/cpf/:cpf', auth, function (req, res) {
     var cpf = req.params.cpf;
     var type = 'GESTOR';
     return UserModel.find({ 'cpf': { '$regex': cpf }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
@@ -523,7 +579,7 @@ app.get('/managers/cpf/:cpf', function (req, res) {
 
 
 // List managers by Registration
-app.get('/managers/registration/:registration', function (req, res) {
+app.get('/managers/registration/:registration', auth, function (req, res) {
     var registration = req.params.registration;
     var type = 'GESTOR';
     return UserModel.find({ 'registration': registration, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
@@ -536,7 +592,7 @@ app.get('/managers/registration/:registration', function (req, res) {
 });
 
 // Manager by id
-app.get('/managers/:id', function (req, res) {
+app.get('/managers/:id', auth, function (req, res) {
     var id = req.params.id;
 
 
@@ -563,7 +619,7 @@ app.get('/managers/:id', function (req, res) {
 
 
 // List patients
-app.get('/patients', function (req, res) {
+app.get('/patients', auth, function (req, res) {
     return PatientModel.find({}, { _id: 1, name: 1, dateBirth: 1, cpf: 1, sex: 1, dateInclusion: 1 }, function (err, patients) {
         if (!err) {
             return res.send(patients);
@@ -574,7 +630,7 @@ app.get('/patients', function (req, res) {
 });
 
 // List patients by Name
-app.get('/patients/name/:name', function (req, res) {
+app.get('/patients/name/:name', auth, function (req, res) {
     var name = req.params.name;
     return PatientModel.find({ 'name': { '$regex': name, $options: 'i' } }, { _id: 1, name: 1, dateBirth: 1, cpf: 1, sex: 1, dateInclusion: 1 }, function (err, patients) {
         if (!err) {
@@ -586,7 +642,7 @@ app.get('/patients/name/:name', function (req, res) {
 });
 
 // List patients by CPF
-app.get('/patients/cpf/:cpf', function (req, res) {
+app.get('/patients/cpf/:cpf', auth, function (req, res) {
     var cpf = req.params.cpf;
     return PatientModel.find({ 'cpf': { '$regex': cpf } }, { _id: 1, name: 1, dateBirth: 1, cpf: 1, sex: 1, dateInclusion: 1 }, function (err, patients) {
         if (!err) {
@@ -598,7 +654,7 @@ app.get('/patients/cpf/:cpf', function (req, res) {
 });
 
 // Patient by id
-app.get('/patients/:id', function (req, res) {
+app.get('/patients/:id', auth, function (req, res) {
     var id = req.params.id;
 
 

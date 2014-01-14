@@ -123,6 +123,14 @@ window.Student = Backbone.Model.extend({
 });
 
 
+window.LoggedTest = Backbone.Collection.extend({
+
+    model: Student,
+
+    url: "/loggedtest"
+
+});
+
 
 window.StudentCollection = Backbone.Collection.extend({
 
