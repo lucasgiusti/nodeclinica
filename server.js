@@ -81,7 +81,7 @@ var User = new Schema({
     phone2: { type: String, required: false },
     phone3: { type: String, required: false },
     cpf: { type: String, required: true },
-    mail: { type: String, required: true },
+    username: { type: String, required: true },
     password: { type: String, required: true },
     type: { type: String, required: true },
     dateInclusion: { type: Date, required: true },
@@ -91,7 +91,7 @@ var User = new Schema({
 // Patient Model
 var Patient = new Schema({
     name: { type: String, required: true },
-    mail: { type: String, required: true }
+    username: { type: String, required: true }
 });
 //************************************************************
 
@@ -175,8 +175,8 @@ function putUser(res, user, id) {
                             }
 
                             if (!iz.between(user.address.length, 1, 100)) {
-                                console.log('Error updating user: o email deve ter 1 a 100 caracteres');
-                                res.send('500', { status: 500, error: 'O email deve ter 1 a 100 caracteres' });
+                                console.log('Error updating user: o endereco deve ter 1 a 100 caracteres');
+                                res.send('500', { status: 500, error: 'O endereco deve ter 1 a 100 caracteres' });
                             }
 
                             if (!iz.between(user.number.length, 1, 10)) {
@@ -233,7 +233,7 @@ function putUser(res, user, id) {
                                 res.send('500', { status: 500, error: 'O telefone 3 deve ter maximo 20 caracteres' });
                             }
 
-                            if (!iz(user.mail).required().email().valid) {
+                            if (!iz(user.username).required().email().valid) {
                                 console.log('Error updating user: email invalido');
                                 res.send('500', { status: 500, error: 'Email invalido' });
                             }
@@ -353,7 +353,27 @@ app.get('/students/registration/:registration', auth, function (req, res) {
 app.get('/students/:id', auth, function (req, res) {
     var id = req.params.id;
 
-    return UserModel.findById(id, function (err, users) {
+    return UserModel.findById(id, { _id: 1, 
+        name: 1, 
+        address: 1,
+        number: 1,
+        complement: 1,
+        district: 1,
+        state: 1,
+        city: 1,
+        cep: 1,
+        registration: 1,
+        phone1: 1,
+        active: 1,
+        rg: 1,
+        phone2: 1,
+        phone3: 1,
+        cpf: 1,
+        type: 1,
+        dateInclusion: 1,
+        dateUpdate: 1,
+        username: 1
+    }, function (err, users) {
         if (!err) {
             return res.send(users);
 
