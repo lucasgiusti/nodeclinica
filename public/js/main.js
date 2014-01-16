@@ -58,6 +58,10 @@ var AppRouter = Backbone.Router.extend({
 
         var logged = new LoggedTest();
         logged.fetch({
+            success: function () {
+                this.headerView = new HeaderView();
+                $('.header').html(this.headerView.el);
+            },
             error: function (err, message) {
                 var erro = $.parseJSON(message.responseText).status;
                 if (erro == 401) {
@@ -65,9 +69,6 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-
-        this.headerView = new HeaderView();
-        $('.header').html(this.headerView.el);
     },
 
     home: function (id) {

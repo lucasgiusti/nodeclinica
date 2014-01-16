@@ -126,9 +126,9 @@ var auth = function (req, res, next) {
         next();
 };
 
-// List students by CPF
+
 app.get('/loggedtest', auth, function (req, res) {
-    res.send(200);
+    res.send(req.username);
 });
 
 
@@ -142,11 +142,14 @@ app.get('/logout', function (req, res) {
 
 AccountModel.find({ 'username': 'admin' }, { _id: 1 }, function (err, acc) {
     if (!err) {
-        if (acc== '') {
+        if (acc == '') {
 
-            AccountModel.register(new AccountModel({ username: 'admin' }), 'uscsablltcc', function (err, account) {
+            AccountModel.register(new AccountModel({ username: 'admin', dateInclusion: new Date(), type: 'ADMIN' }), 'admin', function (err, account) {
                 if (err) {
-                    console.log('erro ao criar usuario administrador.');
+                    console.log(err);
+                }
+                else {
+                    console.log("Admin user created");
                 }
             });
 
