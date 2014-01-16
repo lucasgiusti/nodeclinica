@@ -60,9 +60,14 @@ mongoose.connect(connectionString);
 
 
 
-
 //************************************************************
 var Schema = mongoose.Schema; //Schema.ObjectId
+
+//Account Model
+var Account = new Schema({
+    type: { type: String, required: true },
+    dateInclusion: { type: Date, required: true }
+});
 
 // User Model
 var User = new Schema({
@@ -96,10 +101,10 @@ var Patient = new Schema({
 //************************************************************
 
 
-User.plugin(passportLocalMongoose);
+Account.plugin(passportLocalMongoose);
 
 
-
+var AccountModel = mongoose.model('accounts', Account);
 var UserModel = mongoose.model('users', User);
 var PatientModel = mongoose.model('patients', Patient);
 
@@ -109,9 +114,9 @@ var PatientModel = mongoose.model('patients', Patient);
 //************************************************************
 // AUTHENTICATION
 
-passport.use(new LocalStrategy(UserModel.authenticate()));
-passport.serializeUser(UserModel.serializeUser());
-passport.deserializeUser(UserModel.deserializeUser());
+passport.use(new LocalStrategy(AccountModel.authenticate()));
+passport.serializeUser(AccountModel.serializeUser());
+passport.deserializeUser(AccountModel.deserializeUser());
 
 
 var auth = function (req, res, next) {
@@ -133,6 +138,25 @@ app.get('/logout', function (req, res) {
     req.logout();
     res.redirect('/signin.html');
 });
+
+
+AccountModel.find({ 'username': 'admin' }, { _id: 1 }, function (err, acc) {
+    if (!err) {
+        if (acc== '') {
+
+            AccountModel.register(new AccountModel({ username: 'admin' }), 'uscsablltcc', function (err, account) {
+                if (err) {
+                    console.log('erro ao criar usuario administrador.');
+                }
+            });
+
+        }
+    } else {
+        console.log(err);
+    }
+});
+
+
 //************************************************************
 
 
