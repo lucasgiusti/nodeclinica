@@ -28,7 +28,7 @@
                 html += '<tr>';
                 html += '<td>' + jsonObject._id + '</td>';
                 html += '<td><a href="#students/' + jsonObject._id + '">' + jsonObject.name + '</td>';
-                //html += '<td><a data-toggle="modal" href="#full-width">' + jsonObject.name + '</td>';
+                //html += '<td><a data-toggle="modal" href="#addAccount">' + jsonObject.name + '</td>';
 
                 html += '<td>' + jsonObject.registration + '</td>';
 
@@ -43,7 +43,7 @@
                     html += '<td></td>';
 
                 if (jsonObject.active)
-                    html += '<td>Sim</td>';
+                    html += '<td><a data-toggle="modal" data-id="' + jsonObject.mail + '" href="#addAccount" class="openAddAccount">Sim</a></td>';
                 else
                     html += '<td>Não</td>';
 

@@ -16,7 +16,7 @@
       </div><!-- /btn-group -->
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
-<button class="btn btn-primary btn-large" data-toggle="modal" href="#full-width">Incluir Aluno</button>
+<button class="btn btn-primary btn-large">Incluir Aluno</button>
 </div><!-- /.row -->
 
 
@@ -41,18 +41,51 @@
 </div>
 
 <!-- Modal -->
-    <div id="full-width" class="modal container hide fade" tabindex="-1">
+    <div id="addAccount" class="modal container hide fade" tabindex="-1">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3>Full Width</h3>
+    <h3>Gerar senha de acesso</h3>
   </div>
+  <fieldset>
   <div class="modal-body">
-    <p>This modal will resize itself to the same dimensions as the container class.</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sollicitudin ipsum ac ante fermentum suscipit. In ac augue non purus accumsan lobortis id sed nibh. Nunc egestas hendrerit ipsum, et porttitor augue volutpat non. Aliquam erat volutpat. Vestibulum scelerisque lobortis pulvinar. Aenean hendrerit risus neque, eget tincidunt leo. Vestibulum est tortor, commodo nec cursus nec, vestibulum vel nibh. Morbi elit magna, ornare placerat euismod semper, dignissim vel odio. Phasellus elementum quam eu ipsum euismod pretium.</p>
+    <section style="float: left; width: 48%">
+                    <div class="control-group">
+                        <label for="name" class="control-label">Email:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="username" name="username" maxlength="100" readonly/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    <section style="padding: 5px 0px;">
+                    <article style="float: left; width: 48%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Senha:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="password" name="password" maxlength="100"/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    <article style="float: right; width: 48%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Confirma Senha:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="passwordconfirm" name="passwordconfirm"/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    </section>
+    </section>
   </div>
+  </fieldset>
+  </br>
   <div class="modal-footer">
-    <button type="button" data-dismiss="modal" class="btn">Close</button>
-    <button type="button" class="btn btn-primary">Save changes</button>
+    <button type="button" data-dismiss="modal" class="btn">Cancelar</button>
+    <button type="button" class="btn btn-primary">Gerar Senha de Acesso</button>
   </div>
 </div>
 
@@ -70,5 +103,13 @@
 
         window.location = '#students/' + por + '/' + $('#txtPesquisa').val();
     }
+
+    $(document).on("click", ".openAddAccount", function () {
+        var studentId = $(this).data('id');
+        $(".modal-body #username").val(studentId);
+        // As pointed out in comments, 
+        // it is superfluous to have to manually call the modal.
+        // $('#addBookDialog').modal('show');
+    });
 
 </script>

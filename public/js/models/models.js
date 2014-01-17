@@ -101,7 +101,6 @@ window.Student = Backbone.Model.extend({
         _id: null,
         name: null,
         mail: null,
-        password: null,
         registration: null,
         cpf: null,
         rg: null,
@@ -245,7 +244,6 @@ window.Teacher = Backbone.Model.extend({
     defaults: {
         _id: null,
         name: "",
-        password: "123",
         type: "ATENDENTE",
         active: true
     }

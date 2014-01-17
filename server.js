@@ -72,6 +72,7 @@ var Account = new Schema({
 // User Model
 var User = new Schema({
     name: { type: String, required: true },
+    mail: { type: String, required: true },
     address: { type: String, required: true },
     number: { type: String, required: true },
     complement: { type: String, required: false },
@@ -86,8 +87,6 @@ var User = new Schema({
     phone2: { type: String, required: false },
     phone3: { type: String, required: false },
     cpf: { type: String, required: true },
-    username: { type: String, required: true },
-    password: { type: String, required: true },
     type: { type: String, required: true },
     dateInclusion: { type: Date, required: true },
     dateUpdate: { type: Date, required: false }
@@ -96,7 +95,7 @@ var User = new Schema({
 // Patient Model
 var Patient = new Schema({
     name: { type: String, required: true },
-    username: { type: String, required: true }
+    mail: { type: String, required: true }
 });
 //************************************************************
 
@@ -260,14 +259,9 @@ function putUser(res, user, id) {
                                 res.send('500', { status: 500, error: 'O telefone 3 deve ter maximo 20 caracteres' });
                             }
 
-                            if (!iz(user.username).required().email().valid) {
+                            if (!iz(user.mail).required().email().valid) {
                                 console.log('Error updating user: email invalido');
                                 res.send('500', { status: 500, error: 'Email invalido' });
-                            }
-
-                            if (!iz.between(user.password.length, 1, 30)) {
-                                console.log('Error updating user: a senha deve ter 1 a 30 caracteres');
-                                res.send('500', { status: 500, error: 'A senha deve ter 1 a 30 caracteres' });
                             }
 
                             if (!iz(user.dateInclusion).required().date().valid) {
@@ -327,7 +321,7 @@ function putUser(res, user, id) {
 // List students
 app.get('/students', auth, function (req, res) {
     var type = 'ALUNO';
-    return UserModel.find({ 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
+    return UserModel.find({ 'type': type }, { _id: 1, name: 1, mail: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
         if (!err) {
             return res.send(users);
         } else {
@@ -380,8 +374,9 @@ app.get('/students/registration/:registration', auth, function (req, res) {
 app.get('/students/:id', auth, function (req, res) {
     var id = req.params.id;
 
-    return UserModel.findById(id, { _id: 1, 
+    return UserModel.findById(id, { _id: 1,
         name: 1, 
+        mail: 1,
         address: 1,
         number: 1,
         complement: 1,
@@ -398,8 +393,7 @@ app.get('/students/:id', auth, function (req, res) {
         cpf: 1,
         type: 1,
         dateInclusion: 1,
-        dateUpdate: 1,
-        username: 1
+        dateUpdate: 1
     }, function (err, users) {
         if (!err) {
             return res.send(users);
