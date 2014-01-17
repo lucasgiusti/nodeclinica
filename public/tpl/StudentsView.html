@@ -45,6 +45,9 @@
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3>Gerar senha de acesso</h3>
+    <div id="addAccountAlert" class="alert alert-warning" style="text-align: center">
+            <b>Este usuário já possui senha de acesso</b>
+        </div>
   </div>
   <fieldset>
   <div class="modal-body">
@@ -53,12 +56,12 @@
                         <label for="name" class="control-label">Email:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="username" name="username" maxlength="100" readonly/>
+                            <input type="text" class="form-control" id="username" name="username" maxlength="100" readonly style="float: left"/>
                             <span class="help-inline"></span>
                         </div>
                     </div>
-                    <section style="padding: 5px 0px;">
-                    <article style="float: left; width: 48%">
+                    <section>
+                    <article style="float: left; width: 48%; padding: 5px 0px;">
                     <div class="control-group">
                         <label for="grapes" class="control-label">Senha:</label>
 
@@ -68,7 +71,7 @@
                         </div>
                     </div>
                     </article>
-                    <article style="float: right; width: 48%">
+                    <article style="float: right; width: 48%; padding: 5px 0px;">
                     <div class="control-group">
                         <label for="grapes" class="control-label">Confirma Senha:</label>
 
@@ -87,6 +90,7 @@
     <button type="button" data-dismiss="modal" class="btn">Cancelar</button>
     <button type="button" class="btn btn-primary">Gerar Senha de Acesso</button>
   </div>
+  </br>
 </div>
 
 <script>
@@ -105,8 +109,21 @@
     }
 
     $(document).on("click", ".openAddAccount", function () {
-        var studentId = $(this).data('id');
-        $(".modal-body #username").val(studentId);
+        var username = $(this).data('id');
+
+
+
+        $("#addAccountAlert").hide();
+        $(".modal-body #username").val(username);
+
+        $.getJSON('/account/' + username, function (data) {
+            if(data)
+            $("#addAccountAlert").show();
+        });
+
+
+
+
         // As pointed out in comments, 
         // it is superfluous to have to manually call the modal.
         // $('#addBookDialog').modal('show');

@@ -314,6 +314,22 @@ function putUser(res, user, id) {
 
 
 
+//************************************************************
+// GET to READ ACCOUNT
+
+// List accounts by username
+app.get('/account/:username', auth, function (req, res) {
+    var username = req.params.username;
+
+    return AccountModel.findOne({ 'username': username }, { _id: 1, username: 1 }, function (err, account) {
+        if (!err) {
+            return res.send(account);
+        } else {
+            return console.log(err);
+        }
+    });
+});
+
 
 //************************************************************
 // GET to READ STUDENTS
