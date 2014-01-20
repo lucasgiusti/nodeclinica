@@ -127,7 +127,7 @@ var auth = function (req, res, next) {
 
 
 app.get('/loggedtest', auth, function (req, res) {
-    res.send(req.username);
+    res.send({ 'username': req.user.username });
 });
 
 
@@ -160,6 +160,48 @@ AccountModel.find({ 'username': 'admin' }, { _id: 1 }, function (err, acc) {
 
 
 //************************************************************
+
+
+
+
+
+//************************************************************
+// GET to READ ACCOUNT
+
+// List accounts by username
+app.get('/account/:username', auth, function (req, res) {
+    var username = req.params.username;
+
+    return AccountModel.findOne({ 'username': username }, { _id: 1, username: 1 }, function (err, account) {
+        if (!err) {
+            return res.send(account);
+        } else {
+            return console.log(err);
+        }
+    });
+});
+
+
+app.put('/account/:id', auth, function (req, res) {
+    console.log('Updating account: ');
+    var id = req.params.id;
+    var account = req.body;
+    console.log('Updating account: ' + id);
+    console.log(JSON.stringify(account));
+
+
+    AccountModel.findById(id).remove(), function (err, account) {
+        if (!err) {
+            console.log(account);
+        }
+        else {
+            return console.log(err);
+        }
+    };
+
+});
+
+
 
 
 
@@ -313,22 +355,6 @@ function putUser(res, user, id) {
 //************************************************************
 
 
-
-//************************************************************
-// GET to READ ACCOUNT
-
-// List accounts by username
-app.get('/account/:username', auth, function (req, res) {
-    var username = req.params.username;
-
-    return AccountModel.findOne({ 'username': username }, { _id: 1, username: 1 }, function (err, account) {
-        if (!err) {
-            return res.send(account);
-        } else {
-            return console.log(err);
-        }
-    });
-});
 
 
 //************************************************************
