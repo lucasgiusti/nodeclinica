@@ -90,7 +90,7 @@
   <br/>
   <div class="modal-footer">
     <button type="button" data-dismiss="modal" class="btn">Cancelar</button>
-    <button type="button" class="btn btn-primary btn-large save">Gerar Senha de Acesso</button>
+    <button type="button" class="btn btn-primary btn-large save" onclick="addAccess();">Gerar Senha de Acesso</button>
   </div>
   <br/>
 </div>
@@ -113,8 +113,8 @@
 
     $(document).on("click", ".openAddAccount", function () {
         var username = $(this).data('id');
-
-
+        $(".modal-body #password").val('');
+        $(".modal-body #passwordconfirm").val('');
 
         $("#addAccountAlert").hide();
         $(".modal-body #username").val(username);
@@ -123,28 +123,32 @@
             if(data)
             $("#addAccountAlert").show();
         });
-
-
-
-
-        // As pointed out in comments, 
-        // it is superfluous to have to manually call the modal.
-        // $('#addBookDialog').modal('show');
     });
 
 
     // Account
     function AccountData(fusername, fpassword) {
-        this.fusername = fusername;
-        this.fpassword = fpassword;
+        this.username = fusername;
+        this.password = fpassword;
+        this.type = 'ALUNO';
         this.toJsonString = function () { return JSON.stringify(this); };
 
     };
 
-    $(document).on("click", ".save", function () {
-        alet('ok');
+    function passwordValid() {
+        var pass = $(".modal-body #password").val();
+        var passConfirm = $(".modal-body #passwordconfirm").val();
+
+        return (pass == passConfirm);
+    }
+
+    function addAccess() {
         var username = $(".modal-body #username").val();
-        var accountData = AccountData($(".modal-body #username").val(), $(".modal-body #password").val());
+
+        if (!passwordValid())
+            return;
+
+        var accountData = new AccountData($(".modal-body #username").val(), $(".modal-body #password").val());
 
         jQuery.ajax({
             type: "PUT",
@@ -152,13 +156,13 @@
             contentType: "application/json; charset=utf-8",
             data: accountData.toJsonString(),
             dataType: "json",
-            success: function (data, status, jqXHR) {
-                alert('success');
+            success: function (status) {
+                utils.showAlert('Success!', 'Senha gerada com sucesso', 'alert-success');
             },
 
-            error: function (jqXHR, status) {
-                alert('error');
-
+            error: function (err, message) {
+                alert(message.responseText);
+                utils.showAlert('Erro', $.parseJSON(message.responseText).error, 'alert-error');
             }
         });
     };

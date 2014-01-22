@@ -183,22 +183,31 @@ app.get('/account/:username', auth, function (req, res) {
 
 
 app.put('/account/:id', auth, function (req, res) {
-    console.log('Updating account: ');
     var id = req.params.id;
-    var account = req.body;
+    var accountNew = req.body;
     console.log('Updating account: ' + id);
-    console.log(JSON.stringify(account));
-
-
-    AccountModel.findById(id).remove(), function (err, account) {
+    
+    AccountModel.findOne({ 'username': id }, { _id: 1 }, function (err, account) {
         if (!err) {
-            console.log(account);
+            if (account) {
+                account.remove();
+            }
+                AccountModel.register(new AccountModel({ username: accountNew.username, dateInclusion: new Date(), type: accountNew.type }), accountNew.password, function (err, account) {
+                    if (err) {
+                        console.log('Error updating user: ' + err);
+                        res.send('500', { status: 500, error: err });
+                    }
+                    else {
+                        console.log('document(s) updated');
+                        res.send(account);
+                        //res.send('500', { status: 500, error: 'erro de teste' });
+                    }
+                });
+        } else {
+            console.log('Error updating user: ' + err);
+            res.send('500', { status: 500, error: err });
         }
-        else {
-            return console.log(err);
-        }
-    };
-
+    });
 });
 
 
