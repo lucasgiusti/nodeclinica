@@ -132,4 +132,35 @@
         // $('#addBookDialog').modal('show');
     });
 
+
+    // Account
+    function AccountData(fusername, fpassword) {
+        this.fusername = fusername;
+        this.fpassword = fpassword;
+        this.toJsonString = function () { return JSON.stringify(this); };
+
+    };
+
+    $(document).on("click", ".save", function () {
+        alet('ok');
+        var username = $(".modal-body #username").val();
+        var accountData = AccountData($(".modal-body #username").val(), $(".modal-body #password").val());
+
+        jQuery.ajax({
+            type: "PUT",
+            url: '/account/' + username,
+            contentType: "application/json; charset=utf-8",
+            data: accountData.toJsonString(),
+            dataType: "json",
+            success: function (data, status, jqXHR) {
+                alert('success');
+            },
+
+            error: function (jqXHR, status) {
+                alert('error');
+
+            }
+        });
+    };
+
 </script>
