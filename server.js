@@ -200,7 +200,7 @@ app.put('/account/:id', auth, function (req, res) {
                     else {
                         console.log('document(s) updated');
                         //res.send(account);
-                        res.send('500', { status: 500, error: err });
+                        res.send('500', { status: 500, error: 'teste' });
                     }
                 });
         } else {

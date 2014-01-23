@@ -163,8 +163,8 @@
             },
 
             error: function (err, message) {
-                //alert(message);
-                utils.showAlert('Erro', $.parseJSON(message.responseText).error, 'alert-error');
+                utils.showAlert('Erro', 'Erro ao gerar senha de acesso', 'alert-error');
+                alert('ok');
             }
         });
     };
