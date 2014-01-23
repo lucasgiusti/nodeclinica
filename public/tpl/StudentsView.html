@@ -120,8 +120,10 @@
         $(".modal-body #username").val(username);
 
         $.getJSON('/account/' + username, function (data) {
-            if(data)
-            $("#addAccountAlert").show();
+            if (data) {
+                utils.showAlert('Este usuário já possui senha de acesso', '', 'alert-warning');
+                $("#addAccountAlert").show();
+            }
         });
     });
 
@@ -161,7 +163,7 @@
             },
 
             error: function (err, message) {
-                alert(message.responseText);
+                //alert(message);
                 utils.showAlert('Erro', $.parseJSON(message.responseText).error, 'alert-error');
             }
         });
