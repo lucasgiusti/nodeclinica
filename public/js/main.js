@@ -75,7 +75,7 @@ var AppRouter = Backbone.Router.extend({
             this.homeView = new HomeView();
         }
         $('#content').html(this.homeView.el);
-        this.headerView.selectMenuItem('home-menu');
+        selectMenuItem('home-menu');
     },
 
     wineList: function (page) {
@@ -85,7 +85,7 @@ var AppRouter = Backbone.Router.extend({
             $("#content").html(new WineListView({ model: wineList, page: p }).el);
         }
         });
-        this.headerView.selectMenuItem('home-menu');
+        selectMenuItem('home-menu');
     },
 
     wineDetails: function (id) {
@@ -94,13 +94,13 @@ var AppRouter = Backbone.Router.extend({
             $("#content").html(new WineView({ model: wine }).el);
         }
         });
-        this.headerView.selectMenuItem();
+        
     },
 
     addWine: function () {
         var wine = new Wine();
         $('#content').html(new WineView({ model: wine }).el);
-        this.headerView.selectMenuItem('add-menu');
+        selectMenuItem('add-menu');
     },
 
     studentList: function (page) {
@@ -118,7 +118,7 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-        this.headerView.selectMenuItem('home-menu');
+        selectMenuItem('students-menu');
     },
 
     studentListByName: function (n, page) {
@@ -142,7 +142,7 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-        this.headerView.selectMenuItem('home-menu');
+        selectMenuItem();
     },
 
     studentListByCPF: function (n, page) {
@@ -166,7 +166,7 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-        this.headerView.selectMenuItem('home-menu');
+        selectMenuItem();
     },
 
     studentListByRegistration: function (n, page) {
@@ -190,7 +190,7 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-        this.headerView.selectMenuItem('home-menu');
+        selectMenuItem();
     },
 
     studentDetails: function (id) {
@@ -206,7 +206,7 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-        this.headerView.selectMenuItem();
+        selectMenuItem();
     },
 
 
@@ -226,7 +226,7 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-        this.headerView.selectMenuItem('home-menu');
+        selectMenuItem('teachers-menu');
     },
 
     teacherListByName: function (n, page) {
@@ -250,7 +250,7 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-        this.headerView.selectMenuItem('home-menu');
+        selectMenuItem();
     },
 
     teacherListByCPF: function (n, page) {
@@ -274,7 +274,7 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-        this.headerView.selectMenuItem('home-menu');
+        selectMenuItem();
     },
 
     teacherListByRegistration: function (n, page) {
@@ -298,7 +298,7 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-        this.headerView.selectMenuItem('home-menu');
+        selectMenuItem();
     },
 
 
@@ -324,7 +324,7 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-        this.headerView.selectMenuItem('home-menu');
+        selectMenuItem('attendants-menu');
     },
 
     attendantListByName: function (n, page) {
@@ -348,7 +348,7 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-        this.headerView.selectMenuItem('home-menu');
+        selectMenuItem();
     },
 
     attendantListByCPF: function (n, page) {
@@ -372,7 +372,7 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-        this.headerView.selectMenuItem('home-menu');
+        selectMenuItem();
     },
 
     attendantListByRegistration: function (n, page) {
@@ -396,7 +396,7 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-        this.headerView.selectMenuItem('home-menu');
+        selectMenuItem();
     },
 
 
@@ -416,7 +416,7 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-        this.headerView.selectMenuItem('home-menu');
+        selectMenuItem('managers-menu');
     },
 
     managerListByName: function (n, page) {
@@ -440,7 +440,7 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-        this.headerView.selectMenuItem('home-menu');
+        selectMenuItem();
     },
 
     managerListByCPF: function (n, page) {
@@ -464,7 +464,7 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-        this.headerView.selectMenuItem('home-menu');
+        selectMenuItem();
     },
 
     managerListByRegistration: function (n, page) {
@@ -488,7 +488,7 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-        this.headerView.selectMenuItem('home-menu');
+        selectMenuItem();
     },
 
 
@@ -508,7 +508,7 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-        this.headerView.selectMenuItem('home-menu');
+        selectMenuItem('patients-menu');
     },
 
     patientListByName: function (n, page) {
@@ -532,7 +532,7 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-        this.headerView.selectMenuItem('home-menu');
+        selectMenuItem();
     },
 
     patientListByCPF: function (n, page) {
@@ -556,7 +556,7 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-        this.headerView.selectMenuItem('home-menu');
+        selectMenuItem();
     },
 
 
@@ -566,7 +566,7 @@ var AppRouter = Backbone.Router.extend({
             this.aboutView = new AboutView();
         }
         $('#content').html(this.aboutView.el);
-        this.headerView.selectMenuItem('about-menu');
+        selectMenuItem('about-menu');
     }
 
 });
@@ -575,3 +575,12 @@ utils.loadTemplate(['HomeView', 'HeaderView', 'WineView', 'WineListItemView', 'S
     app = new AppRouter();
     Backbone.history.start();
 });
+
+
+
+function selectMenuItem(menuItem) {
+    if (menuItem) {
+        $('.nav li').removeClass('active');
+        $('.' + menuItem).addClass('active');
+    }
+}
