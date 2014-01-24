@@ -208,11 +208,23 @@
         <div class="footer">
             <button type="button" class="btn btn-primary btn-large save">Salvar</button>
             <button type="button" class="btn" onclick="back();">Cancelar</button>
-            <button type="button" class="btn delete">Excluir</button>
+            <button type="button" class="btn" data-toggle="modal" href="#delUser">Excluir</button>
         </div>
 
     </form>
 
+</div>
+
+    <div id="delUser" class="modal container hide fade" tabindex="-1" style="width: 500px; margin-left: -250px;">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Excluir Aluno ?</h3>
+  </div>
+  <div class="modal-footer">
+    <button type="button" data-dismiss="modal" class="btn">Cancelar</button>
+    <button type="button" data-dismiss="modal" class="btn btn-primary btn-large delete">Sim</button>
+  </div>
+  <br/>
 </div>
 <br />
 <div class="row-fluid status-bar">
