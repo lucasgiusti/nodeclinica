@@ -130,6 +130,15 @@ app.get('/loggedtest', auth, function (req, res) {
     res.send({ 'username': req.user.username, 'type': req.user.type });
 });
 
+function isAuthorized(typeUser, typeAuthorization) {
+
+    if (typeAuthorization == 'MANUTENCAO_CADASTRO') {
+        return (typeUser == 'ADMIN' || typeUser == 'GESTOR');
+    }
+    else {
+        return false;
+    }
+}
 
 app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/signin.html?return=false' }));
 
@@ -183,35 +192,44 @@ app.get('/account/:username', auth, function (req, res) {
 
 
 app.put('/account/:id', auth, function (req, res) {
-    if (req.user.type != 'ADMIN')
+    if (!isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
         res.send('401', { status: 401, error: 'Acesso Negado' });
+    }
+    else {
 
+        var id = req.params.id;
+        var accountNew = req.body;
+        console.log('Updating account: ' + id);
 
-    var id = req.params.id;
-    var accountNew = req.body;
-    console.log('Updating account: ' + id);
-    
-    AccountModel.findOne({ 'username': id }, { _id: 1 }, function (err, account) {
-        if (!err) {
-            if (account) {
-                account.remove();
+        AccountModel.findOne({ 'username': id }, { _id: 1 }, function (err, account) {
+            if (!err) {
+                if (account) {
+                    account.remove(function () { registerAccount(res, accountNew); });
+                }
+                else {
+                    registerAccount(res, accountNew);
+                }
+
+            } else {
+                console.log('Error updating account: ' + err);
+                res.send('500', { status: 500, error: err });
             }
-                AccountModel.register(new AccountModel({ username: accountNew.username, dateInclusion: new Date(), type: accountNew.type }), accountNew.password, function (err, account) {
-                    if (err) {
-                        console.log('Error updating account: ' + err);
-                        res.send('500', { status: 500, error: err });
-                    }
-                    else {
-                        console.log('document(s) updated');
-                        res.send(account);
-                    }
-                });
-        } else {
+        });
+    }
+});
+
+function registerAccount(res, accountNew) {
+    AccountModel.register(new AccountModel({ username: accountNew.username, dateInclusion: new Date(), type: accountNew.type }), accountNew.password, function (err, account) {
+        if (err) {
             console.log('Error updating account: ' + err);
             res.send('500', { status: 500, error: err });
         }
+        else {
+            console.log('document(s) updated');
+            res.send(account);
+        }
     });
-});
+}
 
 
 
@@ -459,14 +477,34 @@ app.get('/students/:id', auth, function (req, res) {
 });
 
 app.put('/students/:id', auth, function (req, res) {
-    var id = req.params.id;
-    var user = req.body;
-    delete user._id;
-    console.log('Updating user: ' + id);
-    console.log(JSON.stringify(user));
-    user.dateUpdate = new Date();
+    if (!isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
+        res.send('401', { status: 401, error: 'Acesso Negado' });
+    }
+    else {
+        var id = req.params.id;
+        var user = req.body;
+        delete user._id;
+        console.log('Updating user: ' + id);
+        console.log(JSON.stringify(user));
+        user.dateUpdate = new Date();
 
-    putUser(res, user, id);
+        putUser(res, user, id);
+    }
+});
+
+app.del('/students/:id', auth, function (req, res) {
+    if (!isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
+        res.send('401', { status: 401, error: 'Acesso Negado' });
+    }
+    else {
+        console.log(req.user.type != 'ADMIN' && req.user.type != 'GESTOR');
+        var id = req.params.id;
+        var user = req.body;
+        console.log('Deleting user: ' + id);
+        console.log(JSON.stringify(user));
+
+        res.send(200);
+    }
 });
 //************************************************************
 

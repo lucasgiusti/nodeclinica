@@ -116,8 +116,11 @@ window.StudentView = Backbone.View.extend({
     deleteStudent: function () {
         this.model.destroy({
             success: function () {
-                alert('Student deleted successfully');
-                window.history.back();
+                self.render();
+                app.navigate('students', false);
+            },
+            error: function (err, message) {
+                utils.showAlert('Erro', $.parseJSON(message.responseText).error, 'alert-error');
             }
         });
         return false;
