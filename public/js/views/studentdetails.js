@@ -7,12 +7,12 @@ window.StudentView = Backbone.View.extend({
     render: function () {
 
         //var student = this.model.toJSON();
-        
+
 
         $(this.el).html(this.template(this.model.toJSON()));
 
         var html = '';
-        
+
         html += '<article style="float: left; width: 35%">';
         html += '<div class="control-group">';
         html += '<label for="grapes" class="control-label">Estado:</label>';
@@ -53,14 +53,14 @@ window.StudentView = Backbone.View.extend({
     },
 
     events: {
-        "change"        : "change",
-        "click .save"   : "beforeSave",
-        "click .delete" : "deleteStudent",
-        "drop #picture" : "dropHandler"
+        "change": "change",
+        "click .save": "beforeSave",
+        "click .delete": "deleteStudent",
+        "drop #picture": "dropHandler"
     },
 
     change: function (event) {
-        
+
         // Remove any existing alert message
         utils.hideAlert();
 
@@ -115,11 +115,13 @@ window.StudentView = Backbone.View.extend({
 
     deleteStudent: function () {
         this.model.destroy({
-            success: function () {
+            success: function (model) {
+
+                app.navigate('#students', true);
                 self.render();
-                app.navigate('students', false);
             },
             error: function (err, message) {
+
                 utils.showAlert('Erro', $.parseJSON(message.responseText).error, 'alert-error');
             }
         });

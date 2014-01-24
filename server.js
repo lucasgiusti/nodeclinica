@@ -65,6 +65,7 @@ var Schema = mongoose.Schema; //Schema.ObjectId
 
 //Account Model
 var Account = new Schema({
+    username: {type: String, index: { unique: true}},
     type: { type: String, required: true },
     dateInclusion: { type: Date, required: true }
 });
@@ -497,13 +498,43 @@ app.del('/students/:id', auth, function (req, res) {
         res.send('401', { status: 401, error: 'Acesso Negado' });
     }
     else {
-        console.log(req.user.type != 'ADMIN' && req.user.type != 'GESTOR');
         var id = req.params.id;
-        var user = req.body;
         console.log('Deleting user: ' + id);
-        console.log(JSON.stringify(user));
 
-        res.send(200);
+
+        UserModel.findOne({ '_id': id }, { _id: 1, mail: 1 }, function (err, user) {
+            if (!err) {
+                if (user) {
+                    if (user.mail != req.user.username) {
+
+                        AccountModel.findOne({ 'username': user.mail }, { _id: 1 }, function (err, account) {
+                            if (!err) {
+                                if (account) {
+                                    account.remove(function () { user.remove(function () { res.send(user); }); });
+                                }
+                                else {
+                                    user.remove(function () { res.send(user); });
+                                }
+
+                            } else {
+                                console.log('Error updating account: ' + err);
+                                res.send('500', { status: 500, error: err });
+                            }
+                        });
+                    }
+                    else {
+                        res.send('500', { status: 500, error: 'Nao e possivel excluir o proprio usuario' });
+                    }
+                }
+                else {
+                    res.send('500', { status: 500, error: 'Usuario nao encontrado' });
+                }
+
+            } else {
+                console.log('Error deleting user: ' + err);
+                res.send('500', { status: 500, error: err });
+            }
+        });
     }
 });
 //************************************************************
