@@ -127,7 +127,7 @@ var auth = function (req, res, next) {
 
 
 app.get('/loggedtest', auth, function (req, res) {
-    res.send({ 'username': req.user.username });
+    res.send({ 'username': req.user.username, 'type': req.user.type });
 });
 
 
@@ -183,6 +183,10 @@ app.get('/account/:username', auth, function (req, res) {
 
 
 app.put('/account/:id', auth, function (req, res) {
+    if (req.user.type != 'ADMIN')
+        res.send('401', { status: 401, error: 'Acesso Negado' });
+
+
     var id = req.params.id;
     var accountNew = req.body;
     console.log('Updating account: ' + id);
@@ -194,17 +198,16 @@ app.put('/account/:id', auth, function (req, res) {
             }
                 AccountModel.register(new AccountModel({ username: accountNew.username, dateInclusion: new Date(), type: accountNew.type }), accountNew.password, function (err, account) {
                     if (err) {
-                        console.log('Error updating user: ' + err);
+                        console.log('Error updating account: ' + err);
                         res.send('500', { status: 500, error: err });
                     }
                     else {
                         console.log('document(s) updated');
-                        //res.send(account);
-                        res.send('500', { status: 500, error: 'teste' });
+                        res.send(account);
                     }
                 });
         } else {
-            console.log('Error updating user: ' + err);
+            console.log('Error updating account: ' + err);
             res.send('500', { status: 500, error: err });
         }
     });
@@ -301,7 +304,7 @@ function putUser(res, user, id) {
                             }
 
                             if (!iz.maxLength(user.phone2, 20)) {
-                                console.log('Error updating user: o telefone 2deve ter maximo 20 caracteres');
+                                console.log('Error updating user: o telefone 2 deve ter maximo 20 caracteres');
                                 res.send('500', { status: 500, error: 'O telefone 2 deve ter maximo 20 caracteres' });
                             }
 

@@ -42,8 +42,15 @@
                 else
                     html += '<td></td>';
 
-                if (jsonObject.active)
-                    html += '<td><a data-toggle="modal" data-id="' + jsonObject.mail + '" href="#addAccount" class="openAddAccount">Sim</a></td>';
+                if (jsonObject.active) {
+
+                    if (userAccountAccess.type == 'ADMIN') {
+                        html += '<td><a data-toggle="modal" data-id="' + jsonObject.mail + '" href="#addAccount" class="openAddAccount">Sim</a></td>';
+                    }
+                    else {
+                        html += '<td>Sim</td>';
+                    }
+                }
                 else
                     html += '<td>Não</td>';
 

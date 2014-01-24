@@ -3,7 +3,6 @@ function signin() {
     //res.redirect('/signin.html');
 }
 
-
 var AppRouter = Backbone.Router.extend({
 
     routes: {
@@ -58,7 +57,7 @@ var AppRouter = Backbone.Router.extend({
 
         var logged = new LoggedTest();
         logged.fetch({
-            success: function () {
+            success: function (data) {
                 this.headerView = new HeaderView();
                 $('.header').html(this.headerView.el);
             },

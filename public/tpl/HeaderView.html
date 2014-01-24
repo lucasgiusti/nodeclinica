@@ -39,8 +39,10 @@
 <script>
 
     $.getJSON('/loggedtest', function (data) {
-        if (data)
+        if (data) {
+            userAccountAccess = data;
             $("#loggedBy").html(data.username);
+        }
     });
 
 </script>
