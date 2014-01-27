@@ -14,7 +14,7 @@
                         <label for="name" class="control-label">Nome:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="name" name="name" value="<%= name %>" maxlength="100"/>
+                            <input type="text" class="form-control" id="name" name="name" value="<%= name == null ? '' : name %>" maxlength="100"/>
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -24,7 +24,7 @@
                         <label for="grapes" class="control-label">Endereço:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="address" name="address" value="<%= address %>" maxlength="100"/>
+                            <input type="text" class="form-control" id="address" name="address" value="<%= address == null ? '' : address %>" maxlength="100"/>
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
                         <label for="grapes" class="control-label">Número:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="number" name="number" value="<%= number %>"/>
+                            <input type="text" class="form-control" id="number" name="number" value="<%= number == null ? '' : number %>"/>
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -67,7 +67,7 @@
         <label for="grapes" class="control-label">Estado:</label>
 
         <div class="controls">
-        <input type="text" class="form-control" id="state" name="state" value="<%= state %>"/>
+        <input type="text" class="form-control" id="state" name="state" value="<%= state == null ? '' : state %>"/>
         <span class="help-inline"></span>
         </div>
         </div>
@@ -77,7 +77,7 @@
         <label for="grapes" class="control-label">Cidade:</label>
 
         <div class="controls">
-        <input type="text" class="form-control" id="city" name="city" value="<%= city %>"/>
+        <input type="text" class="form-control" id="city" name="city" value="<%= city == null ? '' : city %>"/>
         <span class="help-inline"></span>
         </div>
         </div>
@@ -99,7 +99,7 @@
                         <label for="grapes" class="control-label">Matrícula:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="registration" name="registration" value="<%= registration %>"/>
+                            <input type="text" class="form-control" id="registration" name="registration" value="<%= registration == null ? '' : registration %>"/>
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -174,7 +174,7 @@
                         <label for="grapes" class="control-label">Email:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="mail" name="mail" value="<%= mail %>" maxlength="100"/>
+                            <input type="text" class="form-control" id="mail" name="mail" value="<%= mail == null ? '' : mail %>" maxlength="100"/>
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -184,7 +184,7 @@
                         <label for="grapes" class="control-label">Data Inclusão:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="dateInclusion" name="dateInclusion" value="<%= new Date(dateInclusion).toLocaleDateString() %>" readonly/>
+                            <input type="text" class="form-control" id="dateInclusion" name="dateInclusion" value="<%= dateInclusion == null ? '' : new Date(dateInclusion).toLocaleDateString() %>" readonly/>
                             <span class="help-inline"></span>
                         </div>
                     </div>

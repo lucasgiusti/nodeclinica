@@ -5,9 +5,8 @@ window.StudentView = Backbone.View.extend({
     },
 
     render: function () {
-
+        
         //var student = this.model.toJSON();
-
 
         $(this.el).html(this.template(this.model.toJSON()));
 

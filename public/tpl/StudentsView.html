@@ -16,7 +16,7 @@
       </div><!-- /btn-group -->
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
-<button class="btn btn-primary btn-large">Incluir Aluno</button>
+<button class="btn btn-primary btn-large addStudent">Incluir Aluno</button>
 </div><!-- /.row -->
 
 
@@ -110,6 +110,10 @@
 
         window.location = '#students/' + por + '/' + $('#txtPesquisa').val();
     }
+
+    $(document).on("click", ".addStudent", function () {
+        window.location = '#students/add';
+    });
 
     $(document).on("click", ".openAddAccount", function () {
         var username = $(this).data('id');

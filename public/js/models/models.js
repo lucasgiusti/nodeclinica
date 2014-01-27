@@ -114,7 +114,7 @@ window.Student = Backbone.Model.extend({
         phone1: null,
         phone2: null,
         phone3: null,
-        active: false,
+        active: true,
         type: "ALUNO",
         dateInclusion: null,
         dateUpdate: null

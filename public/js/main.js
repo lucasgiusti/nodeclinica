@@ -19,6 +19,7 @@ var AppRouter = Backbone.Router.extend({
         "students/cpf/:cpf/page/:page": "studentListByCPF",
         "students/registration/:registration": "studentListByRegistration",
         "students/registration/:registration/page/:page": "studentListByRegistration",
+        "students/add": "addStudent",
         "students/:id": "studentDetails",
         "teachers": "teacherList",
         "teachers/page/:page": "teacherList",
@@ -102,6 +103,9 @@ var AppRouter = Backbone.Router.extend({
         $('#content').html(new WineView({ model: wine }).el);
         selectMenuItem('add-menu');
     },
+
+
+
 
     studentList: function (page) {
         var p = page ? parseInt(page, 10) : 1;
@@ -209,6 +213,14 @@ var AppRouter = Backbone.Router.extend({
         selectMenuItem();
     },
 
+    addStudent: function () {
+        
+        var student = new Student();
+        $('#content').html(new StudentView({ model: student }).el);
+        selectMenuItem('students-menu');
+
+    },
+
 
 
     teacherList: function (page) {
@@ -300,12 +312,6 @@ var AppRouter = Backbone.Router.extend({
         });
         selectMenuItem();
     },
-
-
-
-
-
-
 
 
 
@@ -575,8 +581,6 @@ utils.loadTemplate(['HomeView', 'HeaderView', 'WineView', 'WineListItemView', 'S
     app = new AppRouter();
     Backbone.history.start();
 });
-
-
 
 function selectMenuItem(menuItem) {
     if (menuItem) {
