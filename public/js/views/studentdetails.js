@@ -6,9 +6,9 @@ window.StudentView = Backbone.View.extend({
 
     render: function () {
         
-        //var student = this.model.toJSON();
+        var student = this.model.toJSON();
 
-        $(this.el).html(this.template(this.model.toJSON()));
+        $(this.el).html(this.template(student));
 
         var html = '';
 
@@ -17,10 +17,10 @@ window.StudentView = Backbone.View.extend({
         html += '<label for="grapes" class="control-label">Estado:</label>';
 
         html += '<div class="controls">';
-        //html += '<select class="form-control" id="selstate" name="state" value="' + student.state + '" >';
+        html += '<select class="form-control" id="selstate" name="state" value="' + student.state + '" >';
 
 
-        //html += carregaEstados(_estadoscidades, student.state);
+        html += carregaEstados(_estadoscidades, student.state);
 
         html += '</select>';
 
@@ -33,10 +33,10 @@ window.StudentView = Backbone.View.extend({
         html += '<label for="grapes" class="control-label">Cidade:</label>';
 
         html += '<div class="controls">';
-        //html += '<select class="form-control" id="selcity" name="city" value="' + student.city + '">';
+        html += '<select class="form-control" id="selcity" name="city" value="' + student.city + '">';
 
 
-        //html += carregaCidades(_estadoscidades, student.state, student.city);
+        html += carregaCidades(_estadoscidades, student.state, student.city);
 
         html += '</select>';
         html += '<span class="help-inline"></span>';
@@ -44,9 +44,12 @@ window.StudentView = Backbone.View.extend({
         html += '</div>';
         html += '</article>';
 
-        //$('#divEstadosCidades', this.el).append(html);
+        $('#divEstadosCidades', this.el).append(html);
+        
+        $('#selstate', this.el).change(function () {
+            $('#selcity', this.el).html(carregaCidades(_estadoscidades, $('#selstate option:selected', this.el).val(), ''));
 
-        //$('#selstate', this.el).change(carregaCidades(_estadoscidades, 'DF', ''));
+        });
 
         return this;
     },
@@ -168,12 +171,10 @@ function carregaEstados(data, userState) {
 
 
 function carregaCidades(data, userState, userCity) {
-
     var items = [];
     var options = '';
 
     $.each(data, function (key, val) {
-
         if (val.sigla == userState) {
             $.each(val.cidades, function (key_city, val_city) {
                 if (userCity != val_city) {
