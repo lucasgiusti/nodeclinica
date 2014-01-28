@@ -84,7 +84,7 @@ var User = new Schema({
     state: { type: String, required: true },
     city: { type: String, required: true },
     cep: { type: String, required: false },
-    registration: { type: String, index: { unique: true } },
+    registration: { type: String, required: true },
     phone1: { type: String, required: false },
     active: { type: Boolean, required: true },
     rg: { type: String, required: false },
@@ -374,7 +374,7 @@ function putUser(res, user, id) {
                 res.send('500', { status: 500, error: 'A matricula ou registro ja existe' });
             }
             else {
-                UserModel.findOne({ 'cpf': user.cpf, 'type': user.type, '_id': { $nin: [objectID]} }, function (err, u) {
+                UserModel.findOne({ 'cpf': user.cpf, '_id': { $nin: [objectID]} }, function (err, u) {
                     if (!err) {
                         if (u) {
                             console.log('Error updating user: o CPF ja existe');
@@ -429,7 +429,7 @@ function postUser(res, user) {
                 return;
             }
             else {
-                UserModel.findOne({ 'cpf': user.cpf, 'type': user.type }, function (err, u) {
+                UserModel.findOne({ 'cpf': user.cpf }, function (err, u) {
                     if (!err) {
                         if (u) {
                             console.log('Error adding user: o CPF ja existe');
@@ -475,6 +475,44 @@ function postUser(res, user) {
             console.log(err);
             res.send('500', { status: 500, error: err });
             return;
+        }
+    });
+}
+
+function delUser(res, req, id) {
+
+    UserModel = mongoose.model('users', User);
+    UserModel.findOne({ '_id': id }, { _id: 1, mail: 1 }, function (err, user) {
+        if (!err) {
+            if (user) {
+                if (user.mail != req.user.username) {
+
+                    AccountModel.findOne({ 'username': user.mail }, { _id: 1 }, function (err, account) {
+                        if (!err) {
+                            if (account) {
+                                account.remove(function () { user.remove(function () { res.send(user); }); });
+                            }
+                            else {
+                                user.remove(function () { res.send(user); });
+                            }
+
+                        } else {
+                            console.log('Error updating account: ' + err);
+                            res.send('500', { status: 500, error: err });
+                        }
+                    });
+                }
+                else {
+                    res.send('500', { status: 500, error: 'Nao e possivel excluir o proprio usuario' });
+                }
+            }
+            else {
+                res.send('500', { status: 500, error: 'Usuario nao encontrado' });
+            }
+
+        } else {
+            console.log('Error deleting user: ' + err);
+            res.send('500', { status: 500, error: err });
         }
     });
 }
@@ -597,41 +635,7 @@ app.del('/students/:id', auth, function (req, res) {
     else {
         var id = req.params.id;
         console.log('Deleting user: ' + id);
-
-        UserModel = mongoose.model('users', User);
-        UserModel.findOne({ '_id': id }, { _id: 1, mail: 1 }, function (err, user) {
-            if (!err) {
-                if (user) {
-                    if (user.mail != req.user.username) {
-
-                        AccountModel.findOne({ 'username': user.mail }, { _id: 1 }, function (err, account) {
-                            if (!err) {
-                                if (account) {
-                                    account.remove(function () { user.remove(function () { res.send(user); }); });
-                                }
-                                else {
-                                    user.remove(function () { res.send(user); });
-                                }
-
-                            } else {
-                                console.log('Error updating account: ' + err);
-                                res.send('500', { status: 500, error: err });
-                            }
-                        });
-                    }
-                    else {
-                        res.send('500', { status: 500, error: 'Nao e possivel excluir o proprio usuario' });
-                    }
-                }
-                else {
-                    res.send('500', { status: 500, error: 'Usuario nao encontrado' });
-                }
-
-            } else {
-                console.log('Error deleting user: ' + err);
-                res.send('500', { status: 500, error: err });
-            }
-        });
+        delUser(res, req, id);
     }
 });
 
@@ -722,6 +726,49 @@ app.get('/teachers/:id', auth, function (req, res) {
             return console.log(err);
         }
     });
+});
+
+app.put('/teachers/:id', auth, function (req, res) {
+    if (!isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
+        res.send('401', { status: 401, error: 'Acesso Negado' });
+    }
+    else {
+        var id = req.params.id;
+        var user = req.body;
+        delete user._id;
+        console.log('Updating user: ' + id);
+        user.dateUpdate = new Date();
+
+        if (validateUser(res, user)) {
+            putUser(res, user, id);
+        }
+    }
+});
+
+app.del('/teachers/:id', auth, function (req, res) {
+    if (!isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
+        res.send('401', { status: 401, error: 'Acesso Negado' });
+    }
+    else {
+        var id = req.params.id;
+        console.log('Deleting user: ' + id);
+        delUser(res, req, id);
+    }
+});
+
+app.post('/teachers', auth, function (req, res) {
+    if (!isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
+        res.send('401', { status: 401, error: 'Acesso Negado' });
+    }
+    else {
+        var user = req.body;
+        console.log('Adding user');
+        user.dateInclusion = new Date();
+
+        if (validateUser(res, user)) {
+            postUser(res, user);
+        }
+    }
 });
 //************************************************************
 
