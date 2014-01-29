@@ -240,7 +240,7 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-        selectMenuItem('students-menu');
+        selectMenuItem('teachers-menu');
     },
 
     teacherListByName: function (n, page) {
