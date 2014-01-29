@@ -29,6 +29,8 @@ var AppRouter = Backbone.Router.extend({
         "teachers/cpf/:cpf/page/:page": "teacherListByCPF",
         "teachers/registration/:registration": "teacherListByRegistration",
         "teachers/registration/:registration/page/:page": "teacherListByRegistration",
+        "teachers/add": "addTeacher",
+        "teachers/:id": "teacherDetails",
         "attendants": "attendantList",
         "attendants/page/:page": "attendantList",
         "attendants/name/:name": "attendantListByName",
@@ -238,7 +240,7 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-        selectMenuItem('teachers-menu');
+        selectMenuItem('students-menu');
     },
 
     teacherListByName: function (n, page) {
@@ -311,6 +313,30 @@ var AppRouter = Backbone.Router.extend({
             }
         });
         selectMenuItem();
+    },
+
+    teacherDetails: function (id) {
+        var teacher = new Teacher({ _id: id });
+        teacher.fetch({
+            success: function () {
+                $("#content").html(new TeacherView({ model: teacher }).el);
+            },
+            error: function (err, message) {
+                var erro = $.parseJSON(message.responseText).status;
+                if (erro == 401) {
+                    signin();
+                }
+            }
+        });
+        selectMenuItem();
+    },
+
+    addTeacher: function () {
+
+        var teacher = new Teacher();
+        $('#content').html(new TeacherView({ model: teacher }).el);
+        selectMenuItem('teachers-menu');
+
     },
 
 
@@ -577,7 +603,7 @@ var AppRouter = Backbone.Router.extend({
 
 });
 
-utils.loadTemplate(['HomeView', 'HeaderView', 'WineView', 'WineListItemView', 'StudentsView', 'StudentView', 'TeachersView', 'AttendantsView', 'ManagersView', 'PatientsView', 'AboutView', 'BaseModalView'], function () {
+utils.loadTemplate(['HomeView', 'HeaderView', 'WineView', 'WineListItemView', 'StudentsView', 'StudentView', 'TeachersView', 'TeacherView', 'AttendantsView', 'ManagersView', 'PatientsView', 'AboutView', 'BaseModalView'], function () {
     app = new AppRouter();
     Backbone.history.start();
 });
