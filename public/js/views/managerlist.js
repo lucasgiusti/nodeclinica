@@ -5,6 +5,7 @@
     },
 
     render: function () {
+
         var managers = this.model.models;
         var len = managers.length;
         var startPos = (this.options.page - 1) * 8;
@@ -27,6 +28,8 @@
                 html += '<tr>';
                 html += '<td>' + jsonObject._id + '</td>';
                 html += '<td><a href="#managers/' + jsonObject._id + '">' + jsonObject.name + '</td>';
+                //html += '<td><a data-toggle="modal" href="#addAccount">' + jsonObject.name + '</td>';
+
                 html += '<td>' + jsonObject.registration + '</td>';
 
                 if (jsonObject.cpf != null)
@@ -39,8 +42,15 @@
                 else
                     html += '<td></td>';
 
-                if (jsonObject.active)
-                    html += '<td>Sim</td>';
+                if (jsonObject.active) {
+
+                    if (userAccountAccess.type == 'ADMIN') {
+                        html += '<td><a data-toggle="modal" data-id="' + jsonObject.mail + '" href="#addAccount" class="openAddAccount">Sim</a></td>';
+                    }
+                    else {
+                        html += '<td>Sim</td>';
+                    }
+                }
                 else
                     html += '<td>Não</td>';
 
@@ -106,5 +116,17 @@ window.ManagersPaginator = Backbone.View.extend({
         $(this.el).bootstrapPaginator(options);
 
         return this;
+    }
+});
+
+
+var BaseModalView = Backbone.View.extend({
+
+    initialize: function () {
+        this.render();
+    },
+
+    render: function () {
+        $(this.el).html(this.template());
     }
 });
