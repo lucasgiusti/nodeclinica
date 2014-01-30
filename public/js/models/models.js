@@ -400,18 +400,20 @@ window.Attendant = Backbone.Model.extend({
 
     initialize: function () {
         this.validators = {};
-
+        /*
         this.validators.name = function (value) {
-            return value.length > 0 ? { isValid: true } : { isValid: false, message: "You must enter a name" };
+            return value.length > 0 ? { isValid: true } : { isValid: false, message: "Informe o Nome" };
         };
 
-        this.validators.grapes = function (value) {
-            return value.length > 0 ? { isValid: true } : { isValid: false, message: "You must enter a grape variety" };
+        this.validators.address = function (value) {
+            return value.length > 0 ? { isValid: true } : { isValid: false, message: "Informe o Endereço" };
         };
-
-        this.validators.country = function (value) {
-            return value.length > 0 ? { isValid: true } : { isValid: false, message: "You must enter a country" };
-        };
+        
+        this.validators.mail = function (value) {
+            var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+            return emailRegex.test(value) == true ? { isValid: true } : { isValid: false, message: "Informe um email correto" };
+        }
+        */
     },
 
     validateItem: function (key) {
@@ -437,14 +439,27 @@ window.Attendant = Backbone.Model.extend({
 
     defaults: {
         _id: null,
-        name: "",
-        password: "123",
+        name: null,
+        mail: null,
+        registration: null,
+        cpf: null,
+        rg: null,
+        address: null,
+        number: null,
+        complement: null,
+        district: null,
+        state: 'SP',
+        city: 'SAO CAETANO DO SUL',
+        cep: null,
+        phone1: null,
+        phone2: null,
+        phone3: null,
+        active: true,
         type: "ATENDENTE",
-        active: true
+        dateInclusion: null,
+        dateUpdate: null
     }
 });
-
-
 
 window.AttendantCollection = Backbone.Collection.extend({
 

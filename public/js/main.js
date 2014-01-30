@@ -39,6 +39,8 @@ var AppRouter = Backbone.Router.extend({
         "attendants/cpf/:cpf/page/:page": "attendantListByCPF",
         "attendants/registration/:registration": "attendantListByRegistration",
         "attendants/registration/:registration/page/:page": "attendantListByRegistration",
+        "attendants/add": "addAttendant",
+        "attendants/:id": "attendantDetails",
         "managers": "managerList",
         "managers/page/:page": "managerList",
         "managers/name/:name": "managerListByName",
@@ -433,6 +435,30 @@ var AppRouter = Backbone.Router.extend({
         selectMenuItem();
     },
 
+    attendantDetails: function (id) {
+        var attendant = new Attendant({ _id: id });
+        attendant.fetch({
+            success: function () {
+                $("#content").html(new AttendantView({ model: attendant }).el);
+            },
+            error: function (err, message) {
+                var erro = $.parseJSON(message.responseText).status;
+                if (erro == 401) {
+                    signin();
+                }
+            }
+        });
+        selectMenuItem();
+    },
+
+    addAttendant: function () {
+
+        var attendant = new Attendant();
+        $('#content').html(new AttendantView({ model: attendant }).el);
+        selectMenuItem('attendants-menu');
+
+    },
+
 
 
     managerList: function (page) {
@@ -629,7 +655,7 @@ var AppRouter = Backbone.Router.extend({
 
 });
 
-utils.loadTemplate(['HomeView', 'HeaderView', 'WineView', 'WineListItemView', 'StudentsView', 'StudentView', 'TeachersView', 'TeacherView', 'AttendantsView', 'ManagersView', 'ManagerView', 'PatientsView', 'AboutView', 'BaseModalView'], function () {
+utils.loadTemplate(['HomeView', 'HeaderView', 'WineView', 'WineListItemView', 'StudentsView', 'StudentView', 'TeachersView', 'TeacherView', 'AttendantsView', 'AttendantView', 'ManagersView', 'ManagerView', 'PatientsView', 'AboutView', 'BaseModalView'], function () {
     app = new AppRouter();
     Backbone.history.start();
 });
