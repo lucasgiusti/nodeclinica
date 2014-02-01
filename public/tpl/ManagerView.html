@@ -188,7 +188,7 @@
         <div class="footer">
             <button type="button" class="btn btn-primary btn-large save">Salvar</button>
             <button type="button" class="btn" onclick="back();">Cancelar</button>
-            <button type="button" class="btn" data-toggle="modal" href="#delUser">Excluir</button>
+            <button type="button" class="btn" data-toggle="modal" href="#delUser" <%= _id === null ? 'style="display: none"' : '' %>>Excluir</button>
         </div>
 
     </form>
