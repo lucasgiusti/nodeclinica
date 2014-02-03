@@ -9,17 +9,20 @@ var application_root = __dirname,
     passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
     iz = require('iz'),
-    ObjectID = require('mongodb').ObjectID;
-    passportLocalMongoose = require('passport-local-mongoose');
+    ObjectID = require('mongodb').ObjectID,
+    passportLocalMongoose = require('passport-local-mongoose'),
+    utilRoute = require("./routes/util"),
+    accountRoute = require("./routes/account");
 
 
 //************************************************************
 
 
+var validaCpf = utilRoute.validaCpf;
 
-
-
-
+var AccountModel = accountRoute.AccountModel;
+var auth = accountRoute.auth;
+var isAuthorized = accountRoute.isAuthorized;
 
 //*****************************************
 // Config
@@ -60,18 +63,13 @@ var connectionString = require('./models/conn');
 mongoose.connect(connectionString);
 //************************************************************
 
+accountRoute.admUserExists;
 
 
 
 //************************************************************
-var Schema = mongoose.Schema; //Schema.ObjectId
+var Schema = mongoose.Schema;
 
-//Account Model
-var Account = new Schema({
-    username: {type: String, index: { unique: true}},
-    type: { type: String, required: true },
-    dateInclusion: { type: Date, required: true }
-});
 
 // User Model
 var User = new Schema({
@@ -101,75 +99,11 @@ var Patient = new Schema({
     name: { type: String, required: true },
     mail: { type: String, required: true }
 });
-//************************************************************
 
 
-Account.plugin(passportLocalMongoose);
 
-
-var AccountModel = mongoose.model('accounts', Account);
 var UserModel = mongoose.model('users', User);
 var PatientModel = mongoose.model('patients', Patient);
-
-
-
-
-//************************************************************
-// AUTHENTICATION
-
-passport.use(new LocalStrategy(AccountModel.authenticate()));
-passport.serializeUser(AccountModel.serializeUser());
-passport.deserializeUser(AccountModel.deserializeUser());
-
-
-var auth = function (req, res, next) {
-    if (!req.isAuthenticated())
-        res.send('401', { status: 401, error: 'Acesso Negado' });
-    else
-        next();
-};
-
-app.get('/loggedtest', auth, function (req, res) {
-    res.send({ 'username': req.user.username, 'type': req.user.type });
-});
-
-function isAuthorized(typeUser, typeAuthorization) {
-
-    if (typeAuthorization == 'MANUTENCAO_CADASTRO') {
-        return (typeUser == 'ADMIN' || typeUser == 'GESTOR');
-    }
-    else {
-        return false;
-    }
-}
-
-app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/signin.html?return=false' }));
-
-app.get('/logout', function (req, res) {
-    req.logout();
-    res.redirect('/signin.html');
-});
-
-AccountModel.find({ 'username': 'admin' }, { _id: 1 }, function (err, acc) {
-    if (!err) {
-        if (acc == '') {
-
-            AccountModel.register(new AccountModel({ username: 'admin', dateInclusion: new Date(), type: 'ADMIN' }), 'admin', function (err, account) {
-                if (err) {
-                    console.log(err);
-                }
-                else {
-                    console.log("Admin user created");
-                }
-            });
-
-        }
-    } else {
-        console.log(err);
-    }
-});
-
-
 //************************************************************
 
 
@@ -177,63 +111,13 @@ AccountModel.find({ 'username': 'admin' }, { _id: 1 }, function (err, acc) {
 
 
 //************************************************************
-// GET to READ ACCOUNT
+// ACCOUNT
 
-// List accounts by username
-app.get('/account/:username', auth, function (req, res) {
-    var username = req.params.username;
-
-    return AccountModel.findOne({ 'username': username }, { _id: 1, username: 1 }, function (err, account) {
-        if (!err) {
-            return res.send(account);
-        } else {
-            return console.log(err);
-        }
-    });
-});
-
-app.put('/account/:id', auth, function (req, res) {
-    if (!isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
-    }
-    else {
-
-        var id = req.params.id;
-        var accountNew = req.body;
-        console.log('Updating account: ' + id);
-
-        AccountModel.findOne({ 'username': id }, { _id: 1 }, function (err, account) {
-            if (!err) {
-                if (account) {
-                    account.remove(function () { registerAccount(res, accountNew); });
-                }
-                else {
-                    registerAccount(res, accountNew);
-                }
-
-            } else {
-                console.log('Error updating account: ' + err);
-                res.send('500', { status: 500, error: err });
-            }
-        });
-    }
-});
-
-function registerAccount(res, accountNew) {
-    AccountModel.register(new AccountModel({ username: accountNew.username, dateInclusion: new Date(), type: accountNew.type }), accountNew.password, function (err, account) {
-        if (err) {
-            console.log('Error updating account: ' + err);
-            res.send('500', { status: 500, error: err });
-        }
-        else {
-            console.log('document(s) updated');
-            res.send(account);
-        }
-    });
-}
-
-
-
+app.get('/account/:username', auth, accountRoute.findByUserName);
+app.put('/account/:id', auth, accountRoute.putAccount);
+app.get('/loggedtest', accountRoute.loggedtest);
+app.post('/login', accountRoute.login);
+app.get('/logout', accountRoute.logout);
 
 
 
@@ -392,9 +276,9 @@ function putUser(res, user, id) {
 
 
 
-                                        UserModel.findOne({ '_id': objectID }, { _id: 1, mail: 1 }, function (err, u) {
+                                        UserModel.findOne({ '_id': objectID }, { _id: 1, mail: 1, active: 1 }, function (err, u) {
                                             if (!err) {
-                                                if (u && u.mail != user.mail) {
+                                                if ((u && u.mail != user.mail) || (user.active == false && u.active == true)) {
 
                                                     AccountModel.findOne({ 'username': u.mail }, { _id: 1, username: 1 }, function (err, account) {
                                                         if (!err) {
@@ -515,7 +399,7 @@ function delUser(res, req, id) {
     UserModel.findOne({ '_id': id }, { _id: 1, mail: 1 }, function (err, user) {
         if (!err) {
             if (user) {
-                if (user.mail != req.user.username) {
+                if ((user.mail != req.user.username)) {
 
                     AccountModel.findOne({ 'username': user.mail }, { _id: 1 }, function (err, account) {
                         if (!err) {
@@ -1165,49 +1049,6 @@ app.get('/patients/:id', auth, function (req, res) {
 });
 //************************************************************
 
-
-
-
-function validaCpf(str) {
-    if (str == null || str == '') {
-        return false;
-    }
-
-    str = str.replace('.', '');
-    str = str.replace('.', '');
-    str = str.replace('-', '');
-
-    cpf = str;
-    var numeros, digitos, soma, i, resultado, digitos_iguais;
-    digitos_iguais = 1;
-    if (cpf.length < 11)
-        return false;
-    for (i = 0; i < cpf.length - 1; i++)
-        if (cpf.charAt(i) != cpf.charAt(i + 1)) {
-            digitos_iguais = 0;
-            break;
-        }
-    if (!digitos_iguais) {
-        numeros = cpf.substring(0, 9);
-        digitos = cpf.substring(9);
-        soma = 0;
-        for (i = 10; i > 1; i--)
-            soma += numeros.charAt(10 - i) * i;
-        resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-        if (resultado != digitos.charAt(0))
-            return false;
-        numeros = cpf.substring(0, 10);
-        soma = 0;
-        for (i = 11; i > 1; i--)
-            soma += numeros.charAt(11 - i) * i;
-        resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-        if (resultado != digitos.charAt(1))
-            return false;
-        return true;
-    }
-    else
-        return false;
-}
 
 //************************************************************
 // Launch server
