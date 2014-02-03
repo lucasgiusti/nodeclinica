@@ -63,28 +63,6 @@ var isAuthorized = function (typeUser, typeAuthorization) {
     }
 }
 
-var admUserExists = function () {
-
-    AccountModel.find({ 'username': 'admin' }, { _id: 1 }, function (err, acc) {
-        if (!err) {
-            if (acc == '') {
-
-                AccountModel.register(new AccountModel({ username: 'admin', dateInclusion: new Date(), type: 'ADMIN' }), 'admin', function (err, account) {
-                    if (err) {
-                        console.log(err);
-                    }
-                    else {
-                        console.log("Admin user created");
-                    }
-                });
-
-            }
-        } else {
-            console.log(err);
-        }
-    });
-};
-
 var loggedtest = function (req, res) {
     if (req.user)
         res.send({ 'username': req.user.username, 'type': req.user.type });
