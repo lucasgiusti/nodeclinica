@@ -3,11 +3,12 @@
 var express = require("express"),
     mongoose = require('mongoose'),
     iz = require('iz'),
+    ObjectID = require('mongodb').ObjectID,
     passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
     passportLocalMongoose = require('passport-local-mongoose'),
-    utilRoute = require("util"),
-    accountRoute = require("account");
+    utilRoute = require("./util"),
+    accountRoute = require("./account");
 //************************************************************
 
 
@@ -42,8 +43,6 @@ var User = new Schema({
 });
 
 var UserModel = mongoose.model('users', User);
-
-
 
 var validateUser = function (res, user) {
 
@@ -352,7 +351,7 @@ var delUser = function (res, req, id) {
     });
 }
 
-
+module.exports.UserModel = UserModel;
 module.exports.validateUser = validateUser;
 module.exports.putUser = putUser;
 module.exports.postUser = postUser;
