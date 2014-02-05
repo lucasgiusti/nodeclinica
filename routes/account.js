@@ -30,6 +30,25 @@ passport.use(new LocalStrategy(AccountModel.authenticate()));
 passport.serializeUser(AccountModel.serializeUser());
 passport.deserializeUser(AccountModel.deserializeUser());
 
+function createAdmUser() {
+    AccountModel.find({ 'username': 'admin' }, { _id: 1 }, function (err, acc) {
+        if (!err) {
+            if (acc == '') {
+                AccountModel.register(new AccountModel({ username: 'admin', dateInclusion: new Date(), type: 'ADMIN' }), 'admin', function (err, account) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    else {
+                        console.log("Admin user created");
+                    }
+                });
+            }
+        } else {
+            console.log(err);
+        }
+    });
+}
+
 function registerAccount(res, accountNew) {
     AccountModel.register(new AccountModel({ username: accountNew.username, dateInclusion: new Date(), type: accountNew.type }), accountNew.password, function (err, account) {
         if (err) {
@@ -119,6 +138,7 @@ var putAccount = function (req, res) {
 
 
 module.exports.AccountModel = AccountModel;
+module.exports.CreateAdmUser = createAdmUser;
 module.exports.auth = auth;
 module.exports.loggedtest = loggedtest;
 module.exports.isAuthorized = isAuthorized;

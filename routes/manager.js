@@ -13,8 +13,8 @@ var express = require("express"),
 
 var UserModel = userRoute.UserModel;
 
-var getAttendantsAll = function (req, res) {
-    var type = 'ATENDENTE';
+var getManagersAll = function (req, res) {
+    var type = 'GESTOR';
     UserModel = userRoute.UserModel;
     return UserModel.find({ 'type': type }, { _id: 1, name: 1, mail: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
         if (!err) {
@@ -25,9 +25,9 @@ var getAttendantsAll = function (req, res) {
     });
 };
 
-var getAttendantsByName = function (req, res) {
+var getManagersByName = function (req, res) {
     var name = req.params.name;
-    var type = 'ATENDENTE';
+    var type = 'GESTOR';
     UserModel = userRoute.UserModel;
     return UserModel.find({ 'name': { '$regex': name, $options: 'i' }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
         if (!err) {
@@ -38,9 +38,9 @@ var getAttendantsByName = function (req, res) {
     });
 };
 
-var getAttendantsByCpf = function (req, res) {
+var getManagersByCpf = function (req, res) {
     var cpf = req.params.cpf;
-    var type = 'ATENDENTE';
+    var type = 'GESTOR';
     UserModel = userRoute.UserModel;
     return UserModel.find({ 'cpf': { '$regex': cpf }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
         if (!err) {
@@ -51,9 +51,9 @@ var getAttendantsByCpf = function (req, res) {
     });
 };
 
-var getAttendantsByRegistration = function (req, res) {
+var getManagersByRegistration = function (req, res) {
     var registration = req.params.registration;
-    var type = 'ATENDENTE';
+    var type = 'GESTOR';
     UserModel = userRoute.UserModel;
     return UserModel.find({ 'registration': registration, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
         if (!err) {
@@ -64,7 +64,7 @@ var getAttendantsByRegistration = function (req, res) {
     });
 };
 
-var getAttendantsById = function (req, res) {
+var getManagersById = function (req, res) {
     var id = req.params.id;
     UserModel = userRoute.UserModel;
     return UserModel.findById(id, {
@@ -98,7 +98,7 @@ var getAttendantsById = function (req, res) {
     });
 };
 
-var putAttendant = function (req, res) {
+var putManager = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
         res.send('401', { status: 401, error: 'Acesso Negado' });
     }
@@ -115,7 +115,7 @@ var putAttendant = function (req, res) {
     }
 };
 
-var delAttendant = function (req, res) {
+var delManager = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
         res.send('401', { status: 401, error: 'Acesso Negado' });
     }
@@ -126,7 +126,7 @@ var delAttendant = function (req, res) {
     }
 };
 
-var postAttendant = function (req, res) {
+var postManager = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
         res.send('401', { status: 401, error: 'Acesso Negado' });
     }
@@ -141,11 +141,11 @@ var postAttendant = function (req, res) {
     }
 };
 
-module.exports.getAttendantsAll = getAttendantsAll;
-module.exports.getAttendantsByName = getAttendantsByName;
-module.exports.getAttendantsByCpf = getAttendantsByCpf;
-module.exports.getAttendantsByRegistration = getAttendantsByRegistration;
-module.exports.getAttendantsById = getAttendantsById;
-module.exports.putAttendant = putAttendant;
-module.exports.delAttendant = delAttendant;
-module.exports.postAttendant = postAttendant;
+module.exports.getManagersAll = getManagersAll;
+module.exports.getManagersByName = getManagersByName;
+module.exports.getManagersByCpf = getManagersByCpf;
+module.exports.getManagersByRegistration = getManagersByRegistration;
+module.exports.getManagersById = getManagersById;
+module.exports.putManager = putManager;
+module.exports.delManager = delManager;
+module.exports.postManager = postManager;
