@@ -13,7 +13,9 @@ var application_root = __dirname,
     passportLocalMongoose = require('passport-local-mongoose'),
     accountRoute = require("./routes/account"),
     userRoute = require("./routes/user"),
-    studentRoute = require("./routes/student");
+    studentRoute = require("./routes/student"),
+    teacherRoute = require("./routes/teacher"),
+    attendantRoute = require("./routes/attendant");
 
 
 //************************************************************
@@ -130,283 +132,32 @@ app.post('/students', auth, studentRoute.postStudent);
 
 
 //************************************************************
-// GET to READ TEACHERS
+// TEACHERS
 
-
-// List teachers
-app.get('/teachers', auth, function (req, res) {
-    var type = 'PROFESSOR';
-    UserModel = mongoose.model('users', User);
-    return UserModel.find({ 'type': type }, { _id: 1, name: 1, mail: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
-        if (!err) {
-            return res.send(users);
-        } else {
-            return console.log(err);
-        }
-    });
-});
-
-// List teachers by Name
-app.get('/teachers/name/:name', auth, function (req, res) {
-    var name = req.params.name;
-    var type = 'PROFESSOR';
-    UserModel = mongoose.model('users', User);
-    return UserModel.find({ 'name': { '$regex': name, $options: 'i' }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
-        if (!err) {
-            return res.send(users);
-        } else {
-            return console.log(err);
-        }
-    });
-});
-
-// List teachers by CPF
-app.get('/teachers/cpf/:cpf', auth, function (req, res) {
-    var cpf = req.params.cpf;
-    var type = 'PROFESSOR';
-    UserModel = mongoose.model('users', User);
-    return UserModel.find({ 'cpf': { '$regex': cpf }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
-        if (!err) {
-            return res.send(users);
-        } else {
-            return console.log(err);
-        }
-    });
-});
-
-
-// List teachers by Registration
-app.get('/teachers/registration/:registration', auth, function (req, res) {
-    var registration = req.params.registration;
-    var type = 'PROFESSOR';
-    UserModel = mongoose.model('users', User);
-    return UserModel.find({ 'registration': registration, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
-        if (!err) {
-            return res.send(users);
-        } else {
-            return console.log(err);
-        }
-    });
-});
-
-// Teacher by id
-app.get('/teachers/:id', auth, function (req, res) {
-    var id = req.params.id;
-    UserModel = mongoose.model('users', User);
-    return UserModel.findById(id, {
-        _id: 1,
-        name: 1,
-        mail: 1,
-        address: 1,
-        number: 1,
-        complement: 1,
-        district: 1,
-        state: 1,
-        city: 1,
-        cep: 1,
-        registration: 1,
-        phone1: 1,
-        active: 1,
-        rg: 1,
-        phone2: 1,
-        phone3: 1,
-        cpf: 1,
-        type: 1,
-        dateInclusion: 1,
-        dateUpdate: 1
-    }, function (err, users) {
-        if (!err) {
-            return res.send(users);
-
-        } else {
-            return console.log(err);
-        }
-    });
-});
-
-app.put('/teachers/:id', auth, function (req, res) {
-    if (!isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
-    }
-    else {
-        var id = req.params.id;
-        var user = req.body;
-        delete user._id;
-        console.log('Updating user: ' + id);
-        user.dateUpdate = new Date();
-
-        if (validateUser(res, user)) {
-            putUser(res, user, id);
-        }
-    }
-});
-
-app.del('/teachers/:id', auth, function (req, res) {
-    if (!isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
-    }
-    else {
-        var id = req.params.id;
-        console.log('Deleting user: ' + id);
-        delUser(res, req, id);
-    }
-});
-
-app.post('/teachers', auth, function (req, res) {
-    if (!isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
-    }
-    else {
-        var user = req.body;
-        console.log('Adding user');
-        user.dateInclusion = new Date();
-
-        if (validateUser(res, user)) {
-            postUser(res, user);
-        }
-    }
-});
+app.get('/teachers', auth, teacherRoute.getTeachersAll);
+app.get('/teachers/name/:name', auth, teacherRoute.getTeachersByName);
+app.get('/teachers/cpf/:cpf', auth, teacherRoute.getTeachersByCpf);
+app.get('/teachers/registration/:registration', auth, teacherRoute.getTeachersByRegistration);
+app.get('/teachers/:id', auth, teacherRoute.getTeachersById);
+app.put('/teachers/:id', auth, teacherRoute.putTeacher);
+app.del('/teachers/:id', auth, teacherRoute.delTeacher);
+app.post('/teachers', auth, teacherRoute.postTeacher);
 //************************************************************
 
 
 
 
 //************************************************************
-// GET to READ ATTENDANTS
+// ATTENDANTS
 
-// List attendants
-app.get('/attendants', auth, function (req, res) {
-    var type = 'ATENDENTE';
-    UserModel = mongoose.model('users', User);
-    return UserModel.find({ 'type': type }, { _id: 1, name: 1, mail: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
-        if (!err) {
-            return res.send(users);
-        } else {
-            return console.log(err);
-        }
-    });
-});
-
-// List attendants by Name
-app.get('/attendants/name/:name', auth, function (req, res) {
-    var name = req.params.name;
-    var type = 'ATENDENTE';
-    UserModel = mongoose.model('users', User);
-    return UserModel.find({ 'name': { '$regex': name, $options: 'i' }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
-        if (!err) {
-            return res.send(users);
-        } else {
-            return console.log(err);
-        }
-    });
-});
-
-// List attendants by CPF
-app.get('/attendants/cpf/:cpf', auth, function (req, res) {
-    var cpf = req.params.cpf;
-    var type = 'ATENDENTE';
-    UserModel = mongoose.model('users', User);
-    return UserModel.find({ 'cpf': { '$regex': cpf }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
-        if (!err) {
-            return res.send(users);
-        } else {
-            return console.log(err);
-        }
-    });
-});
-
-
-// List attendants by Registration
-app.get('/attendants/registration/:registration', auth, function (req, res) {
-    var registration = req.params.registration;
-    var type = 'ATENDENTE';
-    UserModel = mongoose.model('users', User);
-    return UserModel.find({ 'registration': registration, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
-        if (!err) {
-            return res.send(users);
-        } else {
-            return console.log(err);
-        }
-    });
-});
-
-// Student by id
-app.get('/attendants/:id', auth, function (req, res) {
-    var id = req.params.id;
-    UserModel = mongoose.model('users', User);
-    return UserModel.findById(id, {
-        _id: 1,
-        name: 1,
-        mail: 1,
-        address: 1,
-        number: 1,
-        complement: 1,
-        district: 1,
-        state: 1,
-        city: 1,
-        cep: 1,
-        registration: 1,
-        phone1: 1,
-        active: 1,
-        rg: 1,
-        phone2: 1,
-        phone3: 1,
-        cpf: 1,
-        type: 1,
-        dateInclusion: 1,
-        dateUpdate: 1
-    }, function (err, users) {
-        if (!err) {
-            return res.send(users);
-
-        } else {
-            return console.log(err);
-        }
-    });
-});
-
-app.put('/attendants/:id', auth, function (req, res) {
-    if (!isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
-    }
-    else {
-        var id = req.params.id;
-        var user = req.body;
-        delete user._id;
-        console.log('Updating user: ' + id);
-        user.dateUpdate = new Date();
-
-        if (validateUser(res, user)) {
-            putUser(res, user, id);
-        }
-    }
-});
-
-app.del('/attendants/:id', auth, function (req, res) {
-    if (!isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
-    }
-    else {
-        var id = req.params.id;
-        console.log('Deleting user: ' + id);
-        delUser(res, req, id);
-    }
-});
-
-app.post('/attendants', auth, function (req, res) {
-    if (!isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
-    }
-    else {
-        var user = req.body;
-        console.log('Adding user');
-        user.dateInclusion = new Date();
-
-        if (validateUser(res, user)) {
-            postUser(res, user);
-        }
-    }
-});
+app.get('/attendants', auth, attendantRoute.getAttendantsAll);
+app.get('/attendants/name/:name', auth, attendantRoute.getAttendantsByName);
+app.get('/attendants/cpf/:cpf', auth, attendantRoute.getAttendantsByCpf);
+app.get('/attendants/registration/:registration', auth, attendantRoute.getAttendantsByRegistration);
+app.get('/attendants/:id', auth, attendantRoute.getAttendantsById);
+app.put('/attendants/:id', auth, attendantRoute.putAttendant);
+app.del('/attendants/:id', auth, attendantRoute.delAttendant);
+app.post('/attendants', auth, attendantRoute.postAttendant);
 //************************************************************
 
 
