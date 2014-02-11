@@ -57,6 +57,8 @@ var AppRouter = Backbone.Router.extend({
         "patients/name/:name/page/:page": "patientListByName",
         "patients/cpf/:cpf": "patientListByCPF",
         "patients/cpf/:cpf/page/:page": "patientListByCPF",
+        "patients/add": "addPatient",
+        "patients/:id": "patientDetails",
         "about": "about"
     },
 
@@ -643,7 +645,29 @@ var AppRouter = Backbone.Router.extend({
         selectMenuItem();
     },
 
+    patientDetails: function (id) {
+        var patient = new Patient({ _id: id });
+        patient.fetch({
+            success: function () {
+                $("#content").html(new PatientView({ model: patient }).el);
+            },
+            error: function (err, message) {
+                var erro = $.parseJSON(message.responseText).status;
+                if (erro == 401) {
+                    signin();
+                }
+            }
+        });
+        selectMenuItem();
+    },
 
+    addPatient: function () {
+
+        var patient = new Patient();
+        $('#content').html(new PatientView({ model: patient }).el);
+        selectMenuItem('patients-menu');
+
+    },
 
     about: function () {
         if (!this.aboutView) {
@@ -655,7 +679,7 @@ var AppRouter = Backbone.Router.extend({
 
 });
 
-utils.loadTemplate(['HomeView', 'HeaderView', 'WineView', 'WineListItemView', 'StudentsView', 'StudentView', 'TeachersView', 'TeacherView', 'AttendantsView', 'AttendantView', 'ManagersView', 'ManagerView', 'PatientsView', 'AboutView', 'BaseModalView'], function () {
+utils.loadTemplate(['HomeView', 'HeaderView', 'WineView', 'WineListItemView', 'StudentsView', 'StudentView', 'TeachersView', 'TeacherView', 'AttendantsView', 'AttendantView', 'ManagersView', 'ManagerView', 'PatientsView', 'PatientView', 'AboutView', 'BaseModalView'], function () {
     app = new AppRouter();
     Backbone.history.start();
 });

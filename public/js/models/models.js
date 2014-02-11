@@ -658,7 +658,7 @@ window.Patient = Backbone.Model.extend({
 
     initialize: function () {
         this.validators = {};
-
+        /*
         this.validators.name = function (value) {
             return value.length > 0 ? { isValid: true } : { isValid: false, message: "You must enter a name" };
         };
@@ -670,6 +670,7 @@ window.Patient = Backbone.Model.extend({
         this.validators.country = function (value) {
             return value.length > 0 ? { isValid: true } : { isValid: false, message: "You must enter a country" };
         };
+        */
     },
 
     validateItem: function (key) {
@@ -695,7 +696,27 @@ window.Patient = Backbone.Model.extend({
 
     defaults: {
         _id: null,
-        name: ""
+        name: null,
+        address: null,
+        number: null,
+        complement: null,
+        district: null,
+        state: 'SP',
+        city: 'SAO CAETANO DO SUL',
+        cep: null,
+        sex: null,
+        phone1: null,
+        dateBirth: null,
+        maritalStatus: null,
+        phone2: null,
+        cpf: null,
+        phone3: null,
+        mail: null,
+        responsibleName: null,
+        responsibleCPF: null,
+        observations: null,
+        dateInclusion: null,
+        dateUpdate: null
     }
 });
 

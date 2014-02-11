@@ -16,6 +16,7 @@
       </div><!-- /btn-group -->
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
+<button class="btn btn-primary btn-large addPatient">Incluir Paciente</button>
 </div><!-- /.row -->
 
 <br/>
@@ -52,4 +53,8 @@
 
         window.location = '#patients/' + por + '/' + $('#txtPesquisa').val();
     }
+
+    $(document).on("click", ".addPatient", function () {
+        window.location = '#patients/add';
+    });
 </script>
