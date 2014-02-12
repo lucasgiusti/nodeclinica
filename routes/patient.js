@@ -109,87 +109,48 @@ var putPatient = function (req, res) {
     var patient = req.body;
 
     var objectID = new ObjectID(id);
-    UserModel = mongoose.model('users', User);
+    PatientModel = mongoose.model('patients', Patient);
 
-    UserModel.findOne({ 'registration': user.registration, 'type': user.type, '_id': { $nin: [objectID] } }, function (err, u) {
-        if (!err) {
-            if (u) {
-                console.log('Error updating user: a matricula ou registro ja existe');
-                res.send('500', { status: 500, error: 'A matricula ou registro ja existe' });
-            }
-            else {
-                UserModel.findOne({ 'cpf': user.cpf, '_id': { $nin: [objectID] } }, function (err, u) {
-                    if (!err) {
-                        if (u) {
-                            console.log('Error updating user: o CPF ja existe');
-                            res.send('500', { status: 500, error: 'O CPF ja existe' });
+    if (patient.cpf) {
+
+        PatientModel.findOne({ 'cpf': patient.cpf, '_id': { $nin: [objectID] } }, function (err, u) {
+            if (!err) {
+                if (u) {
+                    console.log('Error updating patient: o CPF ja existe');
+                    res.send('500', { status: 500, error: 'O CPF ja existe' });
+                }
+                else {
+                    //UPDATE PATIENT
+                    PatientModel.update({ '_id': id }, patient, { safe: true }, function (err, result) {
+                        if (err) {
+                            console.log('Error updating patient: ' + err);
+                            res.send('500', { status: 500, error: err });
+                        } else {
+                            console.log('' + result + ' document(s) updated');
+
+                            res.send(patient);
                         }
-                        else {
-                            UserModel.findOne({ 'mail': user.mail, '_id': { $nin: [objectID] } }, function (err, u) {
-                                if (!err) {
-                                    if (u) {
-                                        console.log('Error updating user: o Email ja existe');
-                                        res.send('500', { status: 500, error: 'O Email ja existe' });
-                                    }
-                                    else {
-                                        //UPDATE USER
-
-
-
-                                        UserModel.findOne({ '_id': objectID }, { _id: 1, mail: 1, active: 1 }, function (err, u) {
-                                            if (!err) {
-                                                if ((u && u.mail != user.mail) || (user.active == false && u.active == true)) {
-
-                                                    AccountModel.findOne({ 'username': u.mail }, { _id: 1, username: 1 }, function (err, account) {
-                                                        if (!err) {
-                                                            if (account) {
-                                                                account.remove();
-                                                            }
-                                                        } else {
-                                                            console.log(err);
-                                                        }
-                                                    });
-                                                }
-                                            } else {
-                                                console.log(err);
-                                            }
-                                        });
-
-
-
-
-
-
-
-                                        UserModel.update({ '_id': id }, user, { safe: true }, function (err, result) {
-                                            if (err) {
-                                                console.log('Error updating user: ' + err);
-                                                res.send('500', { status: 500, error: err });
-                                            } else {
-                                                console.log('' + result + ' document(s) updated');
-
-                                                res.send(user);
-                                            }
-                                        });
-                                    }
-                                } else {
-                                    console.log(err);
-                                    res.send('500', { status: 500, error: err });
-                                }
-                            });
-                        }
-                    } else {
-                        console.log(err);
-                        res.send('500', { status: 500, error: err });
-                    }
-                });
+                    });
+                }
+            } else {
+                console.log(err);
+                res.send('500', { status: 500, error: err });
             }
-        } else {
-            console.log(err);
-            res.send('500', { status: 500, error: err });
-        }
-    });
+        });
+    }
+    else {
+        //UPDATE PATIENT
+        PatientModel.update({ '_id': id }, patient, { safe: true }, function (err, result) {
+            if (err) {
+                console.log('Error updating patient: ' + err);
+                res.send('500', { status: 500, error: err });
+            } else {
+                console.log('' + result + ' document(s) updated');
 
+                res.send(patient);
+            }
+        });
+    }
 }
 
 var postPatient = function (req, res) {
@@ -205,64 +166,50 @@ var postPatient = function (req, res) {
         if (validatePatient(res, patient)) {
 
             PatientModel = mongoose.model('patients', Patient);
-            console.log(user.type);
-            UserModel.findOne({ 'registration': user.registration, 'type': user.type }, function (err, u) {
-                if (!err) {
-                    if (u) {
-                        console.log('Error adding user: a matricula ou registro ja existe');
-                        res.send('500', { status: 500, error: 'A matricula ou registro ja existe' });
-                        return;
-                    }
-                    else {
-                        UserModel.findOne({ 'cpf': user.cpf }, function (err, u) {
-                            if (!err) {
-                                if (u) {
-                                    console.log('Error adding user: o CPF ja existe');
-                                    res.send('500', { status: 500, error: 'O CPF ja existe' });
-                                    return;
+            if (patient.cpf) {
+                PatientModel.findOne({ 'cpf': patient.cpf }, function (err, u) {
+                    if (!err) {
+                        if (u) {
+                            console.log('Error adding patient: o CPF ja existe');
+                            res.send('500', { status: 500, error: 'O CPF ja existe' });
+                            return;
+                        }
+                        else {
+                            //INSERT
+                            delete patient._id;
+                            delete patient.dateUpdate;
+                            PatientModel = new PatientModel(patient);
+                            PatientModel.save(function (err, patient, result) {
+                                if (err) {
+                                    console.log('Error inserting patient: ' + err);
+                                    res.send('500', { status: 500, error: err });
+                                } else {
+                                    console.log('' + result + ' document(s) inserted');
+                                    res.send(patient);
                                 }
-                                else {
-                                    UserModel.findOne({ 'mail': user.mail }, function (err, u) {
-                                        if (!err) {
-                                            if (u) {
-                                                console.log('Error adding user: o Email ja existe');
-                                                res.send('500', { status: 500, error: 'O Email ja existe' });
-                                                return;
-                                            }
-                                            else {
-                                                //INSERT
-                                                delete user._id;
-                                                delete user.dateUpdate;
-                                                UserModel = new UserModel(user);
-                                                UserModel.save(function (err, user, result) {
-                                                    if (err) {
-                                                        console.log('Error inserting user: ' + err);
-                                                        res.send('500', { status: 500, error: err });
-                                                    } else {
-                                                        console.log('' + result + ' document(s) inserted');
-                                                        res.send(user);
-                                                    }
-                                                });
-                                            }
-                                        } else {
-                                            console.log(err);
-                                            res.send('500', { status: 500, error: err });
-                                        }
-                                    });
-                                }
-                            } else {
-                                console.log(err);
-                                res.send('500', { status: 500, error: err });
-                            }
-                        });
+                            });
+                        }
+                    } else {
+                        console.log(err);
+                        res.send('500', { status: 500, error: err });
                     }
-                } else {
-                    console.log(err);
-                    res.send('500', { status: 500, error: err });
-                    return;
-                }
-            });
-
+                });
+            }
+            else {
+                //INSERT
+                delete patient._id;
+                delete patient.dateUpdate;
+                PatientModel = new PatientModel(patient);
+                PatientModel.save(function (err, patient, result) {
+                    if (err) {
+                        console.log('Error inserting patient: ' + err);
+                        res.send('500', { status: 500, error: err });
+                    } else {
+                        console.log('' + result + ' document(s) inserted');
+                        res.send(patient);
+                    }
+                });
+            }
         }
     }
 }
