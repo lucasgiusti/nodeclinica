@@ -76,10 +76,20 @@
                     </article>
                     <article style="float: right; width: 62%">
                     <div class="control-group">
-                        <label for="grapes" class="control-label">Sexo:</label>
+                        <label for="grapes" class="control-label">Estado Civil:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="registration" name="registration" />
+                            <input type="text" class="form-control" id="maritalStatus" name="maritalStatus" value="<%= maritalStatus === null ? '' : maritalStatus %>" />
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    <article style="float: left; width: 100%">
+                    <div class="control-group">
+                        <label for="name" class="control-label">Observações:</label>
+
+                        <div class="controls">
+                            <textarea class="form-control" id="Text4" name="name" maxlength="3000"><%= observations === null ? '' : observations %></textarea>
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -99,10 +109,10 @@
                     </article>
                     <article style="float: right; width: 49%">
                     <div class="control-group">
-                        <label for="grapes" class="control-label">Ativo:</label>
+                        <label for="grapes" class="control-label">Data de Nascimento:</label>
 
-                        <div class="checkbox">
-                            <input type="checkbox" id="active" name="active" >
+                        <div class="controls">
+                            <input type="text" class="form-control" id="dateBirth" name="dateBirth" value="<%= dateBirth === null ? '' : new Date(dateBirth).toLocaleDateString() %>" />
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -112,10 +122,10 @@
                     <section style="float: right; width: 48%;">
                     <article style="float: left; width: 48%">
                     <div class="control-group">
-                        <label for="grapes" class="control-label">RG:</label>
+                        <label for="grapes" class="control-label">Sexo:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="rg" name="rg" />
+                            <input type="text" class="form-control" id="sex" name="sex" value="<%= sex === null ? '' : sex %>" />
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -155,6 +165,26 @@
 
                         <div class="controls">
                             <input type="text" class="form-control" id="mail" name="mail" value="<%= mail == null ? '' : mail %>" maxlength="100"/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    <article style="float: left; width: 48%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Nome Responsável:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="responsibleName" name="responsibleName" value="<%= responsibleName === null ? '' : responsibleName %>"/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    <article style="float: right; width: 49%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">CPF Responsável:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="responsibleCPF" name="responsibleCPF" value="<%= responsibleCPF === null ? '' : responsibleCPF %>"/>
                             <span class="help-inline"></span>
                         </div>
                     </div>

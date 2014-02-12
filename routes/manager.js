@@ -6,7 +6,7 @@ var express = require("express"),
     passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
     passportLocalMongoose = require('passport-local-mongoose'),
-    accountRoute = require("./account");
+    accountRoute = require("./account"),
     userRoute = require("./user");
 //************************************************************
 
