@@ -3,9 +3,11 @@
 var express = require("express"),
     mongoose = require('mongoose'),
     iz = require('iz'),
+    ObjectID = require('mongodb').ObjectID,
     LocalStrategy = require('passport-local').Strategy,
     passportLocalMongoose = require('passport-local-mongoose'),
-    accountRoute = require("./account");
+    accountRoute = require("./account"),
+    utilRoute = require("./util");
 //************************************************************
 
 
@@ -14,7 +16,26 @@ var Schema = mongoose.Schema;
 // Patient Model
 var Patient = new Schema({
     name: { type: String, required: true },
-    mail: { type: String, required: true }
+    mail: { type: String, required: false },
+    address: { type: String, required: true },
+    number: { type: String, required: true },
+    complement: { type: String, required: false },
+    district: { type: String, required: false },
+    state: { type: String, required: true },
+    city: { type: String, required: true },
+    cep: { type: String, required: false },
+    maritalStatus: { type: String, required: false },
+    phone1: { type: String, required: false },
+    dateBirth: { type: Date, required: true },
+    sex: { type: String, required: true },
+    phone2: { type: String, required: false },
+    phone3: { type: String, required: false },
+    cpf: { type: String, required: false },
+    responsibleName: { type: String, required: false },
+    responsibleCPF: { type: String, required: false },
+    observations: { type: String, required: false },
+    dateInclusion: { type: Date, required: true },
+    dateUpdate: { type: Date, required: false }
 });
 
 var PatientModel = mongoose.model('patients', Patient);
@@ -72,12 +93,30 @@ var validatePatient = function (res, patient) {
     }
     if ((patient.cep == null)) { delete patient.cep; }
 
+    if ((patient.maritalStatus == null)) { delete patient.maritalStatus; }
+    if ((patient.mail == null)) { delete patient.mail; }
+    if ((patient.responsibleName == null)) { delete patient.responsibleName; }
+    if ((patient.responsibleCPF == null)) { delete patient.responsibleCPF; }
+    if ((patient.observations == null)) { delete patient.observations; }
+
     if (!iz.maxLength(patient.phone1, 20)) {
         console.log('Error adding patient: o telefone 1 deve ter maximo 20 caracteres');
         res.send('500', { status: 500, error: 'O telefone 1 deve ter maximo 20 caracteres' });
         return false;
     }
     if ((patient.phone1 == null)) { delete patient.phone1; }
+
+    if (!iz(patient.dateBirth).required().date().valid) {
+        console.log('Error adding patient: data de nascimento invalida');
+        res.send('500', { status: 500, error: 'Data de nascimento invalida' });
+        return false;
+    }
+
+    if (patient.sex == null) {
+        console.log('Error adding patient: sexo invalido');
+        res.send('500', { status: 500, error: 'Sexo invalido' });
+        return false;
+    }
 
     if (!iz.maxLength(patient.phone2, 20)) {
         console.log('Error adding patient: o telefone 2 deve ter maximo 20 caracteres');
@@ -93,6 +132,18 @@ var validatePatient = function (res, patient) {
     }
     if ((patient.phone3 == null)) { delete patient.phone3; }
 
+    if ((patient.cpf == null || !utilRoute.validaCpf(patient.cpf)) && (patient.responsibleCPF == null || !utilRoute.validaCpf(patient.responsibleCPF))) {
+        console.log('Error adding patient: um CPF valido deve ser informado para o paciente ou o responsavel');
+        res.send('500', { status: 500, error: 'Um CPF valido deve ser informado para o paciente ou o responsavel' });
+        return false;
+    }
+
+    if (patient.responsibleCPF != null || patient.resposibleName != null) {
+        console.log('Error adding patient: caso tenha um responsavel, devem ser informados nome e CPF do mesmo');
+        res.send('500', { status: 500, error: 'Caso tenha um responsavel, devem ser informados nome e CPF do mesmo' });
+        return false;
+    }
+
     if (!iz(patient.dateInclusion).required().date().valid) {
         console.log('Error adding patient: data de inclusao invalida');
         res.send('500', { status: 500, error: 'Data de inclusao invalida' });
@@ -104,57 +155,69 @@ var validatePatient = function (res, patient) {
 }
 
 var putPatient = function (req, res) {
-
-    var id = req.params.id;
-    var patient = req.body;
-
-    var objectID = new ObjectID(id);
-    PatientModel = mongoose.model('patients', Patient);
-
-    if (patient.cpf) {
-
-        PatientModel.findOne({ 'cpf': patient.cpf, '_id': { $nin: [objectID] } }, function (err, u) {
-            if (!err) {
-                if (u) {
-                    console.log('Error updating patient: o CPF ja existe');
-                    res.send('500', { status: 500, error: 'O CPF ja existe' });
-                }
-                else {
-                    //UPDATE PATIENT
-                    PatientModel.update({ '_id': id }, patient, { safe: true }, function (err, result) {
-                        if (err) {
-                            console.log('Error updating patient: ' + err);
-                            res.send('500', { status: 500, error: err });
-                        } else {
-                            console.log('' + result + ' document(s) updated');
-
-                            res.send(patient);
-                        }
-                    });
-                }
-            } else {
-                console.log(err);
-                res.send('500', { status: 500, error: err });
-            }
-        });
+    if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
+        res.send('401', { status: 401, error: 'Acesso Negado' });
     }
     else {
-        //UPDATE PATIENT
-        PatientModel.update({ '_id': id }, patient, { safe: true }, function (err, result) {
-            if (err) {
-                console.log('Error updating patient: ' + err);
-                res.send('500', { status: 500, error: err });
-            } else {
-                console.log('' + result + ' document(s) updated');
+        var id = req.params.id;
+        var patient = req.body;
+        delete patient._id;
 
-                res.send(patient);
+        console.log('Updating patient');
+        patient.dateUpdate = new Date();
+        var objectID = new ObjectID(id);
+
+        PatientModel = mongoose.model('patients', Patient);
+
+
+        if (validatePatient(res, patient)) {
+
+            if (patient.cpf) {
+
+                PatientModel.findOne({ 'cpf': patient.cpf, '_id': { $nin: [objectID]} }, function (err, u) {
+                    if (!err) {
+                        if (u) {
+                            console.log('Error updating patient: o CPF ja existe');
+                            res.send('500', { status: 500, error: 'O CPF ja existe' });
+                        }
+                        else {
+                            //UPDATE PATIENT
+                            PatientModel.update({ '_id': id }, patient, { safe: true }, function (err, result) {
+                                if (err) {
+                                    console.log('Error updating patient: ' + err);
+                                    res.send('500', { status: 500, error: err });
+                                } else {
+                                    console.log('' + result + ' document(s) updated');
+
+                                    res.send(patient);
+                                }
+                            });
+                        }
+                    } else {
+                        console.log(err);
+                        res.send('500', { status: 500, error: err });
+                    }
+                });
             }
-        });
+            else {
+                //UPDATE PATIENT
+                PatientModel.update({ '_id': id }, patient, { safe: true }, function (err, result) {
+                    if (err) {
+                        console.log('Error updating patient: ' + err);
+                        res.send('500', { status: 500, error: err });
+                    } else {
+                        console.log('' + result + ' document(s) updated');
+
+                        res.send(patient);
+                    }
+                });
+            }
+        }
     }
 }
 
 var postPatient = function (req, res) {
-
+    
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
         res.send('401', { status: 401, error: 'Acesso Negado' });
     }
@@ -276,21 +339,6 @@ var getPatientsById = function (req, res) {
             return console.log(err);
         }
     });
-};
-
-var postPatient = function (req, res) {
-    if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
-    }
-    else {
-        var patient = req.body;
-        console.log('Adding patient');
-        patient.dateInclusion = new Date();
-
-        if (validatePatient(res, patient)) {
-            postPatient(res, patient);
-        }
-    }
 };
 
 module.exports.PatientModel = PatientModel;

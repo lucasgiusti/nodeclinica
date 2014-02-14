@@ -167,7 +167,6 @@ var validateUser = function (res, user) {
 }
 
 var putUser = function (res, user, id) {
-
     var objectID = new ObjectID(id);
     UserModel = mongoose.model('users', User);
 
