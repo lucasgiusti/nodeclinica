@@ -118,9 +118,9 @@ app.get('/patients', auth, patientRoute.getPatientsAll);
 app.get('/patients/name/:name', auth, patientRoute.getPatientsByName);
 app.get('/patients/cpf/:cpf', auth, patientRoute.getPatientsByCpf);
 app.get('/patients/:id', auth, patientRoute.getPatientsById);
-app.put('/patients/:id', auth, patientsRoute.putPatient);
-app.del('/patients/:id', auth, patientsRoute.delPatient);
-app.post('/patients', auth, patientsRoute.postPatient);
+app.put('/patients/:id', auth, patientRoute.putPatient);
+app.del('/patients/:id', auth, patientRoute.delPatient);
+app.post('/patients', auth, patientRoute.postPatient);
 //************************************************************
 
 
