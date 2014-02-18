@@ -74,7 +74,7 @@ app.post('/login', accountRoute.login);
 app.get('/logout', accountRoute.logout);
 
 // STUDENTS
-app.get('/students', auth, studentRoute.getStudentsAll);
+app.get('/students', studentRoute.getStudentsAll);
 app.get('/students/name/:name', auth, studentRoute.getStudentsByName);
 app.get('/students/cpf/:cpf', auth, studentRoute.getStudentsByCpf);
 app.get('/students/registration/:registration', auth, studentRoute.getStudentsByRegistration);
