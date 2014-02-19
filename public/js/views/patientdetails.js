@@ -51,6 +51,8 @@ window.PatientView = Backbone.View.extend({
 
         });
 
+        $('#dateBirth', this.el).datepicker({ format: 'dd/mm/yyyy' });
+
         return this;
     },
 
@@ -58,7 +60,8 @@ window.PatientView = Backbone.View.extend({
         "change": "change",
         "click .save": "beforeSave",
         "click .delete": "deletePatient",
-        "drop #picture": "dropHandler"
+        "drop #picture": "dropHandler",
+        "changeDate #dateBirth": "change"
     },
 
     change: function (event) {
@@ -70,8 +73,12 @@ window.PatientView = Backbone.View.extend({
         var target = event.target;
         var change = {};
 
-        change[target.name] = target.value;
-
+        if (target.name == "dateBirth") {
+            change[target.name] = new Date(target.value.substring(6, 10), target.value.substring(3, 5)-1, target.value.substring(0, 2));
+        }
+        else {
+            change[target.name] = target.value;
+        }
         this.model.set(change);
 
 

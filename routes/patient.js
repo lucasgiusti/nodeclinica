@@ -106,6 +106,7 @@ var validatePatient = function (res, patient) {
     }
     if ((patient.phone1 == null)) { delete patient.phone1; }
 
+    console.log(patient.dateBirth);
     if (!iz(patient.dateBirth).required().date().valid) {
         console.log('Error adding patient: data de nascimento invalida');
         res.send('500', { status: 500, error: 'Data de nascimento invalida' });
