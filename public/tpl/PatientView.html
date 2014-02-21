@@ -5,7 +5,6 @@
         <fieldset>
 
             <legend>Paciente</legend>
-            <br/>
 
             <div class="row" style="padding: 0px 10px;">
                 <div class="span8">
@@ -94,7 +93,7 @@
                         <label for="name" class="control-label">Observações:</label>
 
                         <div class="controls">
-                            <textarea class="form-control" id="Text4" name="name" maxlength="3000"><%= observations === null ? '' : observations %></textarea>
+                            <textarea class="form-control" id="observations" name="observations" maxlength="3000"><%= observations === null ? '' : observations %></textarea>
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -222,11 +221,11 @@
             </div>
 
         </fieldset>
-        <br/>
         <div class="footer">
             <button type="button" class="btn btn-primary btn-large save">Salvar</button>
             <button type="button" class="btn" onclick="back();">Cancelar</button>
             <button type="button" class="btn" data-toggle="modal" href="#delPatient" <%= _id === null ? 'style="display: none"' : '' %>>Excluir</button>
+            <button type="button" class="btn" data-toggle="modal" href="#treatments" <%= _id === null ? 'style="display: none"' : '' %> style="margin-left: 20px">Tratamentos</button>
         </div>
 
     </form>
