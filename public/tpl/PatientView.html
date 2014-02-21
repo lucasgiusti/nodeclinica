@@ -79,7 +79,12 @@
                         <label for="grapes" class="control-label">Estado Civil:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="maritalStatus" name="maritalStatus" value="<%= maritalStatus === null ? '' : maritalStatus %>" />
+                            <select class="form-control" id="maritalStatus" name="maritalStatus" value="<%= maritalStatus %>" >
+                                <option <%= maritalStatus === 'CASADO' ? 'selected' : '' %>>CASADO</option>
+                                <option <%= maritalStatus === 'SOLTEIRO' ? 'selected' : '' %>>SOLTEIRO</option>
+                                <option <%= maritalStatus === 'DIVORCIADO' ? 'selected' : '' %>>DIVORCIADO</option>
+                                <option <%= maritalStatus === 'VIUVO' ? 'selected' : '' %>>VIUVO</option>
+                            </select>
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -125,7 +130,10 @@
                         <label for="grapes" class="control-label">Sexo:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="sex" name="sex" value="<%= sex === null ? '' : sex %>" />
+                            <select class="form-control" id="sex" name="sex" value="<%= sex %>" >
+                                <option <%= sex === 'MASCULINO' ? 'selected' : '' %>>MASCULINO</option>
+                                <option <%= sex === 'FEMININO' ? 'selected' : '' %>>FEMININO</option>
+                            </select>
                             <span class="help-inline"></span>
                         </div>
                     </div>

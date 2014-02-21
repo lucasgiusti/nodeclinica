@@ -1,6 +1,5 @@
 function signin() {
     window.location.assign("signin.html");
-    //res.redirect('/signin.html');
 }
 
 var AppRouter = Backbone.Router.extend({
