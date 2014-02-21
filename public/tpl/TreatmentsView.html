@@ -1,0 +1,60 @@
+﻿<legend>Tratamentos</legend>
+
+<br/>
+
+<div class="row">
+  <div class="col-lg-5">
+    <div class="input-group">
+      <input type="text" id="txtPesquisa" class="form-control" maxlength="100">
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Por Nome <span class="caret"></span></button>
+        <ul class="dropdown-menu pull-right">
+          <li><a onclick="find('name');">Por Nome</a></li>
+          <li><a onclick="find('cpf');">Por CPF</a></li>
+          <li><a onclick="find('limpar');">Limpar Pesquisa</a></li>
+        </ul>
+      </div><!-- /btn-group -->
+    </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+<button class="btn btn-primary btn-large addTratment">Incluir Paciente</button>
+</div><!-- /.row -->
+
+<br/>
+
+<div class="row">
+    <div id="divTratments" class="col-md12">
+        <table id="tbTratments" class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Data Nascimento</th>
+                    <th>CPF</th>
+                    <th>Data Inclusão</th>
+                    <th>Sexo</th>
+                 </tr>
+             </thead>            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function find(por) {
+        
+        var pesquisa = $('#txtPesquisa').val();
+
+
+        if (por == 'limpar')
+            window.location = '#tratments';
+
+        if (pesquisa.length == 0)
+            return;
+
+        window.location = '#tratments/' + por + '/' + $('#txtPesquisa').val();
+    }
+
+    $(document).on("click", ".addTratment", function () {
+        window.location = '#tratments/add';
+    });
+</script>
