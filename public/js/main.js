@@ -58,6 +58,7 @@ var AppRouter = Backbone.Router.extend({
         "patients/cpf/:cpf/page/:page": "patientListByCPF",
         "patients/add": "addPatient",
         "patients/:id": "patientDetails",
+        "patients/:id/treatments": "treatmentList",
         "about": "about"
     },
 
@@ -668,6 +669,24 @@ var AppRouter = Backbone.Router.extend({
 
     },
 
+    treatmentList: function (page) {
+        var p = page ? parseInt(page, 10) : 1;
+        var treatmentList = new TreatmentCollection();
+
+        treatmentList.fetch({
+            success: function () {
+                $("#content").html(new TreatmentListView({ model: treatmentList, page: p }).el);
+            },
+            error: function (err, message) {
+                var erro = $.parseJSON(message.responseText).status;
+                if (erro == 401) {
+                    signin();
+                }
+            }
+        });
+        selectMenuItem('patients-menu');
+    },
+
     about: function () {
         if (!this.aboutView) {
             this.aboutView = new AboutView();
@@ -678,7 +697,7 @@ var AppRouter = Backbone.Router.extend({
 
 });
 
-utils.loadTemplate(['HomeView', 'HeaderView', 'WineView', 'WineListItemView', 'StudentsView', 'StudentView', 'TeachersView', 'TeacherView', 'AttendantsView', 'AttendantView', 'ManagersView', 'ManagerView', 'PatientsView', 'PatientView', 'AboutView', 'BaseModalView'], function () {
+utils.loadTemplate(['HomeView', 'HeaderView', 'WineView', 'WineListItemView', 'StudentsView', 'StudentView', 'TeachersView', 'TeacherView', 'AttendantsView', 'AttendantView', 'ManagersView', 'ManagerView', 'PatientsView', 'PatientView', 'TreatmentsView', 'AboutView', 'BaseModalView'], function () {
     app = new AppRouter();
     Backbone.history.start();
 });
