@@ -769,7 +769,7 @@ window.PatientByCPFCollection = Backbone.Collection.extend({
 
 window.Treatment = Backbone.Model.extend({
 
-    urlRoot: "/treatments",
+    urlRoot: "/patients/" + this._id + "/treatments",
 
     idAttribute: "_id",
 
@@ -840,9 +840,9 @@ window.Treatment = Backbone.Model.extend({
 
 
 window.TreatmentCollection = Backbone.Collection.extend({
-
-    model: Treatment,
-
-    url: "/treatments"
+    initialize: function (idPatient) {
+        this.url = "/patients/" + idPatient + "/treatments"
+    },
+    model: Treatment
 
 });

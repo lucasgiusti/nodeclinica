@@ -225,7 +225,7 @@
             <button type="button" class="btn btn-primary btn-large save">Salvar</button>
             <button type="button" class="btn" onclick="back();">Cancelar</button>
             <button type="button" class="btn" data-toggle="modal" href="#delPatient" <%= _id === null ? 'style="display: none"' : '' %>>Excluir</button>
-            <button type="button" class="btn" data-toggle="modal" href="#treatments" <%= _id === null ? 'style="display: none"' : '' %> style="margin-left: 20px">Tratamentos</button>
+            <button type="button" class="btn btn-primary btn-large " onclick="treatments();" <%= _id === null ? 'style="display: none"' : '' %> style="margin-left: 20px">Tratamentos</button>
         </div>
 
     </form>
@@ -259,5 +259,10 @@
     function back()
     {
         history.back(1);
+    }
+
+    function treatments()
+    {
+        window.location.assign(window.location.href + "/treatments");
     }
 	</script>

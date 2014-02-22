@@ -58,7 +58,7 @@ var AppRouter = Backbone.Router.extend({
         "patients/cpf/:cpf/page/:page": "patientListByCPF",
         "patients/add": "addPatient",
         "patients/:id": "patientDetails",
-        "patients/:id/treatments": "treatmentList",
+        "patients/:idPatient/treatments": "treatmentList",
         "about": "about"
     },
 
@@ -669,9 +669,9 @@ var AppRouter = Backbone.Router.extend({
 
     },
 
-    treatmentList: function (page) {
+    treatmentList: function (idPatient, page) {
         var p = page ? parseInt(page, 10) : 1;
-        var treatmentList = new TreatmentCollection();
+        var treatmentList = new TreatmentCollection(idPatient);
 
         treatmentList.fetch({
             success: function () {
