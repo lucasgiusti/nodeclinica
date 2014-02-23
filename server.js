@@ -17,7 +17,7 @@ var application_root = __dirname,
     teacherRoute = require("./routes/teacher"),
     attendantRoute = require("./routes/attendant"),
     managerRoute = require("./routes/manager"),
-    patientRoute = require("./routes/patient"),
+    patientRoute = require("./routes/patient")
     treatmentRoute = require("./routes/treatment");
 
 
@@ -51,7 +51,6 @@ var application_root = __dirname,
 var AccountModel = accountRoute.AccountModel;
 var UserModel = userRoute.UserModel;
 var PatientModel = patientRoute.PatientModel;
-var TreatmentModel = treatmentRoute.TreatmentModel;
 var auth = accountRoute.auth;
 var isAuthorized = accountRoute.isAuthorized;
 

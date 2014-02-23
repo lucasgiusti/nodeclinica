@@ -6,12 +6,27 @@ var express = require("express"),
     ObjectID = require('mongodb').ObjectID,
     LocalStrategy = require('passport-local').Strategy,
     passportLocalMongoose = require('passport-local-mongoose'),
+    treatmentRoute = require("./treatment"),
     accountRoute = require("./account"),
     utilRoute = require("./util");
 //************************************************************
 
 
 var Schema = mongoose.Schema;
+
+// Treatment Model
+var Treatment = new Schema({
+    serviceArea: { type: String, required: true },
+    diagnosis: { type: String, required: false },
+    status: { type: String, required: true },
+    dateStart: { type: Date, required: true },
+    dateEnd: { type: Date, required: false },
+    doctor: { type: String, required: false },
+    CRMDoctor: { type: String, required: false },
+    observations: { type: String, required: false },
+    dateInclusion: { type: Date, required: true },
+    dateUpdate: { type: Date, required: false }
+});
 
 // Patient Model
 var Patient = new Schema({
@@ -35,7 +50,8 @@ var Patient = new Schema({
     responsibleCPF: { type: String, required: false },
     observations: { type: String, required: false },
     dateInclusion: { type: Date, required: true },
-    dateUpdate: { type: Date, required: false }
+    dateUpdate: { type: Date, required: false },
+    treatments: [Treatment]
 });
 
 var PatientModel = mongoose.model('patients', Patient);

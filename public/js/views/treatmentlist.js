@@ -5,7 +5,11 @@
     },
 
     render: function () {
-        var treatments = this.model.models;
+
+        var patient = this.model.models;
+        patient = patient[0].toJSON();
+        var treatments = patient.treatments;
+
         var len = treatments.length;
         var startPos = (this.options.page - 1) * 8;
         var endPos = Math.min(startPos + 8, len);
@@ -20,38 +24,33 @@
             for (var i = startPos; i < endPos; i++) {
 
 
-                jsonObject = treatments[i].toJSON();
-
-
+                jsonObject = treatments[i];
 
                 html += '<tr>';
                 html += '<td>' + jsonObject._id + '</td>';
-                html += '<td><a href="#treatments/' + jsonObject._id + '">' + jsonObject.name + '</td>';
+                html += '<td><a href="#patients/' + patient._id  + '/treatments/' + jsonObject._id + '">' + jsonObject.serviceArea + '</td>';
                 
-                if (jsonObject.dateBirth != null)
-                    html += '<td>' + formattedDate(jsonObject.dateBirth) + '</td>';
+                if (jsonObject.dateStart != null)
+                    html += '<td>' + formattedDate(jsonObject.dateStart) + '</td>';
                 else
                     html += '<td></td>';
 
-                if (jsonObject.cpf != null)
-                    html += '<td>' + jsonObject.cpf + '</td>';
+                if (jsonObject.dateEnd != null)
+                    html += '<td>' + formattedDate(jsonObject.dateEnd) + '</td>';
                 else
                     html += '<td></td>';
 
-                if (jsonObject.dateInclusion != null)
-                    html += '<td>' + formattedDate(jsonObject.dateInclusion) + '</td>';
-                else
-                    html += '<td></td>';
-
-                if (jsonObject.sex != null)
-                    html += '<td>' + jsonObject.sex + '</td>';
+                if (jsonObject.status != null)
+                    html += '<td>' + jsonObject.status + '</td>';
                 else
                     html += '<td></td>';
 
                 html += '</tr>';
+
             }
 
             $('#tbTreatments > tbody:last', this.el).append(html);
+            $('legend', this.el).append(patient.name);
             $(this.el).append(new TreatmentsPaginator({ model: this.model, page: this.options.page }).render().el);
         }
         return this;

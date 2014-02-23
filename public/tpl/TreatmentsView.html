@@ -1,4 +1,4 @@
-﻿<legend>Tratamentos</legend>
+﻿<legend>Tratamentos do Paciente </legend>
 
 <br/>
 
@@ -16,22 +16,21 @@
       </div><!-- /btn-group -->
     </div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
-<button class="btn btn-primary btn-large addTratment">Incluir Paciente</button>
+<button class="btn btn-primary btn-large addTreatment">Incluir Tratamento</button>
 </div><!-- /.row -->
 
 <br/>
 
 <div class="row">
-    <div id="divTratments" class="col-md12">
-        <table id="tbTratments" class="table table-hover">
+    <div id="divTreatments" class="col-md12">
+        <table id="tbTreatments" class="table table-hover">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Nome</th>
-                    <th>Data Nascimento</th>
-                    <th>CPF</th>
-                    <th>Data Inclusão</th>
-                    <th>Sexo</th>
+                    <th>Área Atendimento</th>
+                    <th>Data Inicio</th>
+                    <th>Data Fim</th>
+                    <th>Situação</th>
                  </tr>
              </thead>            <tbody>
             </tbody>
@@ -46,15 +45,15 @@
 
 
         if (por == 'limpar')
-            window.location = '#tratments';
+            window.location = '#treatments';
 
         if (pesquisa.length == 0)
             return;
 
-        window.location = '#tratments/' + por + '/' + $('#txtPesquisa').val();
+        window.location = '#treatments/' + por + '/' + $('#txtPesquisa').val();
     }
 
-    $(document).on("click", ".addTratment", function () {
+    $(document).on("click", ".addTreatment", function () {
         alert(window.location);
     });
 </script>
