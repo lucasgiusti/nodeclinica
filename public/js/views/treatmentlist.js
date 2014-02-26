@@ -50,9 +50,10 @@
             }
 
             $('#tbTreatments > tbody:last', this.el).append(html);
-            $('legend', this.el).append(patient.name);
             $(this.el).append(new TreatmentsPaginator({ model: this.model, page: this.options.page }).render().el);
         }
+        $('legend', this.el).append(patient.name);
+
         return this;
     }
 });

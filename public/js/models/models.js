@@ -769,11 +769,17 @@ window.PatientByCPFCollection = Backbone.Collection.extend({
 
 window.Treatment = Backbone.Model.extend({
 
-    urlRoot: "/patients/" + this._id + "/treatments",
+    urlRoot: function () {
+
+        return '/patients/' + this.idPatient + "/treatments";
+    },
 
     idAttribute: "_id",
 
-    initialize: function () {
+    initialize: function (options) {
+        options || (options = {});
+        this.idPatient = options.idPatient;
+        alert(this.idPatient);
         this.validators = {};
         /*
         this.validators.name = function (value) {
@@ -813,6 +819,7 @@ window.Treatment = Backbone.Model.extend({
 
     defaults: {
         _id: null,
+        idPatient: null,
         serviceArea: null,
         diagnosis: null,
         status: null,
@@ -829,9 +836,16 @@ window.Treatment = Backbone.Model.extend({
 
 
 window.TreatmentCollection = Backbone.Collection.extend({
-    initialize: function (idPatient) {
-        this.url = "/patients/" + idPatient + "/treatments"
-    },
-    model: Treatment
 
+    model: Treatment,
+
+    url: function () {
+
+        return '/patients/' + this.idPatient + "/treatments";
+    },
+
+    initialize: function (options) {
+        options || (options = {});
+        this.idPatient = options.idPatient;
+    }
 });

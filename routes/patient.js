@@ -16,6 +16,7 @@ var Schema = mongoose.Schema;
 
 // Treatment Model
 var Treatment = new Schema({
+    idPatient: { type: String, required: true },
     serviceArea: { type: String, required: true },
     diagnosis: { type: String, required: false },
     status: { type: String, required: true },
