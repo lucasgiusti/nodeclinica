@@ -6,7 +6,6 @@ var express = require("express"),
     ObjectID = require('mongodb').ObjectID,
     LocalStrategy = require('passport-local').Strategy,
     passportLocalMongoose = require('passport-local-mongoose'),
-    treatmentRoute = require("./treatment"),
     accountRoute = require("./account"),
     utilRoute = require("./util");
 //************************************************************
@@ -16,15 +15,15 @@ var Schema = mongoose.Schema;
 
 // Treatment Model
 var Treatment = new Schema({
-    idPatient: { type: String, required: true },
     serviceArea: { type: String, required: true },
     diagnosis: { type: String, required: false },
     status: { type: String, required: true },
-    dateStart: { type: Date, required: true },
+    dateStart: { type: Date, required: false },
     dateEnd: { type: Date, required: false },
     doctor: { type: String, required: false },
     CRMDoctor: { type: String, required: false },
     observations: { type: String, required: false },
+    idPatient: {type: String, required: true},
     dateInclusion: { type: Date, required: true },
     dateUpdate: { type: Date, required: false }
 });
@@ -200,6 +199,7 @@ var putPatient = function (req, res) {
                         }
                         else {
                             //UPDATE PATIENT
+
                             PatientModel.update({ '_id': id }, patient, { safe: true }, function (err, result) {
                                 if (err) {
                                     console.log('Error updating patient: ' + err);
@@ -367,3 +367,4 @@ module.exports.getPatientsById = getPatientsById;
 module.exports.putPatient = putPatient;
 module.exports.delPatient = delPatient;
 module.exports.postPatient = postPatient;
+module.exports.Treatment = Treatment;

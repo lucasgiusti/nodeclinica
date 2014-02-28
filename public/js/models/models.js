@@ -704,7 +704,7 @@ window.Patient = Backbone.Model.extend({
         state: 'SP',
         city: 'SAO CAETANO DO SUL',
         cep: null,
-        sex: null,
+        sex: 'MASCULINO',
         phone1: null,
         dateBirth: null,
         maritalStatus: null,
@@ -777,9 +777,14 @@ window.Treatment = Backbone.Model.extend({
     idAttribute: "_id",
 
     initialize: function (options) {
-        options || (options = {});
-        this.idPatient = options.idPatient;
-        alert(this.idPatient);
+        this.options = options || {};
+        this.idPatient = "";
+        var i = 0;
+        while (this.options[i]) {
+            this.idPatient += this.options[i];
+            i++;
+        }
+
         this.validators = {};
         /*
         this.validators.name = function (value) {
@@ -819,10 +824,9 @@ window.Treatment = Backbone.Model.extend({
 
     defaults: {
         _id: null,
-        idPatient: null,
-        serviceArea: null,
+        serviceArea: 'SAUDE COLETIVA',
         diagnosis: null,
-        status: null,
+        status: 'AGUARDANDO TRIAGEM',
         dateStart: null,
         dateEnd: null,
         doctor: null,
@@ -836,16 +840,11 @@ window.Treatment = Backbone.Model.extend({
 
 
 window.TreatmentCollection = Backbone.Collection.extend({
-
-    model: Treatment,
-
     url: function () {
-
         return '/patients/' + this.idPatient + "/treatments";
     },
 
-    initialize: function (options) {
-        options || (options = {});
-        this.idPatient = options.idPatient;
+    initialize: function (idPatient) {
+        this.idPatient = idPatient;
     }
 });

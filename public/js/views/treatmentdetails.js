@@ -70,7 +70,8 @@ window.TreatmentView = Backbone.View.extend({
         this.model.save(null, {
             success: function (model) {
                 self.render();
-                app.navigate('treatments/' + model.id, false);
+
+                app.navigate('patients/' + model.idPatient + "/treatments/" + model.id, false);
                 utils.showAlert('Success!', 'Tratamento atualizado com sucesso', 'alert-success');
             },
             error: function (err, message) {

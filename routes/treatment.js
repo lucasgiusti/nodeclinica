@@ -11,7 +11,71 @@ var express = require("express"),
     utilRoute = require("./util");
 //************************************************************
 
+
+
+
+var validateTreatment = function (res, treatment) {
+
+    if (treatment.serviceArea == null) {
+        console.log('Error adding treatment: area de atendimento invalida');
+        res.send('500', { status: 500, error: 'Area de atendimento invalida' });
+        return false;
+    }
+
+    if ((treatment.diagnosis == null) || (treatment.diagnosis != null && !iz.between(treatment.diagnosis.length, 1, 3000))) {
+        console.log('Error adding treatment: o diagnostico deve ter 1 a 3000 caracteres');
+        res.send('500', { status: 500, error: 'O diagnostico deve ter 1 a 3000 caracteres' });
+        return false;
+    }
+
+    if (treatment.dateStart == null) { delete treatment.dateStart; }
+    if (treatment.dateEnd == null) { delete treatment.dateEnd; }
+
+    if ((treatment.doctor == null) || (treatment.doctor != null && !iz.between(treatment.doctor.length, 1, 100))) {
+        console.log('Error adding treatment: o nome do medico deve ter 1 a 100 caracteres');
+        res.send('500', { status: 500, error: 'O nome do medico deve ter 1 a 100 caracteres' });
+        return false;
+    }
+
+    if ((treatment.CRMDoctor == null) || (treatment.CRMDoctor != null && !iz.between(treatment.CRMDoctor.length, 1, 20))) {
+        console.log('Error adding treatment: o CRM do medico deve ter 1 a 20 caracteres');
+        res.send('500', { status: 500, error: 'O CRM do medico deve ter 1 a 20 caracteres' });
+        return false;
+    }
+
+    if (treatment.status == null) {
+        console.log('Error adding treatment: situacao invalida');
+        res.send('500', { status: 500, error: 'Situacao invalida' });
+        return false;
+    }
+
+    if (!iz.maxLength(treatment.observations, 3000)) {
+        console.log('Error adding treatment: o complemento deve ter maximo 20 caracteres');
+        res.send('500', { status: 500, error: 'O complemento deve ter maximo 20 caracteres' });
+        return false;
+    }
+
+    if ((treatment.observations == null)) { delete treatment.observations; }
+
+    if (!iz(treatment.dateInclusion).required().date().valid) {
+        console.log('Error adding treatment: data de inclusao invalida');
+        res.send('500', { status: 500, error: 'Data de inclusao invalida' });
+        return false;
+    }
+
+    return true;
+}
+
+
+
+
+
+
+
+
+
 var getTreatmentsAll = function (req, res) {
+    //console.log("[" + req.params.idPatient + "]");
     var idPatient = req.params.idPatient;
     return patientRoute.PatientModel.findById(idPatient, { _id: 1, name: 1, treatments: 1 }, function (err, patients) {
         if (!err) {
@@ -29,27 +93,46 @@ var postTreatment = function (req, res) {
     }
     else {
         var idPatient = req.params.idPatient;
-        console.log("[" + idPatient + "]");
+
+
 
         var treatment = req.body;
+
+        for (i = 0; i <= 23; i++) {
+            delete treatment[i];
+        }
         console.log('Adding treatment');
         treatment.dateInclusion = new Date();
 
         if (validateTreatment(res, treatment)) {
 
-            PatientModel = mongoose.model('patients', Patient);
-            //INSERT
-            delete patient._id;
-            delete patient.dateUpdate;
-            PatientModel = new PatientModel(patient);
-            PatientModel.save(function (err, patient, result) {
-                if (err) {
-                    console.log('Error inserting patient: ' + err);
-                    res.send('500', { status: 500, error: err });
-                } else {
-                    console.log('' + result + ' document(s) inserted');
-                    res.send(patient);
+            PatientModel = mongoose.model('patients', patientRoute.Patient);
+            PatientModel.findOne({ '_id': idPatient }, function (err, patient) {
+                if (!err) {
+                    if (patient) {
+
+                        delete treatment._id;
+                        delete treatment.dateUpdate;
+                        treatment.idPatient = idPatient;
+
+                        patient.treatments.push(treatment);
+                        
+                        patient.save(function (err, result) {
+                            if (err) {
+                                console.log('Error updating treatment: ' + err);
+                                res.send('500', { status: 500, error: err });
+                            } else {
+                                console.log('document(s) updated');
+                                res.send(patient.treatments[patient.treatments.length - 1]);
+                            }
+                        });
+                    }
                 }
+                else {
+                    console.log(err);
+                    res.send('500', { status: 500, error: err });
+                }
+
             });
         }
     }

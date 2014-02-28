@@ -672,7 +672,7 @@ var AppRouter = Backbone.Router.extend({
 
     treatmentList: function (idPatient, page) {
         var p = page ? parseInt(page, 10) : 1;
-        var treatmentList = new TreatmentCollection(idPatient);
+        var treatmentList = new TreatmentCollection(idPatient.valueOf());
 
         treatmentList.fetch({
             success: function () {
@@ -689,10 +689,8 @@ var AppRouter = Backbone.Router.extend({
     },
 
     addTreatment: function (idPatient) {
-        alert("1 - [" + idPatient + "]");
         var treatment = new Treatment(idPatient);
         $('#content').html(new TreatmentView({ model: treatment }).el);
-        $('#idPatient').val(idPatient);
         selectMenuItem('patients-menu');
 
     },
