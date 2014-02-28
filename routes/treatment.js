@@ -66,18 +66,21 @@ var validateTreatment = function (res, treatment) {
     return true;
 }
 
-
-
-
-
-
-
-
-
 var getTreatmentsAll = function (req, res) {
     //console.log("[" + req.params.idPatient + "]");
     var idPatient = req.params.idPatient;
     return patientRoute.PatientModel.findById(idPatient, { _id: 1, name: 1, treatments: 1 }, function (err, patients) {
+        if (!err) {
+            return res.send(patients);
+        } else {
+            return console.log(err);
+        }
+    });
+};
+
+var getTreatmentsById = function (req, res) {
+    var id = req.params.id;
+    return PatientModel.findOne({'treatments._id': id}, function (err, patients) {
         if (!err) {
             return res.send(patients);
         } else {
@@ -140,3 +143,4 @@ var postTreatment = function (req, res) {
 
 module.exports.getTreatmentsAll = getTreatmentsAll;
 module.exports.postTreatment = postTreatment;
+module.exports.getTreatmentsById = getTreatmentsById;
