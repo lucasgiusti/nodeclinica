@@ -1,4 +1,4 @@
-
+﻿
 //************************************************************
 var express = require("express"),
     mongoose = require('mongoose'),
@@ -122,12 +122,14 @@ var validatePatient = function (res, patient) {
     }
     if ((patient.phone1 == null)) { delete patient.phone1; }
 
-    console.log(patient.dateBirth);
     if (!iz(patient.dateBirth).required().date().valid) {
         console.log('Error adding patient: data de nascimento invalida');
         res.send('500', { status: 500, error: 'Data de nascimento invalida' });
         return false;
     }
+
+    var dateBirth = new Date(patient.dateBirth.substring(0, 4), patient.dateBirth.substring(5, 7) - 1, patient.dateBirth.substring(8, 10));
+    patient.dateBirth = dateBirth;
 
     if (patient.sex == null) {
         console.log('Error adding patient: sexo invalido');
@@ -259,6 +261,7 @@ var postPatient = function (req, res) {
                             //INSERT
                             delete patient._id;
                             delete patient.dateUpdate;
+                            delete patient.treatments;
                             PatientModel = new PatientModel(patient);
                             PatientModel.save(function (err, patient, result) {
                                 if (err) {
@@ -280,6 +283,7 @@ var postPatient = function (req, res) {
                 //INSERT
                 delete patient._id;
                 delete patient.dateUpdate;
+                delete patient.treatments;
                 PatientModel = new PatientModel(patient);
                 PatientModel.save(function (err, patient, result) {
                     if (err) {
@@ -317,6 +321,7 @@ var delPatient = function (req, res) {
 }
 
 var getPatientsAll = function (req, res) {
+    PatientModel = mongoose.model('patients', Patient);
     return PatientModel.find({}, { _id: 1, name: 1, dateBirth: 1, cpf: 1, sex: 1, dateInclusion: 1 }, function (err, patients) {
         if (!err) {
             return res.send(patients);
@@ -328,6 +333,7 @@ var getPatientsAll = function (req, res) {
 
 var getPatientsByName = function (req, res) {
     var name = req.params.name;
+    PatientModel = mongoose.model('patients', Patient);
     return PatientModel.find({ 'name': { '$regex': name, $options: 'i'} }, { _id: 1, name: 1, dateBirth: 1, cpf: 1, sex: 1, dateInclusion: 1 }, function (err, patients) {
         if (!err) {
             return res.send(patients);
@@ -339,6 +345,7 @@ var getPatientsByName = function (req, res) {
 
 var getPatientsByCpf = function (req, res) {
     var cpf = req.params.cpf;
+    PatientModel = mongoose.model('patients', Patient);
     return PatientModel.find({ 'cpf': { '$regex': cpf} }, { _id: 1, name: 1, dateBirth: 1, cpf: 1, sex: 1, dateInclusion: 1 }, function (err, patients) {
         if (!err) {
             return res.send(patients);
@@ -350,6 +357,7 @@ var getPatientsByCpf = function (req, res) {
 
 var getPatientsById = function (req, res) {
     var id = req.params.id;
+    PatientModel = mongoose.model('patients', Patient);
     return PatientModel.findById(id, function (err, patients) {
         if (!err) {
             return res.send(patients);

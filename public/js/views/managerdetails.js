@@ -1,4 +1,4 @@
-window.ManagerView = Backbone.View.extend({
+﻿window.ManagerView = Backbone.View.extend({
 
     initialize: function () {
         this.render();

@@ -1,4 +1,4 @@
-window.Wine = Backbone.Model.extend({
+ï»¿window.Wine = Backbone.Model.extend({
 
     urlRoot: "/wines",
 
@@ -66,7 +66,7 @@ window.Student = Backbone.Model.extend({
         };
 
         this.validators.address = function (value) {
-            return value.length > 0 ? { isValid: true } : { isValid: false, message: "Informe o Endereço" };
+            return value.length > 0 ? { isValid: true } : { isValid: false, message: "Informe o EndereÃ§o" };
         };
         
         this.validators.mail = function (value) {
@@ -203,7 +203,7 @@ window.Account = Backbone.Model.extend({
         };
 
         this.validators.address = function (value) {
-            return value.length > 0 ? { isValid: true } : { isValid: false, message: "Informe o Endereço" };
+            return value.length > 0 ? { isValid: true } : { isValid: false, message: "Informe o EndereÃ§o" };
         };
         
         this.validators.mail = function (value) {
@@ -276,7 +276,7 @@ window.Teacher = Backbone.Model.extend({
         };
 
         this.validators.address = function (value) {
-            return value.length > 0 ? { isValid: true } : { isValid: false, message: "Informe o Endereço" };
+            return value.length > 0 ? { isValid: true } : { isValid: false, message: "Informe o EndereÃ§o" };
         };
         
         this.validators.mail = function (value) {
@@ -406,7 +406,7 @@ window.Attendant = Backbone.Model.extend({
         };
 
         this.validators.address = function (value) {
-            return value.length > 0 ? { isValid: true } : { isValid: false, message: "Informe o Endereço" };
+            return value.length > 0 ? { isValid: true } : { isValid: false, message: "Informe o EndereÃ§o" };
         };
         
         this.validators.mail = function (value) {
@@ -535,7 +535,7 @@ window.Manager = Backbone.Model.extend({
         };
 
         this.validators.address = function (value) {
-            return value.length > 0 ? { isValid: true } : { isValid: false, message: "Informe o Endereço" };
+            return value.length > 0 ? { isValid: true } : { isValid: false, message: "Informe o EndereÃ§o" };
         };
         
         this.validators.mail = function (value) {
@@ -657,6 +657,7 @@ window.Patient = Backbone.Model.extend({
     idAttribute: "_id",
 
     initialize: function () {
+
         this.validators = {};
         /*
         this.validators.name = function (value) {
@@ -766,6 +767,76 @@ window.PatientByCPFCollection = Backbone.Collection.extend({
 
 /* TREATMENTS */
 
+window.TreatmentDetail = Backbone.Model.extend({
+
+    urlRoot: function () {
+        return '/patients/' + this.idPatient + "/treatments/" + this._idUpdate;
+    },
+
+    idAttribute: "_id",
+
+    initialize: function (options, treatment) {
+        this.options = options || {};
+        this.idPatient = "";
+        var i = 0;
+        while (this.options[i]) {
+            this.idPatient += this.options[i];
+            i++;
+        }
+        this._idUpdate = treatment._id;
+
+        this.validators = {};
+        /*
+        this.validators.name = function (value) {
+            return value.length > 0 ? { isValid: true } : { isValid: false, message: "You must enter a name" };
+        };
+
+        this.validators.grapes = function (value) {
+            return value.length > 0 ? { isValid: true } : { isValid: false, message: "You must enter a grape variety" };
+        };
+
+        this.validators.country = function (value) {
+            return value.length > 0 ? { isValid: true } : { isValid: false, message: "You must enter a country" };
+        };
+        */
+    },
+
+    validateItem: function (key) {
+        return (this.validators[key]) ? this.validators[key](this.get(key)) : { isValid: true };
+    },
+
+    // TODO: Implement Backbone's standard validate() method instead.
+    validateAll: function () {
+
+        var messages = {};
+
+        for (var key in this.validators) {
+            if (this.validators.hasOwnProperty(key)) {
+                var check = this.validators[key](this.get(key));
+                if (check.isValid === false) {
+                    messages[key] = check.message;
+                }
+            }
+        }
+
+        return _.size(messages) > 0 ? { isValid: false, messages: messages } : { isValid: true };
+    },
+
+    defaults: {
+        _id: null,
+        serviceArea: 'SAUDE COLETIVA',
+        diagnosis: null,
+        status: 'AGUARDANDO TRIAGEM',
+        dateStart: null,
+        dateEnd: null,
+        doctor: null,
+        CRMDoctor: null,
+        observations: null,
+        dateInclusion: null,
+        dateUpdate: null
+    }
+});
+
 
 window.Treatment = Backbone.Model.extend({
 
@@ -776,7 +847,7 @@ window.Treatment = Backbone.Model.extend({
 
     idAttribute: "_id",
 
-    initialize: function (options) {
+    initialize: function (options, treatment) {
         this.options = options || {};
         this.idPatient = "";
         var i = 0;

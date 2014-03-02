@@ -1,4 +1,4 @@
-
+﻿
 //************************************************************
 var express = require("express"),
     mongoose = require('mongoose'),
@@ -28,9 +28,6 @@ var validateTreatment = function (res, treatment) {
         return false;
     }
 
-    if (treatment.dateStart == null) { delete treatment.dateStart; }
-    if (treatment.dateEnd == null) { delete treatment.dateEnd; }
-
     if ((treatment.doctor == null) || (treatment.doctor != null && !iz.between(treatment.doctor.length, 1, 100))) {
         console.log('Error adding treatment: o nome do medico deve ter 1 a 100 caracteres');
         res.send('500', { status: 500, error: 'O nome do medico deve ter 1 a 100 caracteres' });
@@ -55,8 +52,6 @@ var validateTreatment = function (res, treatment) {
         return false;
     }
 
-    if ((treatment.observations == null)) { delete treatment.observations; }
-
     if (!iz(treatment.dateInclusion).required().date().valid) {
         console.log('Error adding treatment: data de inclusao invalida');
         res.send('500', { status: 500, error: 'Data de inclusao invalida' });
@@ -67,17 +62,21 @@ var validateTreatment = function (res, treatment) {
 }
 
 
-
-
-
-
-
-
-
 var getTreatmentsAll = function (req, res) {
-    //console.log("[" + req.params.idPatient + "]");
     var idPatient = req.params.idPatient;
     return patientRoute.PatientModel.findById(idPatient, { _id: 1, name: 1, treatments: 1 }, function (err, patients) {
+        if (!err) {
+            return res.send(patients);
+        } else {
+            return console.log(err);
+        }
+    });
+};
+
+var getTreatmentsById = function (req, res) {
+    var idPatient = req.params.idPatient;
+    var id = req.params.id;
+    return patientRoute.PatientModel.findOne({ '_id': idPatient, 'treatments._id': id }, { _id: 1, name: 1, 'treatments.$': 1 }, function (err, patients) {
         if (!err) {
             return res.send(patients);
         } else {
@@ -112,7 +111,6 @@ var postTreatment = function (req, res) {
                     if (patient) {
 
                         delete treatment._id;
-                        delete treatment.dateUpdate;
                         treatment.idPatient = idPatient;
 
                         patient.treatments.push(treatment);
@@ -139,4 +137,5 @@ var postTreatment = function (req, res) {
 }
 
 module.exports.getTreatmentsAll = getTreatmentsAll;
+module.exports.getTreatmentsById = getTreatmentsById;
 module.exports.postTreatment = postTreatment;

@@ -1,4 +1,4 @@
-window.TeacherView = Backbone.View.extend({
+﻿window.TeacherView = Backbone.View.extend({
 
     initialize: function () {
         this.render();

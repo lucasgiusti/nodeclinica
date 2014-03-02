@@ -1,4 +1,4 @@
-window.TreatmentView = Backbone.View.extend({
+﻿window.TreatmentView = Backbone.View.extend({
 
     initialize: function () {
         this.render();
@@ -6,12 +6,23 @@ window.TreatmentView = Backbone.View.extend({
 
     render: function () {
 
-        var treatment = this.model.toJSON();
+        var patient = this.model;
+
+        patient = patient.toJSON();
+
+        if (patient.treatments) {
+            var treatment = patient.treatments[0];
+        }
+        else {
+            var treatment = this.model.toJSON();
+        }
 
         $(this.el).html(this.template(treatment));
 
         $('#dateStart', this.el).datepicker({ format: 'dd/mm/yyyy' });
         $('#dateEnd', this.el).datepicker({ format: 'dd/mm/yyyy' });
+
+        $('legend', this.el).append(patient.name);
 
         return this;
     },

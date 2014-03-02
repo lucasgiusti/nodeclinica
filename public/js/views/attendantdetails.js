@@ -1,4 +1,4 @@
-window.AttendantView = Backbone.View.extend({
+﻿window.AttendantView = Backbone.View.extend({
 
     initialize: function () {
         this.render();

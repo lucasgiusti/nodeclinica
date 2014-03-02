@@ -1,4 +1,4 @@
-var validaCpf = function (str) {
+﻿var validaCpf = function (str) {
     if (str == null || str == '') {
         return false;
     }

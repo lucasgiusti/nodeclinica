@@ -1,4 +1,4 @@
-window.WineView = Backbone.View.extend({
+﻿window.WineView = Backbone.View.extend({
 
     initialize: function () {
         this.render();

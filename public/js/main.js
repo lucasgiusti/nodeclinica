@@ -1,4 +1,4 @@
-function signin() {
+﻿function signin() {
     window.location.assign("signin.html");
 }
 
@@ -60,6 +60,7 @@ var AppRouter = Backbone.Router.extend({
         "patients/:id": "patientDetails",
         "patients/:idPatient/treatments": "treatmentList",
         "patients/:idPatient/treatments/add": "addTreatment",
+        "patients/:idPatient/treatments/:id": "treatmentDetails",
         "about": "about"
     },
 
@@ -673,7 +674,6 @@ var AppRouter = Backbone.Router.extend({
     treatmentList: function (idPatient, page) {
         var p = page ? parseInt(page, 10) : 1;
         var treatmentList = new TreatmentCollection(idPatient.valueOf());
-
         treatmentList.fetch({
             success: function () {
                 $("#content").html(new TreatmentListView({ model: treatmentList, page: p }).el);
@@ -693,6 +693,24 @@ var AppRouter = Backbone.Router.extend({
         $('#content').html(new TreatmentView({ model: treatment }).el);
         selectMenuItem('patients-menu');
 
+    },
+
+    treatmentDetails: function (idPatient, id) {
+
+        var treatment = new TreatmentDetail(idPatient, { _id: id });
+        treatment.fetch({
+            success: function () {
+
+                $("#content").html(new TreatmentView({ model: treatment }).el);
+            },
+            error: function (err, message) {
+                var erro = $.parseJSON(message.responseText).status;
+                if (erro == 401) {
+                    signin();
+                }
+            }
+        });
+        selectMenuItem();
     },
 
     about: function () {

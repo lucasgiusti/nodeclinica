@@ -1,4 +1,4 @@
-/*! =========================================================
+Ôªø/*! =========================================================
  * bootstrap-datepicker.js 
  * Original Idea: http://www.eyecon.ro/bootstrap-datepicker (Copyright 2012 Stefan Petre)
  * Updated by AymKdn (http://kodono.info - https://github.com/Aymkdn/Datepicker-for-Bootstrap)
@@ -324,10 +324,10 @@
 				navStep: 10
 		}],
 		dates:{
-		    days: ["Domingo", "Segunda-Feira", "TerÁa-Feira", "Quarta-Feira", "Quinta-Feira", "Sexta-Feira", "S·bado", "Domingo"],
-			daysShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "S·b", "Dom"],
+		    days: ["Domingo", "Segunda-Feira", "Ter√ßa-Feira", "Quarta-Feira", "Quinta-Feira", "Sexta-Feira", "S√°bado", "Domingo"],
+			daysShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "S√°b", "Dom"],
 			daysMin: ["D", "S", "T", "Q", "Q", "S", "S", "D"],
-			months: ["Janeiro", "Fevereiro", "MarÁo", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
+			months: ["Janeiro", "Fevereiro", "Mar√ßo", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
 			monthsShort: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
 		},
 		isLeapYear: function (year) {
@@ -340,7 +340,7 @@
 			var separator = format.match(/[.\/-].*?/),
 				parts = format.split(/\W+/);
 			if (!separator || !parts || parts.length == 0){
-				throw new Error("Formato de Data Inv·lida.");
+				throw new Error("Formato de Data Inv√°lida.");
 			}
 			return {separator: separator, parts: parts};
 		},
