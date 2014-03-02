@@ -848,6 +848,7 @@ window.Treatment = Backbone.Model.extend({
     idAttribute: "_id",
 
     initialize: function (options, treatment) {
+
         this.options = options || {};
         this.idPatient = "";
         var i = 0;

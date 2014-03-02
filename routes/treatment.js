@@ -61,7 +61,6 @@ var validateTreatment = function (res, treatment) {
     return true;
 }
 
-
 var getTreatmentsAll = function (req, res) {
     var idPatient = req.params.idPatient;
     return patientRoute.PatientModel.findById(idPatient, { _id: 1, name: 1, treatments: 1 }, function (err, patients) {
