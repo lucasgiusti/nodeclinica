@@ -135,6 +135,29 @@ var postTreatment = function (req, res) {
     }
 }
 
+var delTreatment = function (req, res) {
+    if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
+        res.send('401', { status: 401, error: 'Acesso Negado' });
+    }
+    else {
+        console.log('Deleting treatment: ' + req.params.id);
+
+        patientRoute.PatientModel.findOne({ '_id': req.params.idPatient, 'treatments._id': req.params.id }, { _id: 1, name: 1, 'treatments.$': 1 }, function (err, patients) {
+            if (!err) {
+                if (patients) {
+                    patients.treatments.remove(req.params.id);
+                    
+                    patients.save(function () { res.send(patients); });
+                }
+            }
+            else {
+                res.send('500', { status: 500, error: 'Usuario nao encontrado' });
+            }
+        });
+    }
+}
+
 module.exports.getTreatmentsAll = getTreatmentsAll;
 module.exports.getTreatmentsById = getTreatmentsById;
 module.exports.postTreatment = postTreatment;
+module.exports.delTreatment = delTreatment;

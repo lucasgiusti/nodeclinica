@@ -82,7 +82,7 @@
             success: function (model) {
                 self.render();
 
-                app.navigate('patients/' + model.idPatient + "/treatments/" + model.id, false);
+                app.navigate('patients/' + model.idPatient + '/treatments/' + model.id, false);
                 utils.showAlert('Success!', 'Tratamento atualizado com sucesso', 'alert-success');
             },
             error: function (err, message) {
@@ -96,7 +96,7 @@
         this.model.destroy({
             success: function (model) {
                 $("#delTreatment", this.el).hide(function () {
-                    app.navigate('#treatments', true);
+                    app.navigate('patients/' + model.idPatient + '/treatments', true);
                     self.render();
                 });
             },

@@ -697,7 +697,7 @@ var AppRouter = Backbone.Router.extend({
 
     treatmentDetails: function (idPatient, id) {
 
-        var treatment = new TreatmentDetail(idPatient, { _id: id });
+        var treatment = new TreatmentDetail(idPatient, id );
         treatment.fetch({
             success: function () {
                 $("#content").html(new TreatmentView({ model: treatment }).el);

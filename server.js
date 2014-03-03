@@ -127,7 +127,7 @@ app.post('/patients', auth, patientRoute.postPatient);
 app.get('/patients/:idPatient/treatments', auth, treatmentRoute.getTreatmentsAll);
 app.get('/patients/:idPatient/treatments/:id', auth, treatmentRoute.getTreatmentsById);
 app.post('/patients/:idPatient/treatments', auth, treatmentRoute.postTreatment);
-app.get('/patients/:idPatient/treatments/:id', auth, treatmentRoute.getTreatmentsById);
+app.del('/patients/:idPatient/treatments/:id', auth, treatmentRoute.delTreatment);
 //************************************************************
 
 

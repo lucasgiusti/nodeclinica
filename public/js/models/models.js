@@ -770,12 +770,12 @@ window.PatientByCPFCollection = Backbone.Collection.extend({
 window.TreatmentDetail = Backbone.Model.extend({
 
     urlRoot: function () {
-        return '/patients/' + this.idPatient + "/treatments/" + this._idUpdate;
+        return '/patients/' + this.idPatient + "/treatments";
     },
 
-    idAttribute: "_id",
+    initialize: function (options, _id) {
 
-    initialize: function (options, treatment) {
+        this.id = _id;
         this.options = options || {};
         this.idPatient = "";
         var i = 0;
@@ -783,7 +783,6 @@ window.TreatmentDetail = Backbone.Model.extend({
             this.idPatient += this.options[i];
             i++;
         }
-        this._idUpdate = treatment._id;
 
         this.validators = {};
         /*
