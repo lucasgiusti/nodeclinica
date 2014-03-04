@@ -6,23 +6,14 @@
 
     render: function () {
 
-        var patient = this.model;
-
-        patient = patient.toJSON();
-
-        if (patient.treatments) {
-            var treatment = patient.treatments[0];
-        }
-        else {
-            var treatment = this.model.toJSON();
-        }
+        var treatment = this.model.toJSON();
 
         $(this.el).html(this.template(treatment));
 
         $('#dateStart', this.el).datepicker({ format: 'dd/mm/yyyy' });
         $('#dateEnd', this.el).datepicker({ format: 'dd/mm/yyyy' });
 
-        $('legend', this.el).append(patient.name);
+        //$('legend', this.el).append(patient.name);
 
         return this;
     },
@@ -44,6 +35,7 @@
         // Apply the change to the model
         var target = event.target;
         var change = {};
+
 
         if (target.name == "dateStart" || target.name == "dateEnd") {
             change[target.name] = new Date(target.value.substring(6, 10), target.value.substring(3, 5) - 1, target.value.substring(0, 2));

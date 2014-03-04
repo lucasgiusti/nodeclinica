@@ -77,12 +77,46 @@ var getTreatmentsById = function (req, res) {
     var id = req.params.id;
     return patientRoute.PatientModel.findOne({ '_id': idPatient, 'treatments._id': id }, { _id: 1, name: 1, 'treatments.$': 1 }, function (err, patients) {
         if (!err) {
-            return res.send(patients);
+            return res.send(patients.treatments[0]);
         } else {
             return console.log(err);
         }
     });
 };
+
+var putTreatment = function (req, res) {
+    if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
+        res.send('401', { status: 401, error: 'Acesso Negado' });
+    }
+    else {
+
+        var id = req.params.id;
+        var treatment = req.body;
+        var idPatient = treatment.idPatient;
+
+        for (i = 0; i <= 23; i++) {
+            delete treatment[i];
+        }
+        console.log('Updating treatment');
+        treatment.dateUpdate = new Date();
+        var objectID = new ObjectID(id);
+
+        if (validateTreatment(res, treatment)) {
+            patientRoute.PatientModel.update({ '_id': idPatient, 'treatments._id': id }, {$set: {'treatments.$': treatment}}, function (err, patient) {
+                if (err) {
+                    console.log('Error updating treatment: ' + err);
+                    res.send('500', { status: 500, error: err });
+                } else {
+                    console.log('document(s) updated');
+
+                    res.send(treatment);
+                }
+            });
+            
+
+        }
+    }
+}
 
 var postTreatment = function (req, res) {
 
@@ -101,6 +135,8 @@ var postTreatment = function (req, res) {
         }
         console.log('Adding treatment');
         treatment.dateInclusion = new Date();
+
+        console.log(treatment);
 
         if (validateTreatment(res, treatment)) {
 
@@ -161,3 +197,4 @@ module.exports.getTreatmentsAll = getTreatmentsAll;
 module.exports.getTreatmentsById = getTreatmentsById;
 module.exports.postTreatment = postTreatment;
 module.exports.delTreatment = delTreatment;
+module.exports.putTreatment = putTreatment;

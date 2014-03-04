@@ -128,6 +128,7 @@ app.get('/patients/:idPatient/treatments', auth, treatmentRoute.getTreatmentsAll
 app.get('/patients/:idPatient/treatments/:id', auth, treatmentRoute.getTreatmentsById);
 app.post('/patients/:idPatient/treatments', auth, treatmentRoute.postTreatment);
 app.del('/patients/:idPatient/treatments/:id', auth, treatmentRoute.delTreatment);
+app.put('/patients/:idPatient/treatments/:id', auth, treatmentRoute.putTreatment);
 //************************************************************
 
 
