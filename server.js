@@ -16,8 +16,9 @@ var application_root = __dirname,
     teacherRoute = require("./routes/teacher"),
     attendantRoute = require("./routes/attendant"),
     managerRoute = require("./routes/manager"),
-    patientRoute = require("./routes/patient")
-    treatmentRoute = require("./routes/treatment");
+    patientRoute = require("./routes/patient"),
+    treatmentRoute = require("./routes/treatment"),
+    sessionRoute = require("./routes/session");
 
 
 // Config
@@ -130,6 +131,9 @@ app.del('/patients/:idPatient/treatments/:id', auth, treatmentRoute.delTreatment
 app.put('/patients/:idPatient/treatments/:id', auth, treatmentRoute.putTreatment);
 //************************************************************
 
+// SESSIONS
+app.get('/patients/:idPatient/treatments/:idTreatment/sessions', auth, sessionRoute.getSessionsAll);
+app.post('/patients/:idPatient/treatments/:idTreatment/sessions', auth, sessionRoute.postSession);
 
 // Launch server
 http.createServer(app).listen(app.get('port'), function () {

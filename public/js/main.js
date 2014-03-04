@@ -61,6 +61,7 @@ var AppRouter = Backbone.Router.extend({
         "patients/:idPatient/treatments": "treatmentList",
         "patients/:idPatient/treatments/add": "addTreatment",
         "patients/:idPatient/treatments/:id": "treatmentDetails",
+        "patients/:idPatient/treatments/:idTreatment/sessions": "sessionList",
         "about": "about"
     },
 
@@ -712,6 +713,26 @@ var AppRouter = Backbone.Router.extend({
         selectMenuItem();
     },
 
+
+    sessionList: function (idPatient, idTreatment, page) {
+        var p = page ? parseInt(page, 10) : 1;
+        var sessionList = new SessionCollection(idPatient.valueOf(), idTreatment.valueOf());
+        sessionList.fetch({
+            success: function () {
+                $("#content").html(new SessionListView({ model: sessionList, page: p }).el);
+            },
+            error: function (err, message) {
+                var erro = $.parseJSON(message.responseText).status;
+                if (erro == 401) {
+                    signin();
+                }
+            }
+        });
+        selectMenuItem('patients-menu');
+    },
+
+
+
     about: function () {
         if (!this.aboutView) {
             this.aboutView = new AboutView();
@@ -722,7 +743,7 @@ var AppRouter = Backbone.Router.extend({
 
 });
 
-utils.loadTemplate(['HomeView', 'HeaderView', 'WineView', 'WineListItemView', 'StudentsView', 'StudentView', 'TeachersView', 'TeacherView', 'AttendantsView', 'AttendantView', 'ManagersView', 'ManagerView', 'PatientsView', 'PatientView', 'TreatmentsView', 'TreatmentView', 'AboutView', 'BaseModalView'], function () {
+utils.loadTemplate(['HomeView', 'HeaderView', 'WineView', 'WineListItemView', 'StudentsView', 'StudentView', 'TeachersView', 'TeacherView', 'AttendantsView', 'AttendantView', 'ManagersView', 'ManagerView', 'PatientsView', 'PatientView', 'TreatmentsView', 'TreatmentView', 'SessionsView', 'AboutView', 'BaseModalView'], function () {
     app = new AppRouter();
     Backbone.history.start();
 });

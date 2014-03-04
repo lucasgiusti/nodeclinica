@@ -919,3 +919,98 @@ window.TreatmentCollection = Backbone.Collection.extend({
         this.idPatient = idPatient;
     }
 });
+
+
+
+
+window.Session = Backbone.Model.extend({
+
+    urlRoot: function () {
+
+        return '/patients/' + this.idPatient + "/treatments/" + this.idTreatment + "/sessions";
+    },
+
+    idAttribute: "_id",
+
+    initialize: function (options, treatment) {
+
+        this.options = options || {};
+        this.idPatient = "";
+        var i = 0;
+        while (this.options[i]) {
+            this.idPatient += this.options[i];
+            i++;
+        }
+        this.idTreatment = treatment._id;
+
+        this.validators = {};
+        /*
+        this.validators.name = function (value) {
+            return value.length > 0 ? { isValid: true } : { isValid: false, message: "You must enter a name" };
+        };
+
+        this.validators.grapes = function (value) {
+            return value.length > 0 ? { isValid: true } : { isValid: false, message: "You must enter a grape variety" };
+        };
+
+        this.validators.country = function (value) {
+            return value.length > 0 ? { isValid: true } : { isValid: false, message: "You must enter a country" };
+        };
+        */
+    },
+
+    validateItem: function (key) {
+        return (this.validators[key]) ? this.validators[key](this.get(key)) : { isValid: true };
+    },
+
+    // TODO: Implement Backbone's standard validate() method instead.
+    validateAll: function () {
+
+        var messages = {};
+
+        for (var key in this.validators) {
+            if (this.validators.hasOwnProperty(key)) {
+                var check = this.validators[key](this.get(key));
+                if (check.isValid === false) {
+                    messages[key] = check.message;
+                }
+            }
+        }
+
+        return _.size(messages) > 0 ? { isValid: false, messages: messages } : { isValid: true };
+    },
+
+    defaults: {
+        _id: null,
+        studentId: null,
+        studentName: null,
+        teacherId: null,
+        teacherName: null,
+        typeSession: null,
+        typeService: null,
+        dateSchedulingStart: null,
+        dateSchedulingEnd: null,
+        dateStart: null,
+        dateEnd: null,
+        observations: null,
+        dateInclusion: null,
+        dateUpdate: null
+    }
+});
+
+
+
+window.SessionCollection = Backbone.Collection.extend({
+    url: function () {
+        return '/patients/' + this.idPatient + "/treatments/" + this.idTreatment + "/sessions";
+    },
+
+    initialize: function (idPatient, idTreatment) {
+        this.idPatient = idPatient;
+        this.idTreatment = idTreatment;
+    }
+});
+
+
+
+

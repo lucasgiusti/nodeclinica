@@ -1,0 +1,32 @@
+﻿<legend>Sessões do Tratamento </legend>
+
+<br/>
+
+<div class="row">
+<button class="btn btn-primary btn-large" onclick="addSession();">Incluir Sessão</button>
+</div><!-- /.row -->
+
+<br/>
+
+<div class="row">
+    <div id="divSessions" class="col-md12">
+        <table id="tbSessions" class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Modalidade</th>
+                    <th>Data Agendamento Inicio</th>
+                    <th>Data Agendamento Fim</th>
+                    <th>Aluno</th>
+                 </tr>
+             </thead>            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function addSession() {
+        window.location.assign(window.location.href + "/add"); 
+    }
+</script>

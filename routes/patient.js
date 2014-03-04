@@ -13,6 +13,22 @@ var express = require("express"),
 
 var Schema = mongoose.Schema;
 
+// Session Model
+var Session = new Schema({
+    studentId: { type: String, required: true },
+    studentName: { type: String, required: true },
+    teacherId: { type: String, required: true },
+    teacherName: { type: String, required: true },
+    typeSession: { type: String, required: true },
+    typeService: { type: String, required: true },
+    dateSchedulingStart: { type: Date, required: true },
+    dateSchedulingEnd: { type: Date, required: true },
+    dateStart: { type: Date, required: false },
+    dateEnd: { type: Date, required: false },
+    observations: { type: String, required: false },
+    dateUpdate: { type: Date, required: false }
+});
+
 // Treatment Model
 var Treatment = new Schema({
     serviceArea: { type: String, required: true },
@@ -25,7 +41,8 @@ var Treatment = new Schema({
     observations: { type: String, required: false },
     idPatient: {type: String, required: true},
     dateInclusion: { type: Date, required: true },
-    dateUpdate: { type: Date, required: false }
+    dateUpdate: { type: Date, required: false },
+    sessions: [Session]
 });
 
 // Patient Model
