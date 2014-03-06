@@ -13,12 +13,9 @@
 
                         <div class="controls">
                             <select class="form-control" id="typeSession" name="typeSession" value="<%= typeSession %>">
-                                <option <%= typeSession === 'NEURO ADULTO' ? 'selected' : '' %>>NEURO ADULTO</option>
-                                <option <%= typeSession === 'NEURO PEDIATRIA' ? 'selected' : '' %>>NEURO PEDIATRIA</option>
-                                <option <%= typeSession === 'ORTOPEDIA TRAUMATOLOGIA' ? 'selected' : '' %>>ORTOPEDIA TRAUMATOLOGIA</option>
-                                <option <%= typeSession === 'UROGENICOLOGIA MASTOLOGIA' ? 'selected' : '' %>>UROGENICOLOGIA MASTOLOGIA</option>
-                                <option <%= typeSession === 'HIDROTERAPIA' ? 'selected' : '' %>>HIDROTERAPIA</option>
-                                <option <%= typeSession === 'SAUDE COLETIVA' ? 'selected' : '' %>>SAUDE COLETIVA</option>
+                                <option <%= typeSession === 'SESSAO' ? 'selected' : '' %>>SESSAO</option>
+                                <option <%= typeSession === 'AVALIACAO' ? 'selected' : '' %>>AVALIACAO</option>
+                                <option <%= typeSession === 'TRIAGEM' ? 'selected' : '' %>>TRIAGEM</option>
                             </select>
                             <span class="help-inline"></span>
                         </div>
@@ -28,44 +25,22 @@
 
                         <div class="controls">
                             <select class="form-control" id="typeService" name="typeService" value="<%= typeService %>">
-                                <option <%= typeService === 'NEURO ADULTO' ? 'selected' : '' %>>NEURO ADULTO</option>
-                                <option <%= typeService === 'NEURO PEDIATRIA' ? 'selected' : '' %>>NEURO PEDIATRIA</option>
-                                <option <%= typeService === 'ORTOPEDIA TRAUMATOLOGIA' ? 'selected' : '' %>>ORTOPEDIA TRAUMATOLOGIA</option>
-                                <option <%= typeService === 'UROGENICOLOGIA MASTOLOGIA' ? 'selected' : '' %>>UROGENICOLOGIA MASTOLOGIA</option>
-                                <option <%= typeService === 'HIDROTERAPIA' ? 'selected' : '' %>>HIDROTERAPIA</option>
-                                <option <%= typeService === 'SAUDE COLETIVA' ? 'selected' : '' %>>SAUDE COLETIVA</option>
+                                <option <%= typeService === 'INDIVIDUAL' ? 'selected' : '' %>>INDIVIDUAL</option>
+                                <option <%= typeService === 'EM GRUPO' ? 'selected' : '' %>>EM GRUPO</option>
                             </select>
                             <span class="help-inline"></span>
                         </div>
                     </div>
                     <div class="control-group">
                         <label for="name" class="control-label">Aluno:</label>
-
-                        <div class="controls">
-                            <select class="form-control" id="studentId" name="studentId" value="<%= studentId %>">
-                                <option <%= studentId === 'NEURO ADULTO' ? 'selected' : '' %>>NEURO ADULTO</option>
-                                <option <%= studentId === 'NEURO PEDIATRIA' ? 'selected' : '' %>>NEURO PEDIATRIA</option>
-                                <option <%= studentId === 'ORTOPEDIA TRAUMATOLOGIA' ? 'selected' : '' %>>ORTOPEDIA TRAUMATOLOGIA</option>
-                                <option <%= studentId === 'UROGENICOLOGIA MASTOLOGIA' ? 'selected' : '' %>>UROGENICOLOGIA MASTOLOGIA</option>
-                                <option <%= studentId === 'HIDROTERAPIA' ? 'selected' : '' %>>HIDROTERAPIA</option>
-                                <option <%= studentId === 'SAUDE COLETIVA' ? 'selected' : '' %>>SAUDE COLETIVA</option>
-                            </select>
-                            <span class="help-inline"></span>
+                        <!-- DIV ALUNOS -->
+                        <div id="divAlunos" class="controls">
                         </div>
                     </div>
                     <div class="control-group">
                         <label for="name" class="control-label">Professor:</label>
-
-                        <div class="controls">
-                            <select class="form-control" id="teacherId" name="teacherId" value="<%= teacherId %>">
-                                <option <%= teacherId === 'NEURO ADULTO' ? 'selected' : '' %>>NEURO ADULTO</option>
-                                <option <%= teacherId === 'NEURO PEDIATRIA' ? 'selected' : '' %>>NEURO PEDIATRIA</option>
-                                <option <%= teacherId === 'ORTOPEDIA TRAUMATOLOGIA' ? 'selected' : '' %>>ORTOPEDIA TRAUMATOLOGIA</option>
-                                <option <%= teacherId === 'UROGENICOLOGIA MASTOLOGIA' ? 'selected' : '' %>>UROGENICOLOGIA MASTOLOGIA</option>
-                                <option <%= teacherId === 'HIDROTERAPIA' ? 'selected' : '' %>>HIDROTERAPIA</option>
-                                <option <%= teacherId === 'SAUDE COLETIVA' ? 'selected' : '' %>>SAUDE COLETIVA</option>
-                            </select>
-                            <span class="help-inline"></span>
+                        <!-- DIV PROFESSORES -->
+                        <div id="divProfessores" class="controls">
                         </div>
                     </div>
                     <article style="float: left; width: 48%">

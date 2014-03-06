@@ -98,6 +98,18 @@ var getStudentsById = function (req, res) {
     });
 };
 
+var getStudentsActive = function (req, res) {
+    var type = 'ALUNO';
+    UserModel = userRoute.UserModel;
+    return UserModel.find({ 'active': true, 'type': type }, { _id: 1, name: 1 }, function (err, users) {
+        if (!err) {
+            return res.send(users);
+        } else {
+            return console.log(err);
+        }
+    });
+};
+
 var putStudent = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
         res.send('401', { status: 401, error: 'Acesso Negado' });
@@ -146,6 +158,7 @@ module.exports.getStudentsByName = getStudentsByName;
 module.exports.getStudentsByCpf = getStudentsByCpf;
 module.exports.getStudentsByRegistration = getStudentsByRegistration;
 module.exports.getStudentsById = getStudentsById;
+module.exports.getStudentsActive = getStudentsActive;
 module.exports.putStudent = putStudent;
 module.exports.delStudent = delStudent;
 module.exports.postStudent = postStudent;

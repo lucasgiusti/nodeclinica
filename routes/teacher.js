@@ -98,6 +98,17 @@ var getTeachersById = function (req, res) {
     });
 };
 
+var getTeachersActive = function (req, res) {
+    var type = 'PROFESSOR';
+    return userRoute.UserModel.find({'active': true, 'type': type }, { _id: 1, name: 1 }, function (err, users) {
+        if (!err) {
+            return res.send(users);
+        } else {
+            return console.log(err);
+        }
+    });
+};
+
 var putTeacher = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
         res.send('401', { status: 401, error: 'Acesso Negado' });
@@ -146,6 +157,7 @@ module.exports.getTeachersByName = getTeachersByName;
 module.exports.getTeachersByCpf = getTeachersByCpf;
 module.exports.getTeachersByRegistration = getTeachersByRegistration;
 module.exports.getTeachersById = getTeachersById;
+module.exports.getTeachersActive = getTeachersActive;
 module.exports.putTeacher = putTeacher;
 module.exports.delTeacher = delTeacher;
 module.exports.postTeacher = postTeacher;

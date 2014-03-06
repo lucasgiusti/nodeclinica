@@ -10,8 +10,14 @@
 
         $(this.el).html(this.template(session));
 
+        carregaAlunos(session.studentId);
+        carregaProfessores(session.teacherId);
+
+        $('#dateSchedulingStart', this.el).datepicker({ format: 'dd/mm/yyyy' });
+        $('#dateSchedulingEnd', this.el).datepicker({ format: 'dd/mm/yyyy' });
         $('#dateStart', this.el).datepicker({ format: 'dd/mm/yyyy' });
         $('#dateEnd', this.el).datepicker({ format: 'dd/mm/yyyy' });
+
 
         //$('legend', this.el).append(patient.name);
 
@@ -117,3 +123,51 @@
     }
 
 });
+
+
+function carregaAlunos(studentId) {
+
+    $.getJSON('studentsactive', function (data) {
+        var html = '';
+        html += '<select class="form-control" id="studentId" name="studentId" value="' + studentId + '" >';
+        var options = '';
+
+        $.each(data, function (key, val) {
+            if (studentId != val._id) {
+                options += '<option value="' + val._id + '">' + val.name + '</option>';
+            }
+            else {
+                options += '<option value="' + val._id + '" selected>' + val.name + '</option>';
+            }
+        });
+
+        html += options;
+        html += '</select>';
+        html += '<span class="help-inline"></span>';
+        $('#divAlunos', this.el).append(html);
+    });
+};
+
+function carregaProfessores(teacherId) {
+
+    $.getJSON('teachersactive', function (data) {
+        html = '';
+        html += '<select class="form-control" id="teacherId" name="teacherId" value="' + teacherId + '">';
+        var options = '';
+
+        $.each(data, function (key, val) {
+
+            if (teacherId != val._id) {
+                options += '<option value="' + val._id + '">' + val.name + '</option>';
+            }
+            else {
+                options += '<option value="' + val._id + '" selected>' + val.name + '</option>';
+            }
+        });
+        
+        html += options;
+        html += '</select>';
+        html += '<span class="help-inline"></span>';
+        $('#divProfessores', this.el).append(html);
+    });
+};
