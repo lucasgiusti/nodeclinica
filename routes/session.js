@@ -64,7 +64,7 @@ var validateSession = function (res, treatment) {
 var getSessionsAll = function (req, res) {
     var idPatient = req.params.idPatient;
     var idTreatment = req.params.idTreatment;
-    return patientRoute.PatientModel.findOne({ '_id': idPatient, 'treatments._id': idTreatment }, { _id: 1, name: 1, 'treatments.$': 1 }, function (err, patients) {
+    return patientRoute.PatientModel.findOne({ '_id': idPatient, 'treatments._id': idTreatment }, { _id: 1, name: 1, 'treatments.$': 1, sessions: 1 }, function (err, patients) {
         if (!err) {
             return res.send(patients);
         } else {

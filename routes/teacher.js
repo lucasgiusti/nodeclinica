@@ -109,8 +109,8 @@ var putTeacher = function (req, res) {
         console.log('Updating user: ' + id);
         user.dateUpdate = new Date();
 
-        if (validateUser(res, user)) {
-            putUser(res, user, id);
+        if ( userRoute.validateUser(res, user)) {
+            userRoute.putUser(res, user, id);
         }
     }
 };
@@ -122,7 +122,7 @@ var delTeacher = function (req, res) {
     else {
         var id = req.params.id;
         console.log('Deleting user: ' + id);
-        delUser(res, req, id);
+        userRoute.delUser(res, req, id);
     }
 };
 
@@ -135,8 +135,8 @@ var postTeacher = function (req, res) {
         console.log('Adding user');
         user.dateInclusion = new Date();
 
-        if (validateUser(res, user)) {
-            postUser(res, user);
+        if (userRoute.validateUser(res, user)) {
+            userRoute.postUser(res, user);
         }
     }
 };
