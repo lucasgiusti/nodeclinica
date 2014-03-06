@@ -1,0 +1,188 @@
+﻿<div class="row-fluid">
+
+    <form class="form-horizontal span12">
+        <fieldset>
+
+            <legend>Sessão do Tratamento do Paciente </legend>
+
+            <div class="row" style="padding: 0px 10px;">
+                <div class="span8">
+                    <section style="float: left; width: 48%">
+                    <div class="control-group">
+                        <label for="name" class="control-label">Tipo de Sessão:</label>
+
+                        <div class="controls">
+                            <select class="form-control" id="typeSession" name="typeSession" value="<%= typeSession %>">
+                                <option <%= typeSession === 'NEURO ADULTO' ? 'selected' : '' %>>NEURO ADULTO</option>
+                                <option <%= typeSession === 'NEURO PEDIATRIA' ? 'selected' : '' %>>NEURO PEDIATRIA</option>
+                                <option <%= typeSession === 'ORTOPEDIA TRAUMATOLOGIA' ? 'selected' : '' %>>ORTOPEDIA TRAUMATOLOGIA</option>
+                                <option <%= typeSession === 'UROGENICOLOGIA MASTOLOGIA' ? 'selected' : '' %>>UROGENICOLOGIA MASTOLOGIA</option>
+                                <option <%= typeSession === 'HIDROTERAPIA' ? 'selected' : '' %>>HIDROTERAPIA</option>
+                                <option <%= typeSession === 'SAUDE COLETIVA' ? 'selected' : '' %>>SAUDE COLETIVA</option>
+                            </select>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="name" class="control-label">Modalidade de Atendimento:</label>
+
+                        <div class="controls">
+                            <select class="form-control" id="typeService" name="typeService" value="<%= typeService %>">
+                                <option <%= typeService === 'NEURO ADULTO' ? 'selected' : '' %>>NEURO ADULTO</option>
+                                <option <%= typeService === 'NEURO PEDIATRIA' ? 'selected' : '' %>>NEURO PEDIATRIA</option>
+                                <option <%= typeService === 'ORTOPEDIA TRAUMATOLOGIA' ? 'selected' : '' %>>ORTOPEDIA TRAUMATOLOGIA</option>
+                                <option <%= typeService === 'UROGENICOLOGIA MASTOLOGIA' ? 'selected' : '' %>>UROGENICOLOGIA MASTOLOGIA</option>
+                                <option <%= typeService === 'HIDROTERAPIA' ? 'selected' : '' %>>HIDROTERAPIA</option>
+                                <option <%= typeService === 'SAUDE COLETIVA' ? 'selected' : '' %>>SAUDE COLETIVA</option>
+                            </select>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="name" class="control-label">Aluno:</label>
+
+                        <div class="controls">
+                            <select class="form-control" id="studentId" name="studentId" value="<%= studentId %>">
+                                <option <%= studentId === 'NEURO ADULTO' ? 'selected' : '' %>>NEURO ADULTO</option>
+                                <option <%= studentId === 'NEURO PEDIATRIA' ? 'selected' : '' %>>NEURO PEDIATRIA</option>
+                                <option <%= studentId === 'ORTOPEDIA TRAUMATOLOGIA' ? 'selected' : '' %>>ORTOPEDIA TRAUMATOLOGIA</option>
+                                <option <%= studentId === 'UROGENICOLOGIA MASTOLOGIA' ? 'selected' : '' %>>UROGENICOLOGIA MASTOLOGIA</option>
+                                <option <%= studentId === 'HIDROTERAPIA' ? 'selected' : '' %>>HIDROTERAPIA</option>
+                                <option <%= studentId === 'SAUDE COLETIVA' ? 'selected' : '' %>>SAUDE COLETIVA</option>
+                            </select>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="name" class="control-label">Professor:</label>
+
+                        <div class="controls">
+                            <select class="form-control" id="teacherId" name="teacherId" value="<%= teacherId %>">
+                                <option <%= teacherId === 'NEURO ADULTO' ? 'selected' : '' %>>NEURO ADULTO</option>
+                                <option <%= teacherId === 'NEURO PEDIATRIA' ? 'selected' : '' %>>NEURO PEDIATRIA</option>
+                                <option <%= teacherId === 'ORTOPEDIA TRAUMATOLOGIA' ? 'selected' : '' %>>ORTOPEDIA TRAUMATOLOGIA</option>
+                                <option <%= teacherId === 'UROGENICOLOGIA MASTOLOGIA' ? 'selected' : '' %>>UROGENICOLOGIA MASTOLOGIA</option>
+                                <option <%= teacherId === 'HIDROTERAPIA' ? 'selected' : '' %>>HIDROTERAPIA</option>
+                                <option <%= teacherId === 'SAUDE COLETIVA' ? 'selected' : '' %>>SAUDE COLETIVA</option>
+                            </select>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    <article style="float: left; width: 48%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Data De Agendamento Início:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="dateSchedulingStart" name="dateSchedulingStart" value="<%= dateSchedulingStart === null ? '' : new Date(dateSchedulingStart).toLocaleDateString() %>" data-date-format="dd/mm/yyyy" />
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    <article style="float: right; width: 49%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Data de Agendamento Fim:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="dateSchedulingEnd" name="dateSchedulingEnd" value="<%= dateSchedulingEnd === null ? '' : new Date(dateSchedulingEnd).toLocaleDateString() %>" data-date-format="dd/mm/yyyy" />
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    <article style="float: left; width: 48%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Data Início:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="dateStart" name="dateStart" value="<%= dateStart === null ? '' : new Date(dateStart).toLocaleDateString() %>" data-date-format="dd/mm/yyyy" />
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    <article style="float: right; width: 49%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Data Fim:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="dateEnd" name="dateEnd" value="<%= dateEnd === null ? '' : new Date(dateEnd).toLocaleDateString() %>" data-date-format="dd/mm/yyyy" />
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    </section>
+                    
+                    <section style="float: right; width: 48%;">
+                    <article style="float: left; width: 100%">
+                    <div class="control-group">
+                        <label for="name" class="control-label">Observações:</label>
+
+                        <div class="controls">
+                            <textarea class="form-control" id="observations" name="observations" maxlength="3000" style="height: 278px"><%= observations === null ? '' : observations %></textarea>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+
+                    <article style="float: left; width: 48%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Data Inclusão:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="dateInclusion" name="dateInclusion" value="<%= dateInclusion == null ? '' : new Date(dateInclusion).toLocaleDateString() %>" readonly/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    <article style="float: right; width: 49%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Data Alteração:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="dateUpdate" name="dateUpdate" value="<%= dateUpdate === null ? '' : new Date(dateUpdate).toLocaleDateString() %>" readonly/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    </section>
+                </div>
+            </div>
+
+        </fieldset>
+        <div class="footer">
+            <button type="button" class="btn btn-primary btn-large save">Salvar</button>
+            <button type="button" class="btn" onclick="back();">Cancelar</button>
+            <button type="button" class="btn" data-toggle="modal" href="#delSession" <%= _id === null ? 'style="display: none"' : '' %>>Excluir</button>
+        </div>
+
+    </form>
+
+</div>
+
+    <div id="delSession" class="modal container hide fade" tabindex="-1" style="width: 500px; margin-left: -250px;">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Excluir Sessão ?</h3>
+  </div>
+  <div class="modal-footer">
+    <button type="button" data-dismiss="modal" class="btn">Cancelar</button>
+    <button type="button" data-dismiss="modal" class="btn btn-primary btn-large delete">Sim</button>
+  </div>
+  <br/>
+</div>
+<br />
+<div class="row-fluid status-bar">
+    <div class="span12">
+        <div class="alert alert-success" style="display: none">
+            <b>Success!</b> Session saved successfully
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+    function back()
+    {
+        history.back(1);
+    }
+	</script>

@@ -26,6 +26,7 @@ var Session = new Schema({
     dateStart: { type: Date, required: false },
     dateEnd: { type: Date, required: false },
     observations: { type: String, required: false },
+    dateInclusion: { type: Date, required: true },
     dateUpdate: { type: Date, required: false }
 });
 
@@ -375,7 +376,29 @@ var getPatientsByCpf = function (req, res) {
 var getPatientsById = function (req, res) {
     var id = req.params.id;
     PatientModel = mongoose.model('patients', Patient);
-    return PatientModel.findById(id, function (err, patients) {
+    return PatientModel.findById(id, {
+        name: 1,
+        mail: 1,
+        address: 1,
+        number: 1,
+        complement: 1,
+        district: 1,
+        state: 1,
+        city: 1,
+        cep: 1,
+        maritalStatus: 1,
+        phone1: 1,
+        dateBirth: 1,
+        sex: 1,
+        phone2: 1,
+        phone3: 1,
+        cpf: 1,
+        responsibleName: 1,
+        responsibleCPF: 1,
+        observations: 1,
+        dateInclusion: 1,
+        dateUpdate: 1,
+    }, function (err, patients) {
         if (!err) {
             return res.send(patients);
         } else {

@@ -6,9 +6,10 @@
 
     render: function () {
 
-        var patient = this.model.models;
-        patient = patient[0].toJSON();
-        var sessions = patient.sessions;
+        var patient = this.model;
+        patient = patient.toJSON()[0];
+        var sessions = patient.treatments[0].sessions;
+
 
         var len = sessions.length;
         var startPos = (this.options.page - 1) * 8;
