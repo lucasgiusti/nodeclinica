@@ -79,9 +79,15 @@ var postSession = function (req, res) {
         res.send('401', { status: 401, error: 'Acesso Negado' });
     }
     else {
+
         var idPatient = req.params.idPatient;
         var idTreatment = req.params.idTreatment;
         var session = req.body;
+        
+        for (i = 0; i <= 23; i++) {
+            delete session[i];
+        }
+        console.log(session);
 
         console.log('Adding session');
         session.dateInclusion = new Date();

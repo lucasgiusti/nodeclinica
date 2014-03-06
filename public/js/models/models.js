@@ -932,7 +932,7 @@ window.Session = Backbone.Model.extend({
 
     idAttribute: "_id",
 
-    initialize: function (options, treatment) {
+    initialize: function (options, treatmentId) {
 
         this.options = options || {};
         this.idPatient = "";
@@ -941,7 +941,7 @@ window.Session = Backbone.Model.extend({
             this.idPatient += this.options[i];
             i++;
         }
-        this.idTreatment = treatment._id;
+        this.idTreatment = treatmentId;
 
         this.validators = {};
         /*
@@ -986,8 +986,8 @@ window.Session = Backbone.Model.extend({
         studentName: null,
         teacherId: null,
         teacherName: null,
-        typeSession: null,
-        typeService: null,
+        typeSession: 'SESSAO',
+        typeService: 'INDIVIDUAL',
         dateSchedulingStart: null,
         dateSchedulingEnd: null,
         dateStart: null,
