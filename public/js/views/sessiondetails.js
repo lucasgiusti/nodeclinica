@@ -127,10 +127,8 @@ window.SessionView = Backbone.View.extend({
         $.getJSON('studentsactive', function (data) {
             var options = '';
 
+            options = '<option value="null"></option>';
             $.each(data, function (key, val) {
-
-                if (!studentId)
-                    studentId = val._id;
 
                 if (studentId != val._id) {
                     options += '<option value="' + val._id + '">' + val.name + '</option>';
@@ -147,8 +145,6 @@ window.SessionView = Backbone.View.extend({
             html += '</select>';
             html += '<span class="help-inline"></span>';
             $('#divAlunos', this.el).append(html);
-
-            this.session.studentId = studentId;
         });
     },
 
@@ -157,10 +153,8 @@ window.SessionView = Backbone.View.extend({
         $.getJSON('teachersactive', function (data) {
             var options = '';
 
+            options = '<option value="null"></option>';
             $.each(data, function (key, val) {
-
-                if (!teacherId)
-                    teacherId = val._id;
 
                 if (teacherId != val._id) {
                     options += '<option value="' + val._id + '">' + val.name + '</option>';
@@ -176,8 +170,6 @@ window.SessionView = Backbone.View.extend({
             html += '</select>';
             html += '<span class="help-inline"></span>';
             $('#divProfessores', this.el).append(html);
-
-            this.session.teacherId = teacherId;
         });
     },
 });
