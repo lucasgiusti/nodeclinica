@@ -29,20 +29,20 @@
 
                 html += '<tr>';
                 html += '<td>' + jsonObject._id + '</td>';
-                html += '<td><a href="#patients/' + patient._id  + '/sessions/' + jsonObject._id + '">' + jsonObject.serviceArea + '</td>';
+                html += '<td><a href="#patients/' + patient._id  + '/sessions/' + jsonObject._id + '">' + jsonObject.typeService + '</td>';
                 
-                if (jsonObject.dateStart != null)
-                    html += '<td>' + formattedDate(jsonObject.dateStart) + '</td>';
+                if (jsonObject.dateSchedulingStart != null)
+                    html += '<td>' + formattedDateTime(jsonObject.dateSchedulingStart) + '</td>';
                 else
                     html += '<td></td>';
 
-                if (jsonObject.dateEnd != null)
-                    html += '<td>' + formattedDate(jsonObject.dateEnd) + '</td>';
+                if (jsonObject.dateSchedulingEnd != null)
+                    html += '<td>' + formattedDateTime(jsonObject.dateSchedulingEnd) + '</td>';
                 else
                     html += '<td></td>';
 
-                if (jsonObject.status != null)
-                    html += '<td>' + jsonObject.status + '</td>';
+                if (jsonObject.studentName != null)
+                    html += '<td>' + jsonObject.studentName + '</td>';
                 else
                     html += '<td></td>';
 

@@ -14,46 +14,53 @@ var express = require("express"),
 
 
 
-var validateSession = function (res, treatment) {
+var validateSession = function (res, session) {
 
-    if (treatment.serviceArea == null) {
-        console.log('Error adding treatment: area de atendimento invalida');
-        res.send('500', { status: 500, error: 'Area de atendimento invalida' });
+    if (session.typeSession == null) {
+        console.log('Error adding session: tipo de Sessao invalida');
+        res.send('500', { status: 500, error: 'Tipo de Sessao invalida' });
         return false;
     }
 
-    if ((treatment.diagnosis == null) || (treatment.diagnosis != null && !iz.between(treatment.diagnosis.length, 1, 3000))) {
-        console.log('Error adding treatment: o diagnostico deve ter 1 a 3000 caracteres');
-        res.send('500', { status: 500, error: 'O diagnostico deve ter 1 a 3000 caracteres' });
+    if (session.typeService == null) {
+        console.log('Error adding session: modalidade de Atendimento invalida');
+        res.send('500', { status: 500, error: 'Modalidade de Atendimento invalida' });
         return false;
     }
 
-    if ((treatment.doctor == null) || (treatment.doctor != null && !iz.between(treatment.doctor.length, 1, 100))) {
-        console.log('Error adding treatment: o nome do medico deve ter 1 a 100 caracteres');
-        res.send('500', { status: 500, error: 'O nome do medico deve ter 1 a 100 caracteres' });
+    if (session.studentId == null) {
+        console.log('Error adding session: aluno invalido');
+        res.send('500', { status: 500, error: 'Aluno Invalido' });
         return false;
     }
 
-    if ((treatment.CRMDoctor == null) || (treatment.CRMDoctor != null && !iz.between(treatment.CRMDoctor.length, 1, 20))) {
-        console.log('Error adding treatment: o CRM do medico deve ter 1 a 20 caracteres');
-        res.send('500', { status: 500, error: 'O CRM do medico deve ter 1 a 20 caracteres' });
+    if (session.teacherId == null) {
+        console.log('Error adding session: professor invalido');
+        res.send('500', { status: 500, error: 'Professor Invalido' });
         return false;
     }
 
-    if (treatment.status == null) {
-        console.log('Error adding treatment: situacao invalida');
-        res.send('500', { status: 500, error: 'Situacao invalida' });
+    if (!iz.maxLength(session.observations, 3000)) {
+        console.log('Error adding session: a observacao deve ter maximo 3000 caracteres');
+        res.send('500', { status: 500, error: 'A observacao deve ter maximo 3000 caracteres' });
         return false;
     }
 
-    if (!iz.maxLength(treatment.observations, 3000)) {
-        console.log('Error adding treatment: o complemento deve ter maximo 20 caracteres');
-        res.send('500', { status: 500, error: 'O complemento deve ter maximo 20 caracteres' });
+
+    if (!iz(session.dateSchedulingStart).required().date().valid) {
+        console.log('Error adding session: data de Agendamento Inicio invalida');
+        res.send('500', { status: 500, error: 'Data de Agendamento Inicio invalida' });
         return false;
     }
 
-    if (!iz(treatment.dateInclusion).required().date().valid) {
-        console.log('Error adding treatment: data de inclusao invalida');
+    if (!iz(session.dateSchedulingEnd).required().date().valid) {
+        console.log('Error adding session: data de Agendamento Inicio invalida');
+        res.send('500', { status: 500, error: 'Data de Agendamento Inicio invalida' });
+        return false;
+    }
+
+    if (!iz(session.dateInclusion).required().date().valid) {
+        console.log('Error adding session: data de inclusao invalida');
         res.send('500', { status: 500, error: 'Data de inclusao invalida' });
         return false;
     }
@@ -79,7 +86,6 @@ var postSession = function (req, res) {
         res.send('401', { status: 401, error: 'Acesso Negado' });
     }
     else {
-
         var idPatient = req.params.idPatient;
         var idTreatment = req.params.idTreatment;
         var session = req.body;
@@ -87,22 +93,19 @@ var postSession = function (req, res) {
         for (i = 0; i <= 23; i++) {
             delete session[i];
         }
-        console.log(session);
-
         console.log('Adding session');
         session.dateInclusion = new Date();
 
         if (validateSession(res, session)) {
 
             PatientModel = mongoose.model('patients', patientRoute.Patient);
-            PatientModel.findOne({ '_id': idPatient, 'treatments._id': idTreatment }, function (err, patient) {
+            PatientModel.findOne({ '_id': idPatient, 'treatments._id': idTreatment }, {_id: 1, 'treatments.$': 1}, function (err, patient) {
                 if (!err) {
                     if (patient) {
 
                         delete session._id;
                         session.idTreatment = idTreatment;
-
-                        patient.treatments.sessions.push(session);
+                        patient.treatments[0].sessions.push(session);
 
                         patient.save(function (err, result) {
                             if (err) {
@@ -110,7 +113,7 @@ var postSession = function (req, res) {
                                 res.send('500', { status: 500, error: err });
                             } else {
                                 console.log('document(s) updated');
-                                res.send(patient.treatments[patient.treatments.length - 1].sessions[patient.treatments.sessions.length - 1]);
+                                res.send(patient.treatments[0].sessions[patient.treatments[0].sessions.length - 1]);
                             }
                         });
                     }

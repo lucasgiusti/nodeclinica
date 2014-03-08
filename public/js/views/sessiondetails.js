@@ -13,10 +13,10 @@ window.SessionView = Backbone.View.extend({
 
         $(this.el).html(this.template(session));
 
-        $('#dateSchedulingStart', this.el).datepicker({ format: 'dd/mm/yyyy' });
-        $('#dateSchedulingEnd', this.el).datepicker({ format: 'dd/mm/yyyy' });
-        $('#dateStart', this.el).datepicker({ format: 'dd/mm/yyyy' });
-        $('#dateEnd', this.el).datepicker({ format: 'dd/mm/yyyy' });
+        $("#dateSchedulingStart", this.el).datetimepicker({ format: 'dd/mm/yyyy hh:ii', autoclose: true, minuteStep: 60 });
+        $('#dateSchedulingEnd', this.el).datetimepicker({ format: 'dd/mm/yyyy hh:ii', autoclose: true, minuteStep: 60 });
+        $('#dateStart', this.el).datetimepicker({ format: 'dd/mm/yyyy hh:ii', autoclose: true, minuteStep: 60 });
+        $('#dateEnd', this.el).datetimepicker({ format: 'dd/mm/yyyy hh:ii', autoclose: true, minuteStep: 60 });
 
         //$('legend', this.el).append(patient.name);
         return this;
@@ -44,10 +44,19 @@ window.SessionView = Backbone.View.extend({
         var target = event.target;
         var change = {};
 
+        
+
         if (target.name == "dateStart" || target.name == "dateEnd" || target.name == "dateSchedulingStart" || target.name == "dateSchedulingEnd") {
-            change[target.name] = new Date(target.value.substring(6, 10), target.value.substring(3, 5) - 1, target.value.substring(0, 2));
+
+            change[target.name] = new Date(target.value.substring(6, 10), target.value.substring(3, 5) - 1, target.value.substring(0, 2), target.value.substring(11, 13), target.value.substring(14, 16));
         }
         else {
+
+            if (target.name == "studentId")
+                change["studentName"] = $("#" + target.name).text();
+            if (target.name == "teacherId")
+                change["teacherName"] = $("#" + target.name).text();
+
             change[target.name] = target.value;
         }
 
