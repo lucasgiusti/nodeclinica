@@ -1,4 +1,5 @@
 ﻿//************************************************************
+
 var application_root = __dirname,
     express = require("express"),
     path = require("path"),
@@ -135,7 +136,9 @@ app.put('/patients/:idPatient/treatments/:id', auth, treatmentRoute.putTreatment
 
 // SESSIONS
 app.get('/patients/:idPatient/treatments/:idTreatment/sessions', auth, sessionRoute.getSessionsAll);
+app.get('/patients/:idPatient/treatments/:idTreatment/sessions/:id', auth, sessionRoute.getSessionsById);
 app.post('/patients/:idPatient/treatments/:idTreatment/sessions', auth, sessionRoute.postSession);
+
 
 // Launch server
 http.createServer(app).listen(app.get('port'), function () {

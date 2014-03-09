@@ -80,6 +80,34 @@ var getSessionsAll = function (req, res) {
     });
 };
 
+var getSessionsById = function (req, res) {
+    var idPatient = req.params.idPatient;
+    var idTreatment = req.params.idTreatment;
+    var id = req.params.id;
+
+    var patient = patientRoute.Patient;
+    patient._id = idPatient;
+    patient.treatment = patientRoute.Treatment;
+    patient.treatment._id = idTreatment;
+
+    return patientRoute.PatientModel.findOne({ 'treatments.sessions._id': id }, { _id: 1, name: 1, 'treatments.$': 1 }, function (err, patients) {
+        if (!err) {
+
+            for(var i=0;i<patients.treatments[0].sessions.length;i++)
+            {
+                if (patients.treatments[0].sessions[i]._id != id) {
+                    patients.treatments[0].sessions.pull({ _id: patients.treatments[0].sessions[i]._id });
+                    i--;
+                }
+            }
+
+            return res.send(patients.treatments[0].sessions[0]);
+        } else {
+            return console.log(err);
+        }
+    });
+};
+
 var postSession = function (req, res) {
 
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
@@ -130,4 +158,5 @@ var postSession = function (req, res) {
 
 
 module.exports.getSessionsAll = getSessionsAll;
+module.exports.getSessionsById = getSessionsById;
 module.exports.postSession = postSession;

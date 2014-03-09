@@ -46,7 +46,7 @@ var Treatment = new Schema({
     sessions: [Session]
 });
 
-// Patient Model
+// Patient Mod  el
 var Patient = new Schema({
     name: { type: String, required: true },
     mail: { type: String, required: false },
@@ -416,3 +416,4 @@ module.exports.putPatient = putPatient;
 module.exports.delPatient = delPatient;
 module.exports.postPatient = postPatient;
 module.exports.Treatment = Treatment;
+module.exports.Patient = Patient;

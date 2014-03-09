@@ -8,6 +8,7 @@
 
         var patient = this.model;
         patient = patient.toJSON()[0];
+        var treatment = patient.treatments[0];
         var sessions = patient.treatments[0].sessions;
 
 
@@ -29,7 +30,7 @@
 
                 html += '<tr>';
                 html += '<td>' + jsonObject._id + '</td>';
-                html += '<td><a href="#patients/' + patient._id  + '/sessions/' + jsonObject._id + '">' + jsonObject.typeService + '</td>';
+                html += '<td><a href="#patients/' + patient._id + '/treatments/' + treatment._id + '/sessions/' + jsonObject._id + '">' + jsonObject.typeService + '</td>';
                 
                 if (jsonObject.dateSchedulingStart != null)
                     html += '<td>' + formattedDateTime(jsonObject.dateSchedulingStart) + '</td>';

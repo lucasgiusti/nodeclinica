@@ -63,6 +63,7 @@ var AppRouter = Backbone.Router.extend({
         "patients/:idPatient/treatments/:id": "treatmentDetails",
         "patients/:idPatient/treatments/:idTreatment/sessions": "sessionList",
         "patients/:idPatient/treatments/:idTreatment/sessions/add": "addSession",
+        "patients/:idPatient/treatments/:idTreatment/sessions/:id": "sessionDetails",
         "about": "about"
     },
 
@@ -711,7 +712,7 @@ var AppRouter = Backbone.Router.extend({
                 }
             }
         });
-        selectMenuItem();
+        selectMenuItem('patients-menu');
     },
 
 
@@ -721,6 +722,23 @@ var AppRouter = Backbone.Router.extend({
         sessionList.fetch({
             success: function () {
                 $("#content").html(new SessionListView({ model: sessionList, page: p }).el);
+            },
+            error: function (err, message) {
+                var erro = $.parseJSON(message.responseText).status;
+                if (erro == 401) {
+                    signin();
+                }
+            }
+        });
+        selectMenuItem('patients-menu');
+    },
+
+    sessionDetails: function (idPatient, idTreatment, id) {
+
+        var session = new SessionDetail(idPatient, idTreatment, id);
+        session.fetch({
+            success: function () {
+                $("#content").html(new SessionView({ model: session }).el);
             },
             error: function (err, message) {
                 var erro = $.parseJSON(message.responseText).status;
