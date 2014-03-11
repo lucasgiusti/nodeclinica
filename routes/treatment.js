@@ -187,7 +187,7 @@ var delTreatment = function (req, res) {
                 }
             }
             else {
-                res.send('500', { status: 500, error: 'Usuario nao encontrado' });
+                res.send('500', { status: 500, error: 'Tratamento nao encontrado' });
             }
         });
     }

@@ -138,7 +138,8 @@ app.put('/patients/:idPatient/treatments/:id', auth, treatmentRoute.putTreatment
 app.get('/patients/:idPatient/treatments/:idTreatment/sessions', auth, sessionRoute.getSessionsAll);
 app.get('/patients/:idPatient/treatments/:idTreatment/sessions/:id', auth, sessionRoute.getSessionsById);
 app.post('/patients/:idPatient/treatments/:idTreatment/sessions', auth, sessionRoute.postSession);
-
+app.del('/patients/:idPatient/treatments/:idTreatment/sessions/:id', auth, sessionRoute.delSession);
+app.put('/patients/:idPatient/treatments/:idTreatment/sessions/:id', auth, sessionRoute.putSession);
 
 // Launch server
 http.createServer(app).listen(app.get('port'), function () {

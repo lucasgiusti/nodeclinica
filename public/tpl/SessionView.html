@@ -48,7 +48,7 @@
                         <label for="grapes" class="control-label">Data de Agendamento Início:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="dateSchedulingStart" name="dateSchedulingStart" value="<%= dateSchedulingStart === null ? '' : new Date(dateSchedulingStart).toLocaleDateString() %>" data-date-format="dd/mm/yyyy hh:ii">
+                            <input type="text" class="form-control" id="dateSchedulingStart" name="dateSchedulingStart" value="<%= dateSchedulingStart === null ? '' : formattedDateTime(dateSchedulingStart) %>" data-date-format="dd/mm/yyyy hh:ii">
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -58,7 +58,7 @@
                         <label for="grapes" class="control-label">Data de Agendamento Fim:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="dateSchedulingEnd" name="dateSchedulingEnd" value="<%= dateSchedulingEnd === null ? '' : new Date(dateSchedulingEnd).toLocaleDateString() %>" data-date-format="dd/mm/yyyy hh:ii" />
+                            <input type="text" class="form-control" id="dateSchedulingEnd" name="dateSchedulingEnd" value="<%= dateSchedulingEnd === null ? '' : formattedDateTime(dateSchedulingEnd) %>" data-date-format="dd/mm/yyyy hh:ii" />
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -68,7 +68,7 @@
                         <label for="grapes" class="control-label">Data Início:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="dateStart" name="dateStart" value="<%= dateStart === null ? '' : new Date(dateStart).toLocaleDateString() %>" data-date-format="dd/mm/yyyy hh:ii" />
+                            <input type="text" class="form-control" id="dateStart" name="dateStart" value="<%= dateStart === null ? '' : formattedDateTime(dateStart) %>" data-date-format="dd/mm/yyyy hh:ii" />
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -78,7 +78,7 @@
                         <label for="grapes" class="control-label">Data Fim:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="dateEnd" name="dateEnd" value="<%= dateEnd === null ? '' : new Date(dateEnd).toLocaleDateString() %>" data-date-format="dd/mm/yyyy hh:ii" />
+                            <input type="text" class="form-control" id="dateEnd" name="dateEnd" value="<%= dateEnd === null ? '' : formattedDateTime(dateEnd) %>" data-date-format="dd/mm/yyyy hh:ii" />
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -102,7 +102,7 @@
                         <label for="grapes" class="control-label">Data Inclusão:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="dateInclusion" name="dateInclusion" value="<%= dateInclusion == null ? '' : new Date(dateInclusion).toLocaleDateString() %>" readonly/>
+                            <input type="text" class="form-control" id="dateInclusion" name="dateInclusion" value="<%= dateInclusion == null ? '' : formattedDate(dateInclusion) %>" readonly/>
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -112,7 +112,7 @@
                         <label for="grapes" class="control-label">Data Alteração:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="dateUpdate" name="dateUpdate" value="<%= dateUpdate === null ? '' : new Date(dateUpdate).toLocaleDateString() %>" readonly/>
+                            <input type="text" class="form-control" id="dateUpdate" name="dateUpdate" value="<%= dateUpdate === null ? '' : formattedDateTime(dateUpdate) %>" readonly/>
                             <span class="help-inline"></span>
                         </div>
                     </div>

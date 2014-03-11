@@ -156,7 +156,83 @@ var postSession = function (req, res) {
     }
 }
 
+var delSession = function (req, res) {
+    if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
+        res.send('401', { status: 401, error: 'Acesso Negado' });
+    }
+    else {
+        var idPatient = req.params.idPatient;
+        var idTreatment = req.params.idTreatment;
+        var id = req.params.id;
+
+        console.log('Deleting session: ' + id);
+
+        return patientRoute.PatientModel.findOne({ 'treatments.sessions._id': id }, { _id: 1, name: 1, 'treatments.$': 1 }, function (err, patients) {
+            if (!err) {
+                if (patients) {
+                    patients.treatments[0].sessions.remove(id);
+                    patients.save(function () { res.send(patients); });
+                }
+            }
+            else {
+                return res.send('500', { status: 500, error: 'Sessao nao encontrada' });
+            }
+        });
+    }
+}
+
+var putSession = function (req, res) {
+    if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
+        res.send('401', { status: 401, error: 'Acesso Negado' });
+    }
+    else {
+
+        var id = req.params.id;
+        var session = req.body;
+        var idPatient = session.idPatient;
+
+        for (i = 0; i <= 23; i++) {
+            delete session[i];
+        }
+
+        console.log('Updating treatment');
+        session.dateUpdate = new Date();
+        var objectID = new ObjectID(id);
+
+        if (validateSession(res, session)) {
+
+            return patientRoute.PatientModel.findOne({ 'treatments.sessions._id': id }, { _id: 1, 'treatments.$': 1 }, function (err, patients) {
+                if (!err) {
+
+                    for (var i = 0; i < patients.treatments[0].sessions.length; i++) {
+                        if (patients.treatments[0].sessions[i]._id == id) {
+                            patients.treatments[0].sessions[i] = session;
+                        }
+                    }
+
+                    return patientRoute.PatientModel.update({ '_id': idPatient }, patients, { safe: true }, function (err, result) {
+                        if (err) {
+                            console.log('Error updating session: ' + err);
+                            res.send('500', { status: 500, error: err });
+                        } else {
+                            console.log('' + result + ' document(s) updated');
+
+                            res.send(patient);
+                        }
+                    });
+
+
+                } else {
+                    console.log('Error updating session: ' + err);
+                    res.send('500', { status: 500, error: err });
+                }
+            });
+        }
+    }
+}
 
 module.exports.getSessionsAll = getSessionsAll;
 module.exports.getSessionsById = getSessionsById;
 module.exports.postSession = postSession;
+module.exports.delSession = delSession;
+module.exports.putSession = putSession;

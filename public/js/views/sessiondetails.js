@@ -88,9 +88,8 @@ window.SessionView = Backbone.View.extend({
         this.model.save(null, {
             success: function (model) {
                 self.render();
-
-                app.navigate('patients/' + model.idPatient + '/sessions/' + model.id, false);
-                utils.showAlert('Success!', 'Tratamento atualizado com sucesso', 'alert-success');
+                app.navigate('patients/' + model.idPatient + '/treatments/' + model.idTreatment + '/sessions/' + model.id, false);
+                utils.showAlert('Success!', 'Sessao atualizado com sucesso', 'alert-success');
             },
             error: function (err, message) {
                 utils.showAlert('Erro', $.parseJSON(message.responseText).error, 'alert-error');
@@ -103,7 +102,7 @@ window.SessionView = Backbone.View.extend({
         this.model.destroy({
             success: function (model) {
                 $("#delSession", this.el).hide(function () {
-                    app.navigate('patients/' + model.idPatient + '/sessions', true);
+                    app.navigate('patients/' + model.idPatient + '/treatments/' + model.idTreatment + '/sessions', true);
                     self.render();
                 });
             },

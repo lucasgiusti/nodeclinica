@@ -79,6 +79,5 @@ function formattedDateTime(date) {
     if (day.length < 2) day = '0' + day;
     if (hour.length < 2) hour = '0' + hour;
     if (min.length < 2) min = '0' + min;
-
     return [day, month, year].join('/') + ' ' + hour + ":" + min;
 }
