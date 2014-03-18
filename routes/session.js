@@ -206,21 +206,22 @@ var putSession = function (req, res) {
 
                     for (var i = 0; i < patients.treatments[0].sessions.length; i++) {
                         if (patients.treatments[0].sessions[i]._id == id) {
-                            patients.treatments[0].sessions[i] = session;
+
+                            patients.treatments[0].sessions[i].studentName = session.studentName;
+                            patients.treatments[0].sessions[i].teacherId = session.teacherId;
+                            patients.treatments[0].sessions[i].teacherName = session.teacherName;
+                            patients.treatments[0].sessions[i].typeSession = session.typeSession;
+                            patients.treatments[0].sessions[i].typeService = session.typeService;
+                            patients.treatments[0].sessions[i].dateSchedulingStart = session.dateSchedulingStart;
+                            patients.treatments[0].sessions[i].dateSchedulingEnd = session.dateSchedulingEnd;
+                            patients.treatments[0].sessions[i].dateStart = session.dateStart;
+                            patients.treatments[0].sessions[i].dateEnd = session.dateEnd;
+                            patients.treatments[0].sessions[i].observations = session.observations;
+                            patients.treatments[0].sessions[i].dateUpdate = session.dateUpdate;
                         }
                     }
 
-                    return patientRoute.PatientModel.update({ '_id': idPatient }, patients, { safe: true }, function (err, result) {
-                        if (err) {
-                            console.log('Error updating session: ' + err);
-                            res.send('500', { status: 500, error: err });
-                        } else {
-                            console.log('' + result + ' document(s) updated');
-
-                            res.send(patient);
-                        }
-                    });
-
+                    patients.save(function () { res.send(session); });
 
                 } else {
                     console.log('Error updating session: ' + err);
