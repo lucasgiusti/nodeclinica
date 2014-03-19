@@ -115,7 +115,7 @@ var fcViews = fc.views = {};
 
 
 $.fn.fullCalendar = function(options) {
-    alert('ok');
+    
 	// method calling
 	if (typeof options == 'string') {
 
