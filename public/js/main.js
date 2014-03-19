@@ -6,6 +6,7 @@ var AppRouter = Backbone.Router.extend({
 
     routes: {
         "": "home",
+        "calendar": "calendar",
         "wines": "wineList",
         "wines/page/:page": "wineList",
         "wines/add": "addWine",
@@ -90,6 +91,14 @@ var AppRouter = Backbone.Router.extend({
         }
         $('#content').html(this.homeView.el);
         selectMenuItem('home-menu');
+    },
+
+    calendar: function (id) {
+        if (!this.calendarView) {
+            this.calendarView = new CalendarView();
+        }
+        $('#content').html(this.calendarView.el);
+        selectMenuItem('calendar-menu');
     },
 
     wineList: function (page) {
@@ -767,7 +776,7 @@ var AppRouter = Backbone.Router.extend({
 
 });
 
-utils.loadTemplate(['HomeView', 'HeaderView', 'WineView', 'WineListItemView', 'StudentsView', 'StudentView', 'TeachersView', 'TeacherView', 'AttendantsView', 'AttendantView', 'ManagersView', 'ManagerView', 'PatientsView', 'PatientView', 'TreatmentsView', 'TreatmentView', 'SessionsView', 'SessionView', 'AboutView', 'BaseModalView'], function () {
+utils.loadTemplate(['HomeView', 'HeaderView', 'CalendarView', 'WineView', 'WineListItemView', 'StudentsView', 'StudentView', 'TeachersView', 'TeacherView', 'AttendantsView', 'AttendantView', 'ManagersView', 'ManagerView', 'PatientsView', 'PatientView', 'TreatmentsView', 'TreatmentView', 'SessionsView', 'SessionView', 'AboutView', 'BaseModalView'], function () {
     app = new AppRouter();
     Backbone.history.start();
 });
