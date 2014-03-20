@@ -28,17 +28,18 @@
             },
             
             defaultView: 'agendaWeek',
-            editable: true,
+            editable: false,
             contentHeight: 445,
             events: [
                 {
                     title: 'All Day Event',
-                    start: new Date(y, m, 1)
+                    start: new Date(y, m, d , 19, 0),
+                    end: new Date(y, m, d, 20, 00),
                 },
                 {
                     title: 'Long Event',
-                    start: new Date(y, m, d - 5),
-                    end: new Date(y, m, d - 2)
+                    start: new Date(y, m, d - 5, 19, 0),
+                    end: new Date(y, m, d - 5, 20, 00),
                 },
                 {
                     id: 999,
@@ -58,21 +59,15 @@
                     allDay: false
                 },
                 {
-                    title: 'Lunch',
-                    start: new Date(y, m, d, 12, 0),
-                    end: new Date(y, m, d, 14, 0),
-                    allDay: false
-                },
-                {
                     title: 'Birthday Party',
                     start: new Date(y, m, d + 1, 19, 0),
-                    end: new Date(y, m, d + 1, 22, 30),
+                    end: new Date(y, m, d + 1, 20, 00),
                     allDay: false
                 },
                 {
                     title: 'Click for Google',
-                    start: new Date(y, m, 28),
-                    end: new Date(y, m, 29),
+                    start: new Date(y, m, 28, 11, 0),
+                    end: new Date(y, m, 28, 12, 00),
                     url: 'http://google.com/'
                 }
             ]
