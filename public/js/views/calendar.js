@@ -10,7 +10,6 @@
 
         this.carregaAgenda();
 
-
         return this;
     },
 
@@ -21,12 +20,14 @@
         var d = date.getDate();
         var m = date.getMonth();
         var y = date.getFullYear();
-
+        
         $("#calendar", this.el).fullCalendar({
             header: {
                 left: 'prev,next today',
                 center: 'title'
             },
+            
+            defaultView: 'agendaWeek',
             editable: true,
             contentHeight: 445,
             events: [
@@ -76,6 +77,8 @@
                 }
             ]
         })
+
+        
     }
 
 });

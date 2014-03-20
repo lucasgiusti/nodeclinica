@@ -10,13 +10,15 @@
  * For event resizing, requires jQuery UI resizable.
  */
  
-!function($) {
+(function($, undefined) {
 
 
-    $.fn.fullCalendar.defaults = {
+;;
+
+var defaults = {
 
 	// display
-	defaultView: 'agendaWeek',
+	defaultView: 'month',
 	aspectRatio: 1.35,
 	header: {
 		left: 'title',
@@ -33,7 +35,7 @@
 	//disableDragging: false,
 	//disableResizing: false,
 	
-	allDayDefault: true,
+	allDayDefault: false,
 	ignoreTimezone: true,
 	
 	// event ajax
@@ -69,9 +71,9 @@
 		prevYear: "<span class='fc-text-arrow'>&laquo;</span>",
 		nextYear: "<span class='fc-text-arrow'>&raquo;</span>",
 		today: 'hoje',
-		month: 'mês',
-		week: 'semana',
-		day: 'dias'
+		month: 'month',
+		week: 'week',
+		day: 'day'
 	},
 	
 	// jquery-ui theming
@@ -91,7 +93,7 @@
 };
 
 // right-to-left defaults
-    $.fn.fullCalendar.rtlDefaults = {
+var rtlDefaults = {
 	header: {
 		left: 'next,prev today',
 		center: '',
@@ -110,16 +112,19 @@
 };
 
 
+
+;;
+
 var fc = $.fullCalendar = { version: "1.6.4" };
 var fcViews = fc.views = {};
 
 
 $.fn.fullCalendar = function(options) {
-    
+
+
 	// method calling
 	if (typeof options == 'string') {
-
-	    var args = Array.prototype.slice.call(arguments, 1);
+		var args = Array.prototype.slice.call(arguments, 1);
 		var res;
 		this.each(function() {
 			var calendar = $.data(this, 'fullCalendar');
@@ -148,23 +153,23 @@ $.fn.fullCalendar = function(options) {
 		eventSources.push(options.events);
 		delete options.events;
 	}
+	
 
 	options = $.extend(true, {},
 		defaults,
 		(options.isRTL || options.isRTL===undefined && defaults.isRTL) ? rtlDefaults : {},
 		options
 	);
-
-	this.each(
-        function (i, _element) {
-
+	
+	
+	this.each(function(i, _element) {
 		var element = $(_element);
 		var calendar = new Calendar(element, options, eventSources);
 		element.data('fullCalendar', calendar); // TODO: look into memory leak implications
 		calendar.render();
 	});
-
-
+	
+	
 	return this;
 	
 };
@@ -174,6 +179,10 @@ $.fn.fullCalendar = function(options) {
 function setDefaults(d) {
 	$.extend(true, defaults, d);
 }
+
+
+
+;;
 
  
 function Calendar(element, options, eventSources) {
@@ -598,7 +607,7 @@ function Calendar(element, options, eventSources) {
 		date = new Date();
 		renderView();
 	}
-	
+
 	
 	function gotoDate(year, month, dateOfMonth) {
 		if (year instanceof Date) {
@@ -710,6 +719,8 @@ function Calendar(element, options, eventSources) {
 	
 
 }
+
+;;
 
 function Header(calendar, options) {
 	var t = this;
@@ -868,6 +879,8 @@ function Header(calendar, options) {
 
 
 }
+
+;;
 
 fc.sourceNormalizers = [];
 fc.sourceFetchers = [];
@@ -1283,6 +1296,8 @@ function EventManager(options, _sources) {
 
 }
 
+;;
+
 
 fc.addDays = addDays;
 fc.cloneDate = cloneDate;
@@ -1656,6 +1671,9 @@ function iso8601Week(date) {
 	return Math.floor(Math.round((time - checkDate) / 86400000) / 7) + 1;
 }
 
+
+;;
+
 fc.applyAll = applyAll;
 
 
@@ -1920,6 +1938,9 @@ function firstDefined() {
 	}
 }
 
+
+;;
+
 fcViews.month = MonthView;
 
 function MonthView(element, calendar) {
@@ -1982,6 +2003,8 @@ function MonthView(element, calendar) {
 	
 }
 
+;;
+
 fcViews.basicWeek = BasicWeekView;
 
 function BasicWeekView(element, calendar) {
@@ -2035,6 +2058,8 @@ function BasicWeekView(element, calendar) {
 	
 }
 
+;;
+
 fcViews.basicDay = BasicDayView;
 
 
@@ -2074,6 +2099,8 @@ function BasicDayView(element, calendar) {
 	
 	
 }
+
+;;
 
 setDefaults({
 	weekMode: 'fixed'
@@ -2595,6 +2622,8 @@ function BasicView(element, calendar, viewName) {
 	
 }
 
+;;
+
 function BasicEventRenderer() {
 	var t = this;
 	
@@ -2621,6 +2650,8 @@ function BasicEventRenderer() {
 	// TODO: have this class (and AgendaEventRenderer) be responsible for creating the event container div
 
 }
+
+;;
 
 fcViews.agendaWeek = AgendaWeekView;
 
@@ -2674,6 +2705,8 @@ function AgendaWeekView(element, calendar) {
 
 }
 
+;;
+
 fcViews.agendaDay = AgendaDayView;
 
 
@@ -2713,6 +2746,8 @@ function AgendaDayView(element, calendar) {
 	
 
 }
+
+;;
 
 setDefaults({
 	allDaySlot: false,
@@ -3608,6 +3643,8 @@ function AgendaView(element, calendar, viewName) {
 
 }
 
+;;
+
 function AgendaEventRenderer() {
 	var t = this;
 	
@@ -4495,6 +4532,8 @@ function compareSlotSegs(seg1, seg2) {
 }
 
 
+;;
+
 
 function View(element, calendar, viewName) {
 	var t = this;
@@ -5035,6 +5074,7 @@ function View(element, calendar, viewName) {
 
 }
 
+;;
 
 function DayEventRenderer() {
 	var t = this;
@@ -5787,6 +5827,8 @@ function compareDaySegments(a, b) {
 }
 
 
+;;
+
 //BUG: unselect needs to be triggered when events are dragged+dropped
 
 function SelectionManager() {
@@ -5885,6 +5927,8 @@ function SelectionManager() {
 
 }
 
+;;
+ 
 function OverlayManager() {
 	var t = this;
 	
@@ -5922,6 +5966,7 @@ function OverlayManager() {
 
 }
 
+;;
 
 function CoordinateGrid(buildFunc) {
 
@@ -5969,6 +6014,7 @@ function CoordinateGrid(buildFunc) {
 
 }
 
+;;
 
 function HoverListener(coordinateGrid) {
 
@@ -6028,6 +6074,7 @@ function _fixUIEvent(event) { // for issue 1168
 		event.pageY = event.originalEvent.pageY;
 	}
 }
+;;
 
 function HorizontalPositionCache(getElement) {
 
@@ -6056,4 +6103,6 @@ function HorizontalPositionCache(getElement) {
 	
 }
 
-}(window.jQuery)
+;;
+
+})(jQuery);
