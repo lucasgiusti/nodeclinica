@@ -80,6 +80,64 @@ var getSessionsAll = function (req, res) {
     });
 };
 
+var getSessionsByType = function (req, res) {
+    var id = req.params.id;
+    var type = req.params.type;
+
+    if (type == "studentId") {
+        return patientRoute.PatientModel.find({ 'treatments.sessions.studentId': id }, { _id: 1, name: 1, 'treatments': 1 }, function (err, patients) {
+            if (!err) {
+
+
+                for (var i = 0; i < patients.length; i++) {
+
+                    if (patients[i].treatments) {
+                        for (var j = 0; j < patients[i].treatments.length; j++) {
+
+                            if (patients[i].treatments[j].sessions) {
+
+                                for (var z = 0; z < patients[i].treatments[j].sessions.length; z++) {
+                                    if (patients[i].treatments[j].sessions[z].studentId != id) {
+                                        patients[i].treatments[j].sessions.pull({ _id: patients[i].treatments[j].sessions[z]._id });
+                                        z--;
+                                    }
+                                }
+                            }
+
+                            if (patients[i].treatments[j].sessions.length == 0) {
+                                patients[i].treatments.pull({ _id: patients[i].treatments[j]._id });
+                                j--;
+                            }
+                        }
+
+                        if (patients[i].treatments.length == 0) {
+                            patients[i].pull({ _id: patients[i]._id });
+                            i--;
+                        }
+
+
+                    }
+
+                }
+
+
+                return res.send(patients);
+            } else {
+                return console.log(err);
+            }
+        });
+    }
+    else {
+        return patientRoute.PatientModel.find({ 'treatments.sessions.teacherId': id }, { _id: 1, name: 1, 'treatments.$': 1 }, function (err, patients) {
+            if (!err) {
+                return res.send(patients);
+            } else {
+                return console.log(err);
+            }
+        });
+    }
+};
+
 var getSessionsById = function (req, res) {
     var idPatient = req.params.idPatient;
     var idTreatment = req.params.idTreatment;
@@ -127,13 +185,18 @@ var postSession = function (req, res) {
         if (validateSession(res, session)) {
 
             PatientModel = mongoose.model('patients', patientRoute.Patient);
-            PatientModel.findOne({ '_id': idPatient, 'treatments._id': idTreatment }, {_id: 1, 'treatments.$': 1}, function (err, patient) {
+            PatientModel.findOne({ '_id': idPatient, 'treatments._id': idTreatment }, {_id: 1, 'treatments': 1}, function (err, patient) {
                 if (!err) {
                     if (patient) {
 
                         delete session._id;
                         session.idTreatment = idTreatment;
-                        patient.treatments[0].sessions.push(session);
+
+                        for (var i = 0; i < patient.treatments.length; i++) {
+                            if (patient.treatments[i]._id == idTreatment) {
+                                patient.treatments[i].sessions.push(session);
+                            }
+                        }
 
                         patient.save(function (err, result) {
                             if (err) {
@@ -167,10 +230,15 @@ var delSession = function (req, res) {
 
         console.log('Deleting session: ' + id);
 
-        return patientRoute.PatientModel.findOne({ 'treatments.sessions._id': id }, { _id: 1, name: 1, 'treatments.$': 1 }, function (err, patients) {
+        return patientRoute.PatientModel.findOne({ 'treatments.sessions._id': id }, { _id: 1, name: 1, 'treatments.': 1 }, function (err, patients) {
             if (!err) {
                 if (patients) {
-                    patients.treatments[0].sessions.remove(id);
+
+                    for (var i = 0; i < patients.treatments.length; i++) {
+                        patients.treatments[i].sessions.remove(id);
+                    }
+
+
                     patients.save(function () { res.send(patients); });
                 }
             }
@@ -234,6 +302,7 @@ var putSession = function (req, res) {
 
 module.exports.getSessionsAll = getSessionsAll;
 module.exports.getSessionsById = getSessionsById;
+module.exports.getSessionsByType = getSessionsByType;
 module.exports.postSession = postSession;
 module.exports.delSession = delSession;
 module.exports.putSession = putSession;

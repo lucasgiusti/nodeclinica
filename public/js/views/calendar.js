@@ -8,19 +8,60 @@
         $(this.el).html(this.template());
 
 
-        this.carregaAgenda();
+        this.carregaAlunos();
+        this.carregaProfessores();
 
         return this;
     },
 
+    events: {
+        "change": "change"
+    },
 
-    carregaAgenda: function () {
+    change: function (event) {
+        var target = event.target;
+        
+        if (target.name == "studentId") {
+            $("#teacherId option")
+            .removeAttr('selected')
+            .find(':first')     //you can also use .find('[value=MyVal]')
+            .attr('selected', 'selected');
+        }
+        else {
+            $("#studentId option")
+            .removeAttr('selected')
+            .find(':first')     //you can also use .find('[value=MyVal]')
+            .attr('selected', 'selected');
+        }
+
+        this.carregaAgenda(target.name, target.value);
+    },
+
+    carregaAgenda: function (type, id) {
 
         var date = new Date();
         var d = date.getDate();
         var m = date.getMonth();
         var y = date.getFullYear();
         
+        $.getJSON('sessions/' + id + '/type/' + type + '', function (data) {
+            var options = '';
+
+            $.each(data, function (key, val) {
+                //  alert(val.name);
+
+            })
+        });
+
+
+
+
+
+
+
+
+
+        $("#calendar", this.el).html('');
         $("#calendar", this.el).fullCalendar({
             header: {
                 left: 'prev,next today',
@@ -29,7 +70,7 @@
             
             defaultView: 'agendaWeek',
             editable: false,
-            contentHeight: 445,
+            contentHeight: 400,
             events: [
                 {
                     title: 'All Day Event',
@@ -74,6 +115,46 @@
         })
 
         
-    }
+    },
+
+    carregaAlunos: function () {
+
+        $.getJSON('students', function (data) {
+            var options = '';
+
+            options = '<option value="null"></option>';
+            $.each(data, function (key, val) {
+
+                options += '<option value="' + val._id + '">' + val.name + '</option>';
+            });
+
+            var html = '';
+            html += '<select class="form-control" id="studentId" name="studentId">';
+            html += options;
+            html += '</select>';
+            html += '<span class="help-inline"></span>';
+            $('#divAlunos', this.el).append(html);
+        });
+    },
+
+    carregaProfessores: function () {
+
+        $.getJSON('teachers', function (data) {
+            var options = '';
+
+            options = '<option value="null"></option>';
+            $.each(data, function (key, val) {
+
+                options += '<option value="' + val._id + '">' + val.name + '</option>';
+            });
+
+            html = '';
+            html += '<select class="form-control" id="teacherId" name="teacherId">';
+            html += options;
+            html += '</select>';
+            html += '<span class="help-inline"></span>';
+            $('#divProfessores', this.el).append(html);
+        });
+    },
 
 });
