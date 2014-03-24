@@ -44,14 +44,7 @@
         var m = date.getMonth();
         var y = date.getFullYear();
         
-        $.getJSON('sessions/' + id + '/type/' + type + '', function (data) {
-            var options = '';
-
-            $.each(data, function (key, val) {
-                //  alert(val.name);
-
-            })
-        });
+        
 
 
 
@@ -71,6 +64,51 @@
             defaultView: 'agendaWeek',
             editable: false,
             contentHeight: 400,
+            ignoreTimezone: false,
+            events: function (start, end, callback)
+            {
+                $.getJSON('sessions/' + id + '/type/' + type + '', function (data) {
+                    var events = [];
+
+                    $.each(data, function (key, val) {
+
+                        $.each(val.treatments, function (key, val) {data
+                        
+                            
+                            $.each(val.sessions, function (key, val) {
+
+                                events.push({
+                                    title: val.typeSession,
+                                    start:  val.dateSchedulingStart,
+                                    end: val.dateSchedulingEnd
+                                });
+                                
+                                });
+
+                        });
+
+
+                    });
+                    callback(events);
+                });
+            }
+/*
+            events: {
+                url: 'sessions/' + id + '/type/' + type + '',
+                type: 'GET',
+                data: {
+                    custom_param1: dateSchedulingStart,
+                    custom_param2: dateSchedulingEnd
+                },
+                error: function() {
+                    alert('there was an error while fetching events!');
+                },
+                color: 'yellow',   // a non-ajax option
+                textColor: 'black' // a non-ajax option
+            }
+
+
+
             events: [
                 {
                     title: 'All Day Event',
@@ -112,6 +150,8 @@
                     url: 'http://google.com/'
                 }
             ]
+*/
+
         })
 
         

@@ -95,7 +95,6 @@ var getSessionsByType = function (req, res) {
                         for (var j = 0; j < patients[i].treatments.length; j++) {
 
                             if (patients[i].treatments[j].sessions) {
-
                                 for (var z = 0; z < patients[i].treatments[j].sessions.length; z++) {
                                     if (patients[i].treatments[j].sessions[z].studentId != id) {
                                         patients[i].treatments[j].sessions.pull({ _id: patients[i].treatments[j].sessions[z]._id });
