@@ -4,9 +4,10 @@
         this.render();
     },
 
-    render:function () {
+    render: function () {
         $(this.el).html(this.template());
 
+        Backbone.history
 
         this.carregaAlunos();
         this.carregaProfessores();
@@ -45,15 +46,6 @@
         var y = date.getFullYear();
         
         
-
-
-
-
-
-
-
-
-
         $("#calendar", this.el).html('');
         $("#calendar", this.el).fullCalendar({
             header: {
@@ -71,16 +63,17 @@
                     var events = [];
 
                     $.each(data, function (key, val) {
-
+                        var idPatient = val._id;
                         $.each(val.treatments, function (key, val) {data
-                        
+                            var idTreatment = val._id;
                             
                             $.each(val.sessions, function (key, val) {
 
                                 events.push({
                                     title: val.typeSession,
                                     start:  val.dateSchedulingStart,
-                                    end: val.dateSchedulingEnd
+                                    end: val.dateSchedulingEnd,
+                                    url: '#patients/' + idPatient + '/treatments/' + idTreatment + '/sessions/' + val._id
                                 });
                                 
                                 });

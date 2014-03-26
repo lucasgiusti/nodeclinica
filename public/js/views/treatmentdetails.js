@@ -10,7 +10,6 @@
 
         $(this.el).html(this.template(treatment));
 
-        $('#dateStart', this.el).datepicker({ format: 'dd/mm/yyyy' });
         $('#dateEnd', this.el).datepicker({ format: 'dd/mm/yyyy' });
 
         //$('legend', this.el).append(patient.name);
@@ -23,7 +22,6 @@
         "click .save": "beforeSave",
         "click .delete": "deleteTreatment",
         "drop #picture": "dropHandler",
-        "changeDate #dateStart": "change",
         "changeDate #dateEnd": "change"
     },
 
@@ -37,7 +35,7 @@
         var change = {};
 
 
-        if (target.name == "dateStart" || target.name == "dateEnd") {
+        if (target.name == "dateEnd") {
             change[target.name] = new Date(target.value.substring(6, 10), target.value.substring(3, 5) - 1, target.value.substring(0, 2));
         }
         else {

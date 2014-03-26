@@ -41,7 +41,7 @@
                         <label for="grapes" class="control-label">Data Início:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="dateStart" name="dateStart" value="<%= dateStart === null ? '' : new Date(dateStart).toLocaleDateString() %>" data-date-format="dd/mm/yyyy" />
+                            <input type="text" class="form-control" id="dateStart" name="dateStart" value="<%= dateStart === null ? '' : new Date(dateStart).toLocaleDateString() %>" readonly />
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -51,7 +51,7 @@
                         <label for="grapes" class="control-label">Data Fim:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="dateEnd" name="dateEnd" value="<%= dateEnd === null ? '' : new Date(dateEnd).toLocaleDateString() %>" data-date-format="dd/mm/yyyy" />
+                            <input type="text" class="form-control" id="dateEnd" name="dateEnd" value="<%= dateEnd === null ? '' : new Date(dateEnd).toLocaleDateString() %>" data-date-format="dd/mm/yyyy" readonly/>
                             <span class="help-inline"></span>
                         </div>
                     </div>

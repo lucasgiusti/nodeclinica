@@ -13,8 +13,8 @@
 
 
         var len = sessions.length;
-        var startPos = (this.options.page - 1) * 8;
-        var endPos = Math.min(startPos + 8, len);
+        var startPos = (this.options.page - 1) * 10;
+        var endPos = Math.min(startPos + 10, len);
         var html = '';
         var jsonObject = '';
 
@@ -29,7 +29,6 @@
                 jsonObject = sessions[i];
 
                 html += '<tr>';
-                html += '<td>' + jsonObject._id + '</td>';
                 html += '<td><a href="#patients/' + patient._id + '/treatments/' + treatment._id + '/sessions/' + jsonObject._id + '">' + jsonObject.typeService + '</td>';
                 
                 if (jsonObject.dateSchedulingStart != null)
@@ -84,7 +83,7 @@ window.SessionsPaginator = Backbone.View.extend({
 
         var items = this.model.models;
         var len = items.length;
-        var pageCount = Math.ceil(len / 8);
+        var pageCount = Math.ceil(len / 10);
 
         var options = {
             currentPage: this.options.page,

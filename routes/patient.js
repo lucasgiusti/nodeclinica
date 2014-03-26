@@ -57,7 +57,7 @@ var Patient = new Schema({
     state: { type: String, required: true },
     city: { type: String, required: true },
     cep: { type: String, required: false },
-    maritalStatus: { type: String, required: false },
+    maritalStatus: { type: String, required: true },
     phone1: { type: String, required: false },
     dateBirth: { type: Date, required: true },
     sex: { type: String, required: true },
@@ -127,7 +127,13 @@ var validatePatient = function (res, patient) {
     }
     if ((patient.cep == null)) { delete patient.cep; }
 
-    if ((patient.maritalStatus == null)) { delete patient.maritalStatus; }
+    console.log(patient.maritalStatus);
+    if (patient.maritalStatus == null || patient.maritalStatus == '') {
+        console.log('Error adding patient: estado civil invalido');
+        res.send('500', { status: 500, error: 'Estado civil invalido' });
+        return false;
+    }
+    
     if ((patient.mail == null)) { delete patient.mail; }
     if ((patient.responsibleName == null)) { delete patient.responsibleName; }
     if ((patient.responsibleCPF == null)) { delete patient.responsibleCPF; }
@@ -139,6 +145,8 @@ var validatePatient = function (res, patient) {
         return false;
     }
     if ((patient.phone1 == null)) { delete patient.phone1; }
+
+    console.log(patient.dateBirth);
 
     if (!iz(patient.dateBirth).required().date().valid) {
         console.log('Error adding patient: data de nascimento invalida');
