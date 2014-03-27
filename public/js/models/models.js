@@ -823,7 +823,7 @@ window.TreatmentDetail = Backbone.Model.extend({
 
     defaults: {
         _id: null,
-        serviceArea: 'SAUDE COLETIVA',
+        serviceArea: null,
         diagnosis: null,
         status: 'AGUARDANDO TRIAGEM',
         dateStart: null,
@@ -895,7 +895,7 @@ window.Treatment = Backbone.Model.extend({
 
     defaults: {
         _id: null,
-        serviceArea: 'SAUDE COLETIVA',
+        serviceArea: null,
         diagnosis: null,
         status: 'AGUARDANDO TRIAGEM',
         dateStart: null,
@@ -987,10 +987,9 @@ window.Session = Backbone.Model.extend({
         teacherName: null,
         typeSession: 'SESSAO',
         typeService: 'INDIVIDUAL',
+        everHeld: false,
         dateSchedulingStart: null,
         dateSchedulingEnd: null,
-        dateStart: null,
-        dateEnd: null,
         observations: null,
         dateInclusion: null,
         dateUpdate: null
@@ -1060,10 +1059,9 @@ window.SessionDetail = Backbone.Model.extend({
         teacherName: null,
         typeSession: 'SESSAO',
         typeService: 'INDIVIDUAL',
+        everHeld: false,
         dateSchedulingStart: null,
         dateSchedulingEnd: null,
-        dateStart: null,
-        dateEnd: null,
         observations: null,
         dateInclusion: null,
         dateUpdate: null

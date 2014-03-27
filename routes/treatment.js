@@ -16,7 +16,7 @@ var express = require("express"),
 
 var validateTreatment = function (res, treatment) {
 
-    if (treatment.serviceArea == null) {
+    if (treatment.serviceArea == null || treatment.serviceArea == '') {
         console.log('Error adding treatment: area de atendimento invalida');
         res.send('500', { status: 500, error: 'Area de atendimento invalida' });
         return false;

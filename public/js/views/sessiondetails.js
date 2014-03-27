@@ -15,8 +15,6 @@ window.SessionView = Backbone.View.extend({
 
         $("#dateSchedulingStart", this.el).datetimepicker({ format: 'dd/mm/yyyy hh:ii', autoclose: true, minuteStep: 60 });
         $('#dateSchedulingEnd', this.el).datetimepicker({ format: 'dd/mm/yyyy hh:ii', autoclose: true, minuteStep: 60 });
-        $('#dateStart', this.el).datetimepicker({ format: 'dd/mm/yyyy hh:ii', autoclose: true, minuteStep: 60 });
-        $('#dateEnd', this.el).datetimepicker({ format: 'dd/mm/yyyy hh:ii', autoclose: true, minuteStep: 60 });
 
         //$('legend', this.el).append(patient.name);
         return this;

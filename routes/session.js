@@ -54,9 +54,19 @@ var validateSession = function (res, session) {
     }
 
     if (!iz(session.dateSchedulingEnd).required().date().valid) {
-        console.log('Error adding session: data de Agendamento Inicio invalida');
-        res.send('500', { status: 500, error: 'Data de Agendamento Inicio invalida' });
+        console.log('Error adding session: data de Agendamento Final invalida');
+        res.send('500', { status: 500, error: 'Data de Agendamento Final invalida' });
         return false;
+    }
+
+    if (session.dateSchedulingEnd <= session.dateSchedulingStart) {
+        console.log('Error adding session: data de Agendamento Final invalida');
+        res.send('500', { status: 500, error: 'Data de Agendamento Final invalida' });
+        return false;
+    }
+
+    if (!(session.everHeld == 'true' || session.everHeld == true)) {
+        session.everHeld = false;
     }
 
     if (!iz(session.dateInclusion).required().date().valid) {

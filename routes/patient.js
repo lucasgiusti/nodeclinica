@@ -23,8 +23,7 @@ var Session = new Schema({
     typeService: { type: String, required: true },
     dateSchedulingStart: { type: Date, required: true },
     dateSchedulingEnd: { type: Date, required: true },
-    dateStart: { type: Date, required: false },
-    dateEnd: { type: Date, required: false },
+    everHeld: { type: Boolean, required: true },
     observations: { type: String, required: false },
     dateInclusion: { type: Date, required: true },
     dateUpdate: { type: Date, required: false }
@@ -127,7 +126,6 @@ var validatePatient = function (res, patient) {
     }
     if ((patient.cep == null)) { delete patient.cep; }
 
-    console.log(patient.maritalStatus);
     if (patient.maritalStatus == null || patient.maritalStatus == '') {
         console.log('Error adding patient: estado civil invalido');
         res.send('500', { status: 500, error: 'Estado civil invalido' });
@@ -145,8 +143,6 @@ var validatePatient = function (res, patient) {
         return false;
     }
     if ((patient.phone1 == null)) { delete patient.phone1; }
-
-    console.log(patient.dateBirth);
 
     if (!iz(patient.dateBirth).required().date().valid) {
         console.log('Error adding patient: data de nascimento invalida');

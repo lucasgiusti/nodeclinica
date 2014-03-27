@@ -48,7 +48,7 @@
                         <label for="grapes" class="control-label">Data de Agendamento Início:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="dateSchedulingStart" name="dateSchedulingStart" value="<%= dateSchedulingStart === null ? '' : formattedDateTime(dateSchedulingStart) %>" data-date-format="dd/mm/yyyy hh:ii">
+                            <input type="text" class="form-control" id="dateSchedulingStart" name="dateSchedulingStart" value="<%= dateSchedulingStart === null ? '' : formattedDateTime(dateSchedulingStart) %>" data-date-format="dd/mm/yyyy hh:ii" readonly>
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -58,30 +58,14 @@
                         <label for="grapes" class="control-label">Data de Agendamento Fim:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="dateSchedulingEnd" name="dateSchedulingEnd" value="<%= dateSchedulingEnd === null ? '' : formattedDateTime(dateSchedulingEnd) %>" data-date-format="dd/mm/yyyy hh:ii" />
+                            <input type="text" class="form-control" id="dateSchedulingEnd" name="dateSchedulingEnd" value="<%= dateSchedulingEnd === null ? '' : formattedDateTime(dateSchedulingEnd) %>" data-date-format="dd/mm/yyyy hh:ii" readonly/>
                             <span class="help-inline"></span>
                         </div>
                     </div>
                     </article>
-                    <article style="float: left; width: 48%">
-                    <div class="control-group">
-                        <label for="grapes" class="control-label">Data Início:</label>
-
-                        <div class="controls">
-                            <input type="text" class="form-control" id="dateStart" name="dateStart" value="<%= dateStart === null ? '' : formattedDateTime(dateStart) %>" data-date-format="dd/mm/yyyy hh:ii" />
-                            <span class="help-inline"></span>
-                        </div>
-                    </div>
-                    </article>
-                    <article style="float: right; width: 49%">
-                    <div class="control-group">
-                        <label for="grapes" class="control-label">Data Fim:</label>
-
-                        <div class="controls">
-                            <input type="text" class="form-control" id="dateEnd" name="dateEnd" value="<%= dateEnd === null ? '' : formattedDateTime(dateEnd) %>" data-date-format="dd/mm/yyyy hh:ii" />
-                            <span class="help-inline"></span>
-                        </div>
-                    </div>
+                    <article style="float: left; width: 100%">
+                        <button type="button" id="btnSessaoNaoRealizada" class="btn btn-primary btn-large" <%= everHeld ? 'style="display: none"' : '' %> style="width: 100%; margin-top: 25px">Sessão já Realizada ?</button>
+                        <button type="button" id="btnSessaoRealizada" class="btn btn-large" <%= everHeld ? '' : 'style="display: none"' %> style="width: 100%; margin-top: 25px">Esta Sessão já foi Realizada !</button>
                     </article>
                     </section>
                     
