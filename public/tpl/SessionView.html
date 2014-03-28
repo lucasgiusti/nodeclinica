@@ -63,9 +63,17 @@
                         </div>
                     </div>
                     </article>
-                    <article style="float: left; width: 100%">
-                        <button type="button" id="btnSessaoNaoRealizada" class="btn btn-primary btn-large" <%= everHeld ? 'style="display: none"' : '' %> style="width: 100%; margin-top: 25px">Sessão já Realizada ?</button>
-                        <button type="button" id="btnSessaoRealizada" class="btn btn-large" <%= everHeld ? '' : 'style="display: none"' %> style="width: 100%; margin-top: 25px">Esta Sessão já foi Realizada !</button>
+                    <article style="float: left; width: 100%; <%= _id === null ? 'display: none' : '' %>" >
+                        <input type="checkbox" id="canceledSession" style="display: none" name="canceledSession" <%= canceledSession ? 'checked="checked"' : '' %> >
+                        <button type="button" class="btn btn-large" id="btnSessaoCancelada" name="canceledSession" style="width: 100%; margin-top: 25px; <%= canceledSession ? '' : 'display: none' %>">Esta Sessão foi Cancelada !</button>
+                        <button type="button" id="btnSessaoRealizada" name="everHeld" <%= everHeld ? '' : 'onclick="realizarSessao(false);"' %> class=" btn"style="width: 100%; margin-top: 25px; <%= everHeld ? '' : 'display: none' %>">Sessão já Realizada !</button>
+                    </article>
+                    <article style="float: left; width: 48%; <%= _id === null || canceledSession ? 'display: none' : '' %>">
+                        <input type="checkbox" id="everHeld" style="display: none" name="everHeld" <%= everHeld ? 'checked="checked"' : '' %> >
+                        <button type="button" id="btnSessaoNaoRealizada" name="everHeld" onclick="realizarSessao(true);" class="btn btn-primary btn-large" style="width: 100%; margin-top: 25px; <%= everHeld ? 'display: none' : '' %>" >Sessão já Realizada ?</button>
+                    </article>
+                    <article style="float: right; width: 48%; <%= _id === null || canceledSession ? 'display: none' : '' %>">
+                        <button type="button" id="btnSessaoNaoCancelada" name="canceledSession" onclick="cancelarSessao(true);" class="btn btn-primary btn-large" style="width: 100%; margin-top: 25px; <%= canceledSession || everHeld ? 'display: none' : '' %>">Cancelar Sessão ?</button>
                     </article>
                     </section>
                     
@@ -107,9 +115,8 @@
 
         </fieldset>
         <div class="footer">
-            <button type="button" class="btn btn-primary btn-large save">Salvar</button>
+            <button type="button" class="btn btn-primary btn-large save" <%= canceledSession || everHeld ? 'style="display: none"' : '' %>>Salvar</button>
             <button type="button" class="btn" onclick="back();">Cancelar</button>
-            <button type="button" class="btn" data-toggle="modal" href="#delSession" <%= _id === null ? 'style="display: none"' : '' %>>Excluir</button>
         </div>
 
     </form>
@@ -143,6 +150,33 @@
     function back()
     {
         history.back(1);
+    }
+
+    function realizarSessao(realizar) {
+
+        if (realizar) {
+            $('#everHeld').attr('checked', 'checked');
+            $('#btnSessaoRealizada').show();
+            $('#btnSessaoNaoRealizada').hide();
+            $('#btnSessaoNaoCancelada').hide();
+        }
+        else {
+            $('#everHeld').removeAttr('checked');
+            $('#btnSessaoRealizada').hide();
+            $('#btnSessaoNaoRealizada').show();
+            $('#btnSessaoNaoCancelada').show();
+        }
+    }
+
+    function cancelarSessao(cancelar) {
+
+        if (cancelar) {
+            $('#canceledSession').attr('checked', 'checked');
+            $('#btnSessaoCancelada').show();
+            $('#btnSessaoNaoCancelada').hide();
+            $('#btnSessaoRealizada').hide();
+            $('#btnSessaoNaoRealizada').hide();
+        }
     }
 
 	</script>

@@ -24,6 +24,7 @@ var Session = new Schema({
     dateSchedulingStart: { type: Date, required: true },
     dateSchedulingEnd: { type: Date, required: true },
     everHeld: { type: Boolean, required: true },
+    canceledSession: { type: Boolean, required: true },
     observations: { type: String, required: false },
     dateInclusion: { type: Date, required: true },
     dateUpdate: { type: Date, required: false }

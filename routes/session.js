@@ -69,6 +69,10 @@ var validateSession = function (res, session) {
         session.everHeld = false;
     }
 
+    if (!(session.canceledSession == 'true' || session.canceledSession == true)) {
+        session.canceledSession = false;
+    }
+
     if (!iz(session.dateInclusion).required().date().valid) {
         console.log('Error adding session: data de inclusao invalida');
         res.send('500', { status: 500, error: 'Data de inclusao invalida' });
@@ -184,7 +188,7 @@ var postSession = function (req, res) {
         var idPatient = req.params.idPatient;
         var idTreatment = req.params.idTreatment;
         var session = req.body;
-        
+
         for (i = 0; i <= 23; i++) {
             delete session[i];
         }
@@ -271,7 +275,7 @@ var putSession = function (req, res) {
         for (i = 0; i <= 23; i++) {
             delete session[i];
         }
-
+        console.log(session);
         console.log('Updating treatment');
         session.dateUpdate = new Date();
         var objectID = new ObjectID(id);
@@ -291,8 +295,8 @@ var putSession = function (req, res) {
                             patients.treatments[0].sessions[i].typeService = session.typeService;
                             patients.treatments[0].sessions[i].dateSchedulingStart = session.dateSchedulingStart;
                             patients.treatments[0].sessions[i].dateSchedulingEnd = session.dateSchedulingEnd;
-                            patients.treatments[0].sessions[i].dateStart = session.dateStart;
-                            patients.treatments[0].sessions[i].dateEnd = session.dateEnd;
+                            patients.treatments[0].sessions[i].everHeld = session.everHeld;
+                            patients.treatments[0].sessions[i].canceledSession = session.canceledSession;
                             patients.treatments[0].sessions[i].observations = session.observations;
                             patients.treatments[0].sessions[i].dateUpdate = session.dateUpdate;
                         }

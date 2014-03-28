@@ -29,8 +29,10 @@ window.SessionView = Backbone.View.extend({
         "drop #picture": "dropHandler",
         "changeDate #dateSchedulingStart": "change",
         "changeDate #dateSchedulingEnd": "change",
-        "changeDate #dateStart": "change",
-        "changeDate #dateEnd": "change"
+        "click #btnSessaoNaoRealizada": "change",
+        "click #btnSessaoRealizada": "change",
+        "click #btnSessaoNaoCancelada": "change",
+        "click #btnSessaoCancelada": "change",
     },
 
     change: function (event) {
@@ -42,22 +44,25 @@ window.SessionView = Backbone.View.extend({
         var target = event.target;
         var change = {};
 
-        
-
-        if (target.name == "dateStart" || target.name == "dateEnd" || target.name == "dateSchedulingStart" || target.name == "dateSchedulingEnd") {
+        if (target.name == "dateSchedulingStart" || target.name == "dateSchedulingEnd") {
 
             change[target.name] = new Date(target.value.substring(6, 10), target.value.substring(3, 5) - 1, target.value.substring(0, 2), target.value.substring(11, 13), target.value.substring(14, 16));
         }
+        else if (target.name == "everHeld") {
+            change[target.name] = $('#everHeld').is(':checked');
+        }
+        else if (target.name == "canceledSession") {
+            change[target.name] = $('#canceledSession').is(':checked');
+        }
         else {
-
             if (target.name == "studentId")
-                change["studentName"] = $("#" + target.name).text();
+                change["studentName"] = $("#" + target.name + " option[value='" + target.value + "']").text();
             if (target.name == "teacherId")
-                change["teacherName"] = $("#" + target.name).text();
+                change["teacherName"] = $("#" + target.name + " option[value='" + target.value + "']").text();
 
             change[target.name] = target.value;
         }
-
+        
         this.model.set(change);
 
         // Run validation rule (if any) on changed item
