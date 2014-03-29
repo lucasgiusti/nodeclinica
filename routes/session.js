@@ -195,10 +195,10 @@ var postSession = function (req, res) {
         console.log('Adding session');
         session.dateInclusion = new Date();
 
+
         if (validateSession(res, session)) {
 
-            PatientModel = mongoose.model('patients', patientRoute.Patient);
-            PatientModel.findOne({ '_id': idPatient, 'treatments._id': idTreatment }, {_id: 1, 'treatments': 1}, function (err, patient) {
+            patientRoute.PatientModel.findOne({ '_id': idPatient, 'treatments._id': idTreatment }, { _id: 1, 'treatments': 1 }, function (err, patient) {
                 if (!err) {
                     if (patient) {
 
@@ -207,7 +207,15 @@ var postSession = function (req, res) {
 
                         for (var i = 0; i < patient.treatments.length; i++) {
                             if (patient.treatments[i]._id == idTreatment) {
-                                patient.treatments[i].sessions.push(session);
+                                {
+                                    if (patient.treatments[i].canceledTreatment || patient.treatments[i].treatmentPerformed) {
+                                        console.log('Error updating session: tratamento realizado ou cancelado');
+                                        res.send('500', { status: 500, error: 'Tratamento realizado ou cancelado' });
+                                    }
+                                    else {
+                                        patient.treatments[i].sessions.push(session);
+                                    }
+                                }
                             }
                         }
 
@@ -229,6 +237,9 @@ var postSession = function (req, res) {
 
             });
         }
+
+
+
     }
 }
 
@@ -275,34 +286,41 @@ var putSession = function (req, res) {
         for (i = 0; i <= 23; i++) {
             delete session[i];
         }
-        console.log(session);
-        console.log('Updating treatment');
+        console.log('Updating session');
         session.dateUpdate = new Date();
         var objectID = new ObjectID(id);
 
         if (validateSession(res, session)) {
 
-            return patientRoute.PatientModel.findOne({ 'treatments.sessions._id': id }, { _id: 1, 'treatments.$': 1 }, function (err, patients) {
+            return patientRoute.PatientModel.findOne({ 'treatments.sessions._id': id }, function (err, patients) {
                 if (!err) {
 
-                    for (var i = 0; i < patients.treatments[0].sessions.length; i++) {
-                        if (patients.treatments[0].sessions[i]._id == id) {
+                    for (var j = 0; j < patients.treatments.length; j++) {
 
-                            patients.treatments[0].sessions[i].studentName = session.studentName;
-                            patients.treatments[0].sessions[i].teacherId = session.teacherId;
-                            patients.treatments[0].sessions[i].teacherName = session.teacherName;
-                            patients.treatments[0].sessions[i].typeSession = session.typeSession;
-                            patients.treatments[0].sessions[i].typeService = session.typeService;
-                            patients.treatments[0].sessions[i].dateSchedulingStart = session.dateSchedulingStart;
-                            patients.treatments[0].sessions[i].dateSchedulingEnd = session.dateSchedulingEnd;
-                            patients.treatments[0].sessions[i].everHeld = session.everHeld;
-                            patients.treatments[0].sessions[i].canceledSession = session.canceledSession;
-                            patients.treatments[0].sessions[i].observations = session.observations;
-                            patients.treatments[0].sessions[i].dateUpdate = session.dateUpdate;
+
+                        for (var i = 0; i < patients.treatments[j].sessions.length; i++) {
+                            if (patients.treatments[j].sessions[i]._id == id) {
+
+                                patients.treatments[j].sessions[i].studentName = session.studentName;
+                                patients.treatments[j].sessions[i].teacherId = session.teacherId;
+                                patients.treatments[j].sessions[i].teacherName = session.teacherName;
+                                patients.treatments[j].sessions[i].typeSession = session.typeSession;
+                                patients.treatments[j].sessions[i].typeService = session.typeService;
+                                patients.treatments[j].sessions[i].dateSchedulingStart = session.dateSchedulingStart;
+                                patients.treatments[j].sessions[i].dateSchedulingEnd = session.dateSchedulingEnd;
+                                patients.treatments[j].sessions[i].everHeld = session.everHeld;
+                                patients.treatments[j].sessions[i].canceledSession = session.canceledSession;
+                                patients.treatments[j].sessions[i].observations = session.observations;
+                                patients.treatments[j].sessions[i].dateUpdate = session.dateUpdate;
+
+                                patients.save(function () { res.send(session); });
+                            }
                         }
+
                     }
 
-                    patients.save(function () { res.send(session); });
+
+
 
                 } else {
                     console.log('Error updating session: ' + err);

@@ -10,7 +10,16 @@
 
         $(this.el).html(this.template(treatment));
 
-        $('#dateEnd', this.el).datepicker({ format: 'dd/mm/yyyy' });
+        if ((treatment.sessions && treatment.sessions.length > 0) || (treatment.canceledTreatment || treatment.treatmentPerformed || treatment._id == null))
+        {
+            $('#btnExcluir', this.el).hide();
+        }
+
+        if (!(treatment.sessions && treatment.sessions.length > 0))
+        {
+            $("#divBotoes", this.el).hide();
+        }
+
 
         //$('legend', this.el).append(patient.name);
 
@@ -21,8 +30,11 @@
         "change": "change",
         "click .save": "beforeSave",
         "click .delete": "deleteTreatment",
+        "click #btnTratamentoNaoRealizado": "change",
+        "click #btnTratamentoRealizado": "change",
+        "click #btnTratamentoNaoCancelado": "change",
+        "click #btnTratamentoCancelado": "change",
         "drop #picture": "dropHandler",
-        "changeDate #dateEnd": "change"
     },
 
     change: function (event) {
@@ -34,13 +46,14 @@
         var target = event.target;
         var change = {};
 
-
-        if (target.name == "dateEnd") {
-            change[target.name] = new Date(target.value.substring(6, 10), target.value.substring(3, 5) - 1, target.value.substring(0, 2));
+        if (target.name == "treatmentPerformed") {
+            change[target.name] = $('#treatmentPerformed').is(':checked');
         }
-        else {
+        else if (target.name == "canceledTreatment") {
+            change[target.name] = $('#canceledTreatment').is(':checked');
+        }
+        else
             change[target.name] = target.value;
-        }
 
         this.model.set(change);
 

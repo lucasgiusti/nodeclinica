@@ -26,6 +26,7 @@ var Session = new Schema({
     everHeld: { type: Boolean, required: true },
     canceledSession: { type: Boolean, required: true },
     observations: { type: String, required: false },
+    idTreatment: { type: String, required: true },
     dateInclusion: { type: Date, required: true },
     dateUpdate: { type: Date, required: false }
 });
@@ -34,9 +35,8 @@ var Session = new Schema({
 var Treatment = new Schema({
     serviceArea: { type: String, required: true },
     diagnosis: { type: String, required: false },
-    status: { type: String, required: true },
-    dateStart: { type: Date, required: false },
-    dateEnd: { type: Date, required: false },
+    treatmentPerformed: { type: Boolean, required: true },
+    canceledTreatment: { type: Boolean, required: true },
     doctor: { type: String, required: false },
     CRMDoctor: { type: String, required: false },
     observations: { type: String, required: false },

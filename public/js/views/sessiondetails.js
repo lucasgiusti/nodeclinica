@@ -44,8 +44,15 @@ window.SessionView = Backbone.View.extend({
         var target = event.target;
         var change = {};
 
-        if (target.name == "dateSchedulingStart" || target.name == "dateSchedulingEnd") {
+        if (target.name == "dateSchedulingStart") {
+            change[target.name] = new Date(target.value.substring(6, 10), target.value.substring(3, 5) - 1, target.value.substring(0, 2), target.value.substring(11, 13), target.value.substring(14, 16));
 
+            var dataFinal = new Date(target.value.substring(6, 10), target.value.substring(3, 5) - 1, target.value.substring(0, 2), parseInt(target.value.substring(11, 13)) + 1, target.value.substring(14, 16));
+            change["dateSchedulingEnd"] = dataFinal;
+
+            $('#dateSchedulingEnd', this.el).val(formattedDateTime(dataFinal));
+        }
+        else if (target.name == "dateSchedulingEnd") {
             change[target.name] = new Date(target.value.substring(6, 10), target.value.substring(3, 5) - 1, target.value.substring(0, 2), target.value.substring(11, 13), target.value.substring(14, 16));
         }
         else if (target.name == "everHeld") {
@@ -87,7 +94,6 @@ window.SessionView = Backbone.View.extend({
 
     saveSession: function () {
         var self = this;
-        console.log('before save');
         this.model.save(null, {
             success: function (model) {
                 self.render();

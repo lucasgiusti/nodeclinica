@@ -29,7 +29,7 @@
                 jsonObject = sessions[i];
 
                 html += '<tr>';
-                html += '<td><a href="#patients/' + patient._id + '/treatments/' + treatment._id + '/sessions/' + jsonObject._id + '">' + jsonObject.typeService + '</td>';
+                html += '<td><a href="#patients/' + patient._id + '/treatments/' + treatment._id + '/sessions/' + jsonObject._id + '">' + jsonObject.typeSession + '</td>';
                 
                 if (jsonObject.dateSchedulingStart != null)
                     html += '<td>' + formattedDateTime(jsonObject.dateSchedulingStart) + '</td>';
@@ -45,6 +45,13 @@
                     html += '<td>' + jsonObject.studentName + '</td>';
                 else
                     html += '<td></td>';
+
+                if (jsonObject.everHeld)
+                    html += '<td>REALIZADA</td>';
+                else if (jsonObject.canceledSession)
+                    html += '<td>CANCELADA</td>';
+                else
+                    html += '<td>ABERTA</td>';
 
                 html += '</tr>';
 

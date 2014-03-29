@@ -22,12 +22,6 @@ var validateTreatment = function (res, treatment) {
         return false;
     }
 
-    if ((treatment.diagnosis == null) || (treatment.diagnosis != null && !iz.between(treatment.diagnosis.length, 1, 3000))) {
-        console.log('Error adding treatment: o diagnostico deve ter 1 a 3000 caracteres');
-        res.send('500', { status: 500, error: 'O diagnostico deve ter 1 a 3000 caracteres' });
-        return false;
-    }
-
     if ((treatment.doctor == null) || (treatment.doctor != null && !iz.between(treatment.doctor.length, 1, 100))) {
         console.log('Error adding treatment: o nome do medico deve ter 1 a 100 caracteres');
         res.send('500', { status: 500, error: 'O nome do medico deve ter 1 a 100 caracteres' });
@@ -40,15 +34,23 @@ var validateTreatment = function (res, treatment) {
         return false;
     }
 
-    if (treatment.status == null) {
-        console.log('Error adding treatment: situacao invalida');
-        res.send('500', { status: 500, error: 'Situacao invalida' });
-        return false;
-    }
-
     if (!iz.maxLength(treatment.observations, 3000)) {
         console.log('Error adding treatment: o complemento deve ter maximo 20 caracteres');
         res.send('500', { status: 500, error: 'O complemento deve ter maximo 20 caracteres' });
+        return false;
+    }
+
+    if (!(treatment.treatmentPerformed == 'true' || treatment.treatmentPerformed == true)) {
+        treatment.treatmentPerformed = false;
+    }
+
+    if (!(treatment.canceledTreatment == 'true' || treatment.canceledTreatment == true)) {
+        treatment.canceledTreatment = false;
+    }
+
+    if ((treatment.diagnosis == null) || (treatment.diagnosis != null && !iz.between(treatment.diagnosis.length, 1, 3000))) {
+        console.log('Error adding treatment: o diagnostico deve ter 1 a 3000 caracteres');
+        res.send('500', { status: 500, error: 'O diagnostico deve ter 1 a 3000 caracteres' });
         return false;
     }
 
@@ -101,20 +103,65 @@ var putTreatment = function (req, res) {
         treatment.dateUpdate = new Date();
         var objectID = new ObjectID(id);
 
-        if (validateTreatment(res, treatment)) {
-            patientRoute.PatientModel.update({ '_id': idPatient, 'treatments._id': id }, {$set: {'treatments.$': treatment}}, function (err, patient) {
-                if (err) {
-                    console.log('Error updating treatment: ' + err);
-                    res.send('500', { status: 500, error: err });
-                } else {
-                    console.log('document(s) updated');
+        patientRoute.PatientModel.findOne({ '_id': idPatient, 'treatments._id': id }, { _id: 1, 'treatments': 1 }, function (err, patient) {
+            if (!err) {
+                if (patient) {
 
-                    res.send(treatment);
+                    for (var i = 0; i < patient.treatments.length; i++) {
+                        if (patient.treatments[i]._id == id) {
+                            {
+                                if (patient.treatments[i].sessions.length > 0) {
+
+                                    for (var j = 0; j < patient.treatments[i].sessions.length; j++) {
+                                        if (patient.treatments[i].sessions[j].canceledSession == false && patient.treatments[i].sessions[j].everHeld == false) {
+                                            {
+                                                console.log('Error updating treatment: existe sessão aberta');
+                                                res.send('500', { status: 500, error: 'Existe sessão aberta' });
+                                            }
+                                        }
+                                        else {
+                                            if (validateTreatment(res, treatment)) {
+                                                patientRoute.PatientModel.update({ '_id': idPatient, 'treatments._id': id }, { $set: { 'treatments.$': treatment } }, function (err, patient) {
+                                                    if (err) {
+                                                        console.log('Error updating treatment: ' + err);
+                                                        res.send('500', { status: 500, error: err });
+                                                    } else {
+                                                        console.log('document(s) updated');
+
+                                                        res.send(treatment);
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    }
+                                }
+                                else {
+                                    if (validateTreatment(res, treatment)) {
+                                        patientRoute.PatientModel.update({ '_id': idPatient, 'treatments._id': id }, { $set: { 'treatments.$': treatment } }, function (err, patient) {
+                                            if (err) {
+                                                console.log('Error updating treatment: ' + err);
+                                                res.send('500', { status: 500, error: err });
+                                            } else {
+                                                console.log('document(s) updated');
+
+                                                res.send(treatment);
+                                            }
+                                        });
+                                    }
+                                }
+
+
+                            }
+                        }
+                    }
+
                 }
-            });
-            
-
-        }
+            }
+            else {
+                console.log(err);
+                res.send('500', { status: 500, error: err });
+            }
+        });
     }
 }
 

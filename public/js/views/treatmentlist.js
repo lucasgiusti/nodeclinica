@@ -39,10 +39,12 @@
                 else
                     html += '<td></td>';
 
-                if (jsonObject.status != null)
-                    html += '<td>' + jsonObject.status + '</td>';
+                if (jsonObject.treatmentPerformed)
+                    html += '<td>REALIZADO</td>';
+                else if (jsonObject.canceledTreatment)
+                    html += '<td>CANCELADO</td>';
                 else
-                    html += '<td></td>';
+                    html += '<td>ABERTO</td>';
 
                 html += '</tr>';
 
