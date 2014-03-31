@@ -3,7 +3,7 @@
     <form class="form-horizontal span12">
         <fieldset>
 
-            <legend>Tratamento do Paciente </legend>
+            <legend>Tratamento - </legend>
 
             <div class="row" style="padding: 0px 10px;">
                 <div class="span8">
@@ -123,10 +123,10 @@
 
         </fieldset>
         <div class="footer">
+            <button type="button" class="btn btn-primary" onclick="voltar();">Voltar à lista de tratamentos</button>
+            <button type="button" class="btn btn-primary btn-large " onclick="sessions();" <%= _id === null ? 'style="display: none"' : '' %> style="margin-right: 20px">Sessões</button>
             <button type="button" class="btn btn-primary btn-large save"<%= canceledTreatment || treatmentPerformed ? 'style="display: none"' : '' %>>Salvar</button>
-            <button type="button" class="btn" onclick="back();">Cancelar</button>
             <button type="button" id="btnExcluir" class="btn" data-toggle="modal" href="#delTreatment">Excluir</button>
-            <button type="button" class="btn btn-primary btn-large " onclick="sessions();" <%= _id === null ? 'style="display: none"' : '' %> style="margin-left: 20px">Sessões</button>
         </div>
 
     </form>
@@ -153,14 +153,7 @@
     </div>
 </div>
 
-
-
 <script type="text/javascript">
-
-    function back()
-    {
-        history.back(1);
-    }
 
     function sessions()
     {
@@ -200,4 +193,16 @@
             $('#btnTratamentoNaoRealizado').show();
         }
     }
+
+    function voltar() {
+        window.location.assign(window.location.href.substring(0, window.location.href.indexOf("treatments/")) + "treatments");
+    }
+
+
+
+    var url = window.location.href.replace("#","").substring(0, window.location.href.indexOf("treatments")-2);
+    $.getJSON(url, function (data) {
+        $('legend').append(data.name);
+        });
+
 	</script>

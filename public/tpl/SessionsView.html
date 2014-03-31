@@ -1,8 +1,9 @@
-﻿<legend>Sessões do Tratamento do Paciente </legend>
+﻿<legend>Sessões do Tratamento - </legend>
 
 <br/>
 
 <div class="row">
+<button class="btn btn-primary btn-large" onclick="voltar();">Voltar ao Tratamento</button>
 <button class="btn btn-primary btn-large" onclick="addSession();">Incluir Sessão</button>
 </div><!-- /.row -->
 
@@ -28,5 +29,9 @@
 <script type="text/javascript">
     function addSession() {
         window.location.assign(window.location.href + "/add"); 
+    }
+
+    function voltar() {
+        window.location.assign(window.location.href.replace('/sessions', ''));
     }
 </script>

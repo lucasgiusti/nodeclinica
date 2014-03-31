@@ -28,14 +28,14 @@
 
                 html += '<tr>';
                 html += '<td><a href="#patients/' + patient._id  + '/treatments/' + jsonObject._id + '">' + jsonObject.serviceArea + '</td>';
-                
-                if (jsonObject.dateStart != null)
-                    html += '<td>' + formattedDate(jsonObject.dateStart) + '</td>';
+
+                if (jsonObject.doctor != null)
+                    html += '<td>' + jsonObject.doctor + '</td>';
                 else
                     html += '<td></td>';
 
-                if (jsonObject.dateEnd != null)
-                    html += '<td>' + formattedDate(jsonObject.dateEnd) + '</td>';
+                if (jsonObject.dateInclusion != null)
+                    html += '<td>' + formattedDate(jsonObject.dateInclusion) + '</td>';
                 else
                     html += '<td></td>';
 

@@ -223,10 +223,10 @@
 
         </fieldset>
         <div class="footer">
+            <button type="button" class="btn btn-primary" onclick="voltar();">Voltar à lista de pacientes</button>
+<button type="button" class="btn btn-primary btn-large " onclick="treatments();" <%= _id === null ? 'style="display: none"' : '' %> style="margin-right: 20px">Tratamentos</button>
             <button type="button" class="btn btn-primary btn-large save">Salvar</button>
-            <button type="button" class="btn" onclick="back();">Cancelar</button>
             <button type="button" class="btn" data-toggle="modal" href="#delPatient" <%= _id === null ? 'style="display: none"' : '' %>>Excluir</button>
-            <button type="button" class="btn btn-primary btn-large " onclick="treatments();" <%= _id === null ? 'style="display: none"' : '' %> style="margin-left: 20px">Tratamentos</button>
         </div>
 
     </form>
@@ -257,13 +257,12 @@
 
 <script type="text/javascript">
 
-    function back()
-    {
-        history.back(1);
-    }
-
     function treatments()
     {
         window.location.assign(window.location.href + "/treatments");
+    }
+
+    function voltar() {
+        window.location.assign(window.location.href.substring(0, window.location.href.indexOf("patients/")) + "patients");
     }
 	</script>

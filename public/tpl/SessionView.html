@@ -3,7 +3,7 @@
     <form class="form-horizontal span12">
         <fieldset>
 
-            <legend>Sessão do Tratamento do Paciente </legend>
+            <legend>Sessão do Tratamento - </legend>
 
             <div class="row" style="padding: 0px 10px;">
                 <div class="span8">
@@ -115,8 +115,8 @@
 
         </fieldset>
         <div class="footer">
+            <button type="button" class="btn btn-primary" onclick="voltar();" style="margin-right: 20px">Voltar à lista de sessões</button>
             <button type="button" class="btn btn-primary btn-large save" <%= canceledSession || everHeld ? 'style="display: none"' : '' %>>Salvar</button>
-            <button type="button" class="btn" onclick="back();">Cancelar</button>
         </div>
 
     </form>
@@ -146,11 +146,6 @@
 
 
 <script type="text/javascript">
-
-    function back()
-    {
-        history.back(1);
-    }
 
     function realizarSessao(realizar) {
 
@@ -185,5 +180,14 @@
             $('#btnSessaoNaoRealizada').show();
         }
     }
+
+    function voltar() {
+        window.location.assign(window.location.href.substring(0, window.location.href.indexOf("sessions/")) + "sessions");
+    }
+
+    var url = window.location.href.replace("#", "").substring(0, window.location.href.indexOf("treatments") - 2);
+    $.getJSON(url, function (data) {
+        $('legend').append(data.name);
+    });
 
 	</script>

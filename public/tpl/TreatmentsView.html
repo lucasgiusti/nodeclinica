@@ -1,8 +1,9 @@
-﻿<legend>Tratamentos do Paciente </legend>
+﻿<legend>Tratamentos - </legend>
 
 <br/>
 
 <div class="row">
+<button class="btn btn-primary btn-large" onclick="voltar();">Voltar ao Paciente</button>
 <button class="btn btn-primary btn-large" onclick="addTreatment();">Incluir Tratamento</button>
 </div><!-- /.row -->
 
@@ -14,8 +15,8 @@
             <thead>
                 <tr>
                     <th>Área Atendimento</th>
-                    <th>Data Inicio</th>
-                    <th>Data Fim</th>
+                    <th>Nome do Médico</th>
+                    <th>Data de Inclusão</th>
                     <th>Situação</th>
                  </tr>
              </thead>            <tbody>
@@ -27,5 +28,9 @@
 <script type="text/javascript">
     function addTreatment() {
         window.location.assign(window.location.href + "/add"); 
+    }
+
+    function voltar() {
+        window.location.assign(window.location.href.replace('/treatments',''));
     }
 </script>
