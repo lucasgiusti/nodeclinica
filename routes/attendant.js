@@ -109,7 +109,7 @@ var putAttendant = function (req, res) {
         console.log('Updating user: ' + id);
         user.dateUpdate = new Date();
 
-        if (validateUser(res, user)) {
+        if (userRoute.validateUser(res, user)) {
             putUser(res, user, id);
         }
     }
@@ -135,7 +135,7 @@ var postAttendant = function (req, res) {
         console.log('Adding user');
         user.dateInclusion = new Date();
 
-        if (validateUser(res, user)) {
+        if (userRoute.validateUser(res, user)) {
             postUser(res, user);
         }
     }
