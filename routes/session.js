@@ -206,7 +206,7 @@ var postSession = function (req, res) {
 
                         delete session._id;
                         session.idTreatment = idTreatment;
-                        console.log(patient.treatments.length);
+
                         for (var i = 0; i < patient.treatments.length; i++) {
                             if (patient.treatments[i]._id == idTreatment) {
                                 {
@@ -216,38 +216,40 @@ var postSession = function (req, res) {
                                     }
                                     else {
                                         patient.treatments[i].sessions.push(session);
+
+                                        patient.save(function (err, result) {
+                                            if (err) {
+                                                console.log('Error updating session: ' + err);
+                                                res.send('500', { status: 500, error: err });
+                                            } else {
+                                                console.log('document(s) updated');
+
+
+                                                patientRoute.PatientModel.findOne({ '_id': idPatient, 'treatments._id': idTreatment }, { _id: 1, 'treatments': 1 }, function (err, patient) {
+                                                    if (!err) {
+                                                        if (patient) {
+                                                            for (var i = 0; i < patient.treatments.length; i++) {
+                                                                if (patient.treatments[i]._id == idTreatment) {
+                                                                    res.send(patient.treatments[i].sessions[patient.treatments[i].sessions.length - 1]);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.log('Error updating session: ' + err);
+                                                        res.send('500', { status: 500, error: err });
+                                                    }
+                                                });
+
+
+                                            }
+                                        });
                                     }
                                 }
                             }
                         }
 
-                        patient.save(function (err, result) {
-                            if (err) {
-                                console.log('Error updating session: ' + err);
-                                res.send('500', { status: 500, error: err });
-                            } else {
-                                console.log('document(s) updated');
-                                
 
-                                patientRoute.PatientModel.findOne({ '_id': idPatient, 'treatments._id': idTreatment }, { _id: 1, 'treatments': 1 }, function (err, patient) {
-                                    if (!err) {
-                                        if (patient) {
-                                            for (var i = 0; i < patient.treatments.length; i++) {
-                                                if (patient.treatments[i]._id == idTreatment) {
-                                                    res.send(patient.treatments[i].sessions[patient.treatments[i].sessions.length - 1]);
-                                                }
-                                            }
-                                        }
-                                    }
-                                    else {
-                                        console.log('Error updating session: ' + err);
-                                        res.send('500', { status: 500, error: err });
-                                    }
-                                });
-
-
-                            }
-                        });
                     }
                 }
                 else {
