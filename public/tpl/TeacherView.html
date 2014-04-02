@@ -184,8 +184,9 @@
 
         </fieldset>
         <div class="footer">
+            <button type="button" class="btn btn-primary" onclick="voltar();">Voltar à lista de professores</button>
+            <button type="button" class="btn" onclick="novo();" style="margin-right: 20px">Novo</button>
             <button type="button" class="btn btn-primary btn-large save">Salvar</button>
-            <button type="button" class="btn" onclick="back();">Cancelar</button>
             <button type="button" class="btn" data-toggle="modal" href="#delUser" <%= _id === null ? 'style="display: none"' : '' %>>Excluir</button>
         </div>
 
@@ -220,6 +221,14 @@
     function back()
     {
         history.back(1);
+    }
+
+    function voltar() {
+        window.location.assign(window.location.href.substring(0, window.location.href.indexOf("teachers/")) + "teachers");
+    }
+
+    function novo() {
+        window.location.assign(window.location.href.substring(0, window.location.href.indexOf("teachers/")) + "teachers/add");
     }
 
 	</script>

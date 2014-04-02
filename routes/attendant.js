@@ -15,8 +15,7 @@ var UserModel = userRoute.UserModel;
 
 var getAttendantsAll = function (req, res) {
     var type = 'ATENDENTE';
-    UserModel = userRoute.UserModel;
-    return UserModel.find({ 'type': type }, { _id: 1, name: 1, mail: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
+    return userRoute.UserModel.find({ 'type': type }, { _id: 1, name: 1, mail: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
         if (!err) {
             return res.send(users);
         } else {
@@ -28,8 +27,7 @@ var getAttendantsAll = function (req, res) {
 var getAttendantsByName = function (req, res) {
     var name = req.params.name;
     var type = 'ATENDENTE';
-    UserModel = userRoute.UserModel;
-    return UserModel.find({ 'name': { '$regex': name, $options: 'i' }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
+    return userRoute.UserModel.find({ 'name': { '$regex': name, $options: 'i' }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
         if (!err) {
             return res.send(users);
         } else {
@@ -41,8 +39,7 @@ var getAttendantsByName = function (req, res) {
 var getAttendantsByCpf = function (req, res) {
     var cpf = req.params.cpf;
     var type = 'ATENDENTE';
-    UserModel = userRoute.UserModel;
-    return UserModel.find({ 'cpf': { '$regex': cpf }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
+    return userRoute.UserModel.find({ 'cpf': { '$regex': cpf }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
         if (!err) {
             return res.send(users);
         } else {
@@ -54,8 +51,7 @@ var getAttendantsByCpf = function (req, res) {
 var getAttendantsByRegistration = function (req, res) {
     var registration = req.params.registration;
     var type = 'ATENDENTE';
-    UserModel = userRoute.UserModel;
-    return UserModel.find({ 'registration': registration, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
+    return userRoute.UserModel.find({ 'registration': registration, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
         if (!err) {
             return res.send(users);
         } else {
@@ -66,8 +62,7 @@ var getAttendantsByRegistration = function (req, res) {
 
 var getAttendantsById = function (req, res) {
     var id = req.params.id;
-    UserModel = userRoute.UserModel;
-    return UserModel.findById(id, {
+    return userRoute.UserModel.findById(id, {
         _id: 1,
         name: 1,
         mail: 1,
@@ -110,7 +105,7 @@ var putAttendant = function (req, res) {
         user.dateUpdate = new Date();
 
         if (userRoute.validateUser(res, user)) {
-            putUser(res, user, id);
+            userRoute.putUser(res, user, id);
         }
     }
 };
@@ -122,7 +117,7 @@ var delAttendant = function (req, res) {
     else {
         var id = req.params.id;
         console.log('Deleting user: ' + id);
-        delUser(res, req, id);
+        userRoute.delUser(res, req, id);
     }
 };
 
@@ -136,7 +131,7 @@ var postAttendant = function (req, res) {
         user.dateInclusion = new Date();
 
         if (userRoute.validateUser(res, user)) {
-            postUser(res, user);
+            userRoute.postUser(res, user);
         }
     }
 };
