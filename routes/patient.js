@@ -330,10 +330,15 @@ var delPatient = function (req, res) {
         console.log('Deleting patient: ' + req.params.id);
 
         PatientModel = mongoose.model('patients', Patient);
-        PatientModel.findOne({ '_id': req.params.id }, { _id: 1 }, function (err, patient) {
+        PatientModel.findOne({ '_id': req.params.id }, function (err, patient) {
             if (!err) {
                 if (patient) {
-                    patient.remove(function () { res.send(patient); });
+                    if (patient.treatments.length > 0) {
+                        res.send('500', { status: 500, error: 'Existe tratamento para este paciente' });
+                    }
+                    else {
+                        patient.remove(function () { res.send(patient); });
+                    }
                 }
             }
             else {

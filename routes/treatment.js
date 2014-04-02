@@ -110,28 +110,46 @@ var putTreatment = function (req, res) {
                     for (var i = 0; i < patient.treatments.length; i++) {
                         if (patient.treatments[i]._id == id) {
                             {
-                                if (patient.treatments[i].sessions.length > 0) {
+                                if (treatment.canceledTreatment == true || treatment.treatmentPerformed == true)
+                                    {
 
-                                    for (var j = 0; j < patient.treatments[i].sessions.length; j++) {
-                                        if (patient.treatments[i].sessions[j].canceledSession == false && patient.treatments[i].sessions[j].everHeld == false) {
-                                            {
-                                                console.log('Error updating treatment: existe sessão aberta');
-                                                res.send('500', { status: 500, error: 'Existe sessão aberta' });
+                                    if (patient.treatments[i].sessions.length > 0) {
+
+                                        for (var j = 0; j < patient.treatments[i].sessions.length; j++) {
+                                            if (patient.treatments[i].sessions[j].canceledSession == false && patient.treatments[i].sessions[j].everHeld == false) {
+                                                {
+                                                    console.log('Error updating treatment: existe sessão aberta');
+                                                    res.send('500', { status: 500, error: 'Existe sessão aberta' });
+                                                }
+                                            }
+                                            else {
+                                                if (validateTreatment(res, treatment)) {
+                                                    patientRoute.PatientModel.update({ '_id': idPatient, 'treatments._id': id }, { $set: { 'treatments.$': treatment } }, function (err, patient) {
+                                                        if (err) {
+                                                            console.log('Error updating treatment: ' + err);
+                                                            res.send('500', { status: 500, error: err });
+                                                        } else {
+                                                            console.log('document(s) updated');
+
+                                                            res.send(treatment);
+                                                        }
+                                                    });
+                                                }
                                             }
                                         }
-                                        else {
-                                            if (validateTreatment(res, treatment)) {
-                                                patientRoute.PatientModel.update({ '_id': idPatient, 'treatments._id': id }, { $set: { 'treatments.$': treatment } }, function (err, patient) {
-                                                    if (err) {
-                                                        console.log('Error updating treatment: ' + err);
-                                                        res.send('500', { status: 500, error: err });
-                                                    } else {
-                                                        console.log('document(s) updated');
+                                    }
+                                    else {
+                                        if (validateTreatment(res, treatment)) {
+                                            patientRoute.PatientModel.update({ '_id': idPatient, 'treatments._id': id }, { $set: { 'treatments.$': treatment } }, function (err, patient) {
+                                                if (err) {
+                                                    console.log('Error updating treatment: ' + err);
+                                                    res.send('500', { status: 500, error: err });
+                                                } else {
+                                                    console.log('document(s) updated');
 
-                                                        res.send(treatment);
-                                                    }
-                                                });
-                                            }
+                                                    res.send(treatment);
+                                                }
+                                            });
                                         }
                                     }
                                 }

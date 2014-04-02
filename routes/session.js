@@ -194,6 +194,8 @@ var postSession = function (req, res) {
         }
         console.log('Adding session');
         session.dateInclusion = new Date();
+        session.treatmentPerformed = false;
+        session.canceledTreatment = false;
 
 
         if (validateSession(res, session)) {
@@ -204,7 +206,7 @@ var postSession = function (req, res) {
 
                         delete session._id;
                         session.idTreatment = idTreatment;
-
+                        console.log(patient.treatments.length);
                         for (var i = 0; i < patient.treatments.length; i++) {
                             if (patient.treatments[i]._id == idTreatment) {
                                 {
@@ -225,7 +227,25 @@ var postSession = function (req, res) {
                                 res.send('500', { status: 500, error: err });
                             } else {
                                 console.log('document(s) updated');
-                                res.send(patient.treatments[0].sessions[patient.treatments[0].sessions.length - 1]);
+                                
+
+                                patientRoute.PatientModel.findOne({ '_id': idPatient, 'treatments._id': idTreatment }, { _id: 1, 'treatments': 1 }, function (err, patient) {
+                                    if (!err) {
+                                        if (patient) {
+                                            for (var i = 0; i < patient.treatments.length; i++) {
+                                                if (patient.treatments[i]._id == idTreatment) {
+                                                    res.send(patient.treatments[i].sessions[patient.treatments[i].sessions.length - 1]);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        console.log('Error updating session: ' + err);
+                                        res.send('500', { status: 500, error: err });
+                                    }
+                                });
+
+
                             }
                         });
                     }
