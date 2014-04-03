@@ -144,7 +144,7 @@ window.SessionView = Backbone.View.extend({
         $.getJSON('studentsactive', function (data) {
             var options = '';
 
-            options = '<option value="null"></option>';
+            options = '<option value="null" disabled="disabled" selected style="display:none">Obrigatório</option>';
             $.each(data, function (key, val) {
 
                 if (studentId != val._id) {
@@ -170,7 +170,7 @@ window.SessionView = Backbone.View.extend({
         $.getJSON('teachersactive', function (data) {
             var options = '';
 
-            options = '<option value="null"></option>';
+            options = '<option value="null" disabled="disabled" selected style="display:none">Obrigatório</option>';
             $.each(data, function (key, val) {
 
                 if (teacherId != val._id) {

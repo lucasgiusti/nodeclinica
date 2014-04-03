@@ -26,12 +26,12 @@ var User = new Schema({
     address: { type: String, required: true },
     number: { type: String, required: true },
     complement: { type: String, required: false },
-    district: { type: String, required: false },
+    district: { type: String, required: true },
     state: { type: String, required: true },
     city: { type: String, required: true },
     cep: { type: String, required: false },
     registration: { type: String, required: true },
-    phone1: { type: String, required: false },
+    phone1: { type: String, required: true },
     active: { type: Boolean, required: true },
     rg: { type: String, required: false },
     phone2: { type: String, required: false },
@@ -55,69 +55,76 @@ var validateUser = function (res, user) {
         return false;
     }
 
-    if ((user.name == null) || (user.name != null && !iz.between(user.name.length, 1, 100))) {
+    if ((user.name == null) || (user.name != null && !iz.between(user.name.trim().length, 1, 100))) {
         console.log('Error adding user: o nome deve ter 1 a 100 caracteres');
         res.send('500', { status: 500, error: 'O nome deve ter 1 a 100 caracteres' });
         return false;
     }
-
-    if ((user.address == null) || (user.address != null && !iz.between(user.address.length, 1, 100))) {
+    user.name = user.name.trim();
+    
+    if ((user.address == null) || (user.address != null && !iz.between(user.address.trim().length, 1, 100))) {
         console.log('Error adding user: o endereco deve ter 1 a 100 caracteres');
         res.send('500', { status: 500, error: 'O endereco deve ter 1 a 100 caracteres' });
         return false;
     }
+    user.address = user.address.trim();
 
-    if ((user.number == null) || (user.number != null && !iz.between(user.number.length, 1, 10))) {
+    if ((user.number == null) || (user.number != null && !iz.between(user.number.trim().length, 1, 10))) {
         console.log('Error adding user: o numero deve ter 1 a 10 caracteres');
         res.send('500', { status: 500, error: 'O numero deve ter 1 a 10 caracteres' });
         return false;
     }
+    user.number = user.number.trim();
 
     if (!iz.maxLength(user.complement, 20)) {
         console.log('Error adding user: o complemento deve ter maximo 20 caracteres');
         res.send('500', { status: 500, error: 'O complemento deve ter maximo 20 caracteres' });
         return false;
     }
-    if ((user.complement == null)) { delete user.complement; }
+    if ((user.complement == null)) { delete user.complement; } else { user.complement = user.complement.trim();}
 
-    if (!iz.maxLength(user.district, 50)) {
-        console.log('Error adding user: o bairro deve ter maximo 50 caracteres');
-        res.send('500', { status: 500, error: 'O bairro deve ter maximo 50 caracteres' });
+
+    if ((user.district == null) || (user.district != null && !iz.between(user.district.trim().length, 1, 50))) {
+        console.log('Error adding user: o bairro deve ter 1 a 50 caracteres');
+        res.send('500', { status: 500, error: 'O bairro deve ter 1 a 50 caracteres' });
         return false;
     }
-    if ((user.district == null)) { delete user.district; }
+    user.district = user.district.trim();
 
-    if ((user.state == null) && (user.state != null && !iz.between(user.state.length, 1, 50))) {
+    if ((user.state == null) || (user.state != null && !iz.between(user.state.trim().length, 1, 50))) {
         console.log('Error adding user: estado invalido');
         res.send('500', { status: 500, error: 'Estado invalido' });
         return false;
     }
+    user.state = user.state.trim();
 
-    if ((user.city == null) && (user.city != null && !iz.between(user.city.length, 1, 50))) {
+    if ((user.city == null) || (user.city != null && !iz.between(user.city.trim().length, 1, 50))) {
         console.log('Error adding user: cidade invalida');
         res.send('500', { status: 500, error: 'Cidade invalida' });
         return false;
     }
+    user.city = user.city.trim();
 
     if (!iz.maxLength(user.cep, 9)) {
         console.log('Error adding user: o cep deve ter maximo 9 caracteres');
         res.send('500', { status: 500, error: 'O cep deve ter maximo 9 caracteres' });
         return false;
     }
-    if ((user.cep == null)) { delete user.cep; }
+    if ((user.cep == null)) { delete user.cep; } else { user.cep = user.cep.trim();}
 
-    if ((user.registration == null) || (user.registration != null && !iz.between(user.registration.length, 1, 30))) {
+    if ((user.registration == null) || (user.registration != null && !iz.between(user.registration.trim().length, 1, 30))) {
         console.log('Error adding user: a matricula ou registro deve ter 1 a 30 caracteres');
         res.send('500', { status: 500, error: 'A matricula ou registro deve ter 1 a 30 caracteres' });
         return false;
     }
+    user.registration = user.registration.trim();
 
-    if (!iz.maxLength(user.phone1, 20)) {
-        console.log('Error adding user: o telefone 1 deve ter maximo 20 caracteres');
-        res.send('500', { status: 500, error: 'O telefone 1 deve ter maximo 20 caracteres' });
+    if ((user.phone1 == null) || (user.phone1 != null && !iz.between(user.phone1.trim().length, 1, 20))) {
+        console.log('Error adding user: o telefone 1 deve ter 1 a 20 caracteres');
+            res.send('500', { status: 500, error: 'O telefone 1 deve ter 1 a 20 caracteres' });
         return false;
     }
-    if ((user.phone1 == null)) { delete user.phone1; }
+    user.phone1 = user.phone1.trim();
 
     if (!(user.active == 'true' || user.active == true)) {
         user.active = false;
@@ -128,33 +135,35 @@ var validateUser = function (res, user) {
         res.send('500', { status: 500, error: 'O RG deve ter maximo 20 caracteres' });
         return false;
     }
-    if ((user.rg == null)) { delete user.rg; }
+    if ((user.rg == null)) { delete user.rg; } else { user.rg = user.rg.trim();}
 
     if (!iz.maxLength(user.phone2, 20)) {
         console.log('Error adding user: o telefone 2 deve ter maximo 20 caracteres');
         res.send('500', { status: 500, error: 'O telefone 2 deve ter maximo 20 caracteres' });
         return false;
     }
-    if ((user.phone2 == null)) { delete user.phone2; }
+    if ((user.phone2 == null)) { delete user.phone2; } else { user.phone2 = user.phone2.trim();}
 
     if (user.cpf == null || !validaCpf(user.cpf)) {
         console.log('Error adding user: CPF invalido');
         res.send('500', { status: 500, error: 'CPF invalido' });
         return false;
     }
+    user.cpf = user.cpf.trim();
 
     if (!iz.maxLength(user.phone3, 20)) {
         console.log('Error adding user: o telefone 3 deve ter maximo 20 caracteres');
         res.send('500', { status: 500, error: 'O telefone 3 deve ter maximo 20 caracteres' });
         return false;
     }
-    if ((user.phone3 == null)) { delete user.phone3; }
+    if ((user.phone3 == null)) { delete user.phone3; } else { user.phone3 = user.phone3.trim();}
 
     if (!iz(user.mail).required().email().valid) {
         console.log('Error adding user: email invalido');
         res.send('500', { status: 500, error: 'Email invalido' });
         return false;
     }
+    user.mail = user.mail.trim();
 
     if (!iz(user.dateInclusion).required().date().valid) {
         console.log('Error adding user: data de inclusao invalida');

@@ -53,12 +53,12 @@ var Patient = new Schema({
     address: { type: String, required: true },
     number: { type: String, required: true },
     complement: { type: String, required: false },
-    district: { type: String, required: false },
+    district: { type: String, required: true },
     state: { type: String, required: true },
     city: { type: String, required: true },
     cep: { type: String, required: false },
     maritalStatus: { type: String, required: true },
-    phone1: { type: String, required: false },
+    phone1: { type: String, required: true },
     dateBirth: { type: Date, required: true },
     sex: { type: String, required: true },
     phone2: { type: String, required: false },
@@ -76,74 +76,80 @@ var PatientModel = mongoose.model('patients', Patient);
 
 var validatePatient = function (res, patient) {
 
-    if ((patient.name == null) || (patient.name != null && !iz.between(patient.name.length, 1, 100))) {
+    if ((patient.name == null) || (patient.name != null && !iz.between(patient.name.trim().length, 1, 100))) {
         console.log('Error adding patient: o nome deve ter 1 a 100 caracteres');
         res.send('500', { status: 500, error: 'O nome deve ter 1 a 100 caracteres' });
         return false;
     }
+    patient.name = patient.name.trim();
 
-    if ((patient.address == null) || (patient.address != null && !iz.between(patient.address.length, 1, 100))) {
+    if ((patient.address == null) || (patient.address != null && !iz.between(patient.address.trim().length, 1, 100))) {
         console.log('Error adding patient: o endereco deve ter 1 a 100 caracteres');
         res.send('500', { status: 500, error: 'O endereco deve ter 1 a 100 caracteres' });
         return false;
     }
+    patient.address = patient.address.trim();
 
-    if ((patient.number == null) || (patient.number != null && !iz.between(patient.number.length, 1, 10))) {
+    if ((patient.number == null) || (patient.number != null && !iz.between(patient.number.trim().length, 1, 10))) {
         console.log('Error adding patient: o numero deve ter 1 a 10 caracteres');
         res.send('500', { status: 500, error: 'O numero deve ter 1 a 10 caracteres' });
         return false;
     }
+    patient.number = patient.number.trim();
 
     if (!iz.maxLength(patient.complement, 20)) {
         console.log('Error adding patient: o complemento deve ter maximo 20 caracteres');
         res.send('500', { status: 500, error: 'O complemento deve ter maximo 20 caracteres' });
         return false;
     }
-    if ((patient.complement == null)) { delete patient.complement; }
+    if ((patient.complement == null)) { delete patient.complement; } else { patient.complement = patient.complement.trim();}
 
-    if (!iz.maxLength(patient.district, 50)) {
-        console.log('Error adding patient: o bairro deve ter maximo 50 caracteres');
-        res.send('500', { status: 500, error: 'O bairro deve ter maximo 50 caracteres' });
+    if ((patient.district == null) || (patient.district != null && !iz.between(patient.district.trim().length, 1, 50))) {
+        console.log('Error adding patient: o bairro deve ter 1 a 50 caracteres');
+        res.send('500', { status: 500, error: 'O bairro deve ter 1 a 50 caracteres' });
         return false;
     }
-    if ((patient.district == null)) { delete patient.district; }
-
-    if ((patient.state == null) && (patient.state != null && !iz.between(patient.state.length, 1, 50))) {
+    patient.district = patient.district.trim();
+    
+    if ((patient.state == null) || (patient.state != null && !iz.between(patient.state.trim().length, 1, 50))) {
         console.log('Error adding patient: estado invalido');
         res.send('500', { status: 500, error: 'Estado invalido' });
         return false;
     }
+    patient.state = patient.state.trim();
 
-    if ((patient.city == null) && (patient.city != null && !iz.between(patient.city.length, 1, 50))) {
+    if ((patient.city == null) || (patient.city != null && !iz.between(patient.city.trim().length, 1, 50))) {
         console.log('Error adding patient: cidade invalida');
         res.send('500', { status: 500, error: 'Cidade invalida' });
         return false;
     }
+    patient.city = patient.city.trim();
 
     if (!iz.maxLength(patient.cep, 9)) {
         console.log('Error adding patient: o cep deve ter maximo 9 caracteres');
         res.send('500', { status: 500, error: 'O cep deve ter maximo 9 caracteres' });
         return false;
     }
-    if ((patient.cep == null)) { delete patient.cep; }
+    if ((patient.cep == null)) { delete patient.cep; } else { patient.cep = patient.cep.trim();}
 
     if (patient.maritalStatus == null || patient.maritalStatus == '') {
         console.log('Error adding patient: estado civil invalido');
         res.send('500', { status: 500, error: 'Estado civil invalido' });
         return false;
     }
+    patient.maritalStatus = patient.maritalStatus.trim();
     
-    if ((patient.mail == null)) { delete patient.mail; }
-    if ((patient.responsibleName == null)) { delete patient.responsibleName; }
-    if ((patient.responsibleCPF == null)) { delete patient.responsibleCPF; }
-    if ((patient.observations == null)) { delete patient.observations; }
+    if ((patient.mail == null)) { delete patient.mail; } else { patient.mail = patient.mail.trim();}
+    if ((patient.responsibleName == null)) { delete patient.responsibleName; } else { patient.responsibleName = patient.responsibleName.trim();}
+    if ((patient.responsibleCPF == null)) { delete patient.responsibleCPF; } else { patient.responsibleCPF = patient.responsibleCPF.trim();}
+    if ((patient.observations == null)) { delete patient.observations; } else { patient.observations = patient.observations.trim();}
 
-    if (!iz.maxLength(patient.phone1, 20)) {
-        console.log('Error adding patient: o telefone 1 deve ter maximo 20 caracteres');
-        res.send('500', { status: 500, error: 'O telefone 1 deve ter maximo 20 caracteres' });
+    if ((patient.phone1 == null) || (patient.phone1 != null && !iz.between(patient.phone1.trim().length, 1, 20))) {
+        console.log('Error adding user: o telefone 1 deve ter 1 a 20 caracteres');
+        res.send('500', { status: 500, error: 'O telefone 1 deve ter 1 a 20 caracteres' });
         return false;
     }
-    if ((patient.phone1 == null)) { delete patient.phone1; }
+    patient.phone1 = patient.phone1.trim();
 
     if (!iz(patient.dateBirth).required().date().valid) {
         console.log('Error adding patient: data de nascimento invalida');
@@ -159,32 +165,35 @@ var validatePatient = function (res, patient) {
         res.send('500', { status: 500, error: 'Sexo invalido' });
         return false;
     }
+    patient.sex = patient.sex.trim();
 
     if (!iz.maxLength(patient.phone2, 20)) {
         console.log('Error adding patient: o telefone 2 deve ter maximo 20 caracteres');
         res.send('500', { status: 500, error: 'O telefone 2 deve ter maximo 20 caracteres' });
         return false;
     }
-    if ((patient.phone2 == null)) { delete patient.phone2; }
+    if ((patient.phone2 == null)) { delete patient.phone2; } else { patient.phone2 = patient.phone2.trim();}
 
     if (!iz.maxLength(patient.phone3, 20)) {
         console.log('Error adding patient: o telefone 3 deve ter maximo 20 caracteres');
         res.send('500', { status: 500, error: 'O telefone 3 deve ter maximo 20 caracteres' });
         return false;
     }
-    if ((patient.phone3 == null)) { delete patient.phone3; }
+    if ((patient.phone3 == null)) { delete patient.phone3; } else { patient.phone3 = patient.phone3.trim();}
 
     if ((patient.cpf == null || !utilRoute.validaCpf(patient.cpf)) && (patient.responsibleCPF == null || !utilRoute.validaCpf(patient.responsibleCPF))) {
         console.log('Error adding patient: um CPF valido deve ser informado para o paciente ou o responsavel');
         res.send('500', { status: 500, error: 'Um CPF valido deve ser informado para o paciente ou o responsavel' });
         return false;
     }
+    patient.cpf = patient.cpf.trim();
 
     if (patient.responsibleCPF != null || patient.resposibleName != null) {
         console.log('Error adding patient: caso tenha um responsavel, devem ser informados nome e CPF do mesmo');
         res.send('500', { status: 500, error: 'Caso tenha um responsavel, devem ser informados nome e CPF do mesmo' });
         return false;
     }
+    patient.resposibleName = patient.resposibleName.trim();
 
     if (!iz(patient.dateInclusion).required().date().valid) {
         console.log('Error adding patient: data de inclusao invalida');

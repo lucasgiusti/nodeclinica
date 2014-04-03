@@ -13,7 +13,7 @@
                         <label for="name" class="control-label">Nome:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="name" name="name" value="<%= name == null ? '' : name %>" maxlength="100"/>
+                            <input type="text" class="form-control" id="name" name="name" value="<%= name == null ? '' : name %>" maxlength="100" placeholder="Obrigatório"/>
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -23,7 +23,7 @@
                         <label for="grapes" class="control-label">Endereço:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="address" name="address" value="<%= address == null ? '' : address %>" maxlength="100"/>
+                            <input type="text" class="form-control" id="address" name="address" value="<%= address == null ? '' : address %>" maxlength="100" placeholder="Obrigatório"/>
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -33,7 +33,7 @@
                         <label for="grapes" class="control-label">Número:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="number" name="number" value="<%= number == null ? '' : number %>"/>
+                            <input type="text" class="form-control" id="number" name="number" value="<%= number == null ? '' : number %>" placeholder="Obrigatório"/>
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -54,7 +54,7 @@
                         <label for="grapes" class="control-label">Bairro:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="district" name="district" value="<%= district === null ? '' : district %>"/>
+                            <input type="text" class="form-control" id="district" name="district" value="<%= district === null ? '' : district %>" placeholder="Obrigatório"/>
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -78,7 +78,7 @@
                         <label for="grapes" class="control-label">Matrícula:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="registration" name="registration" value="<%= registration == null ? '' : registration %>"/>
+                            <input type="text" class="form-control" id="registration" name="registration" value="<%= registration == null ? '' : registration %>" placeholder="Obrigatório"/>
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -91,7 +91,7 @@
                         <label for="grapes" class="control-label">Telefone:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="phone1" name="phone1" value="<%= phone1 === null ? '' : phone1 %>"/>
+                            <input type="text" class="form-control" id="phone1" name="phone1" value="<%= phone1 === null ? '' : phone1 %>" placeholder="Obrigatório"/>
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -133,7 +133,7 @@
                         <label for="grapes" class="control-label">CPF:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="cpf" name="cpf" value="<%= cpf === null ? '' : cpf %>"/>
+                            <input type="text" class="form-control" id="cpf" name="cpf" value="<%= cpf === null ? '' : cpf %>" placeholder="Obrigatório"/>
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -153,7 +153,7 @@
                         <label for="grapes" class="control-label">Email:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="mail" name="mail" value="<%= mail == null ? '' : mail %>" maxlength="100"/>
+                            <input type="text" class="form-control" id="mail" name="mail" value="<%= mail == null ? '' : mail %>" maxlength="100" placeholder="Obrigatório"/>
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -185,8 +185,8 @@
         </fieldset>
         <div class="footer">
             <button type="button" class="btn btn-primary" onclick="voltar();">Voltar à lista de atendentes</button>
-            <button type="button" class="btn" onclick="novo();" style="margin-right: 20px">Novo</button>
-            <button type="button" class="btn btn-primary btn-large save">Salvar</button>
+            <button type="button" class="btn" onclick="novo();" <%= _id === null ? 'style="display: none"' : '' %>>Novo</button>
+            <button type="button" class="btn btn-primary btn-large save" style="margin-left: 20px">Salvar</button>
             <button type="button" class="btn" data-toggle="modal" href="#delUser" <%= _id === null ? 'style="display: none"' : '' %>>Excluir</button>
         </div>
 

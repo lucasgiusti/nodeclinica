@@ -13,7 +13,7 @@
 
                         <div class="controls">
                             <select class="form-control" id="serviceArea" name="serviceArea" value="<%= serviceArea %>">
-                                <option></option>
+                                <option  disabled="disabled" selected style='display:none'>Obrigatório</option>
                                 <option <%= serviceArea === 'NEURO ADULTO' ? 'selected' : '' %>>NEURO ADULTO</option>
                                 <option <%= serviceArea === 'NEURO PEDIATRIA' ? 'selected' : '' %>>NEURO PEDIATRIA</option>
                                 <option <%= serviceArea === 'ORTOPEDIA TRAUMATOLOGIA' ? 'selected' : '' %>>ORTOPEDIA TRAUMATOLOGIA</option>
@@ -29,7 +29,7 @@
                         <label for="grapes" class="control-label">Nome do Médico:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="doctor" name="doctor" value="<%= doctor === null ? '' : doctor %>" maxlength="100"/>
+                            <input type="text" class="form-control" id="doctor" name="doctor" value="<%= doctor === null ? '' : doctor %>" maxlength="100" placeholder="Obrigatório"/>
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
                         <label for="grapes" class="control-label">CRM do Médico:</label>
 
                         <div class="controls">
-                            <input type="text" class="form-control" id="CRMDoctor" name="CRMDoctor" value="<%= CRMDoctor === null ? '' : CRMDoctor %>"/>
+                            <input type="text" class="form-control" id="CRMDoctor" name="CRMDoctor" value="<%= CRMDoctor === null ? '' : CRMDoctor %>" placeholder="Obrigatório"/>
                             <span class="help-inline"></span>
                         </div>
                     </div>
@@ -92,7 +92,7 @@
                         <label for="name" class="control-label">Diagnóstico:</label>
 
                         <div class="controls">
-                            <textarea class="form-control" id="diagnosis" name="diagnosis" maxlength="3000" style="height: 278px"><%= diagnosis === null ? '' : diagnosis %></textarea>
+                            <textarea class="form-control" id="diagnosis" name="diagnosis" maxlength="3000" style="height: 278px" placeholder="Obrigatório"><%= diagnosis === null ? '' : diagnosis %></textarea>
                             <span class="help-inline"></span>
                         </div>
                     </div>

@@ -22,17 +22,19 @@ var validateTreatment = function (res, treatment) {
         return false;
     }
 
-    if ((treatment.doctor == null) || (treatment.doctor != null && !iz.between(treatment.doctor.length, 1, 100))) {
+    if ((treatment.doctor == null) || (treatment.doctor != null && !iz.between(treatment.doctor.trim().length, 1, 100))) {
         console.log('Error adding treatment: o nome do medico deve ter 1 a 100 caracteres');
         res.send('500', { status: 500, error: 'O nome do medico deve ter 1 a 100 caracteres' });
         return false;
     }
+    treatment.doctor = treatment.doctor.trim();
 
-    if ((treatment.CRMDoctor == null) || (treatment.CRMDoctor != null && !iz.between(treatment.CRMDoctor.length, 1, 20))) {
+    if ((treatment.CRMDoctor == null) || (treatment.CRMDoctor != null && !iz.between(treatment.CRMDoctor.trim().length, 1, 20))) {
         console.log('Error adding treatment: o CRM do medico deve ter 1 a 20 caracteres');
         res.send('500', { status: 500, error: 'O CRM do medico deve ter 1 a 20 caracteres' });
         return false;
     }
+    treatment.CRMDoctor = treatment.CRMDoctor.trim();
 
     if (!iz.maxLength(treatment.observations, 3000)) {
         console.log('Error adding treatment: o complemento deve ter maximo 20 caracteres');
@@ -48,11 +50,12 @@ var validateTreatment = function (res, treatment) {
         treatment.canceledTreatment = false;
     }
 
-    if ((treatment.diagnosis == null) || (treatment.diagnosis != null && !iz.between(treatment.diagnosis.length, 1, 3000))) {
+    if ((treatment.diagnosis == null) || (treatment.diagnosis != null && !iz.between(treatment.diagnosis.trim().length, 1, 3000))) {
         console.log('Error adding treatment: o diagnostico deve ter 1 a 3000 caracteres');
         res.send('500', { status: 500, error: 'O diagnostico deve ter 1 a 3000 caracteres' });
         return false;
     }
+    treatment.diagnosis = treatment.diagnosis.trim();
 
     if (!iz(treatment.dateInclusion).required().date().valid) {
         console.log('Error adding treatment: data de inclusao invalida');
