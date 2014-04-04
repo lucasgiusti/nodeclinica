@@ -140,8 +140,6 @@ var validatePatient = function (res, patient) {
     patient.maritalStatus = patient.maritalStatus.trim();
     
     if ((patient.mail == null)) { delete patient.mail; } else { patient.mail = patient.mail.trim();}
-    if ((patient.responsibleName == null)) { delete patient.responsibleName; } else { patient.responsibleName = patient.responsibleName.trim();}
-    if ((patient.responsibleCPF == null)) { delete patient.responsibleCPF; } else { patient.responsibleCPF = patient.responsibleCPF.trim();}
     if ((patient.observations == null)) { delete patient.observations; } else { patient.observations = patient.observations.trim();}
 
     if ((patient.phone1 == null) || (patient.phone1 != null && !iz.between(patient.phone1.trim().length, 1, 20))) {
@@ -186,14 +184,24 @@ var validatePatient = function (res, patient) {
         res.send('500', { status: 500, error: 'Um CPF valido deve ser informado para o paciente ou o responsavel' });
         return false;
     }
-    patient.cpf = patient.cpf.trim();
+    if ((patient.cpf != null)) { patient.cpf = patient.cpf.trim(); }
+    if ((patient.responsibleCPF == !null)) { patient.responsibleCPF = patient.responsibleCPF.trim(); }
 
-    if (patient.responsibleCPF != null || patient.resposibleName != null) {
+
+    if (patient.responsibleName != null && !iz.maxLength(patient.responsibleName.trim(), 100)) {
+        console.log('Error adding patient: o nome do responsavel deve ter maximo 100 caracteres');
+        res.send('500', { status: 500, error: 'O nome do responsavel deve ter maximo 100 caracteres' });
+        return false;
+    }
+    if ((patient.responsibleName == !null)) { patient.responsibleName = patient.responsibleName.trim(); }
+
+
+    if (((patient.responsibleCPF != null && patient.responsibleCPF != '') && (patient.responsibleName == null || (patient.responsibleName != null && patient.responsibleName.trim() == '')))
+        || ((patient.responsibleName != null && patient.responsibleName != '') && (patient.responsibleCPF == null || (patient.responsibleCPF != null && patient.responsibleCPF.trim() == '')))) {
         console.log('Error adding patient: caso tenha um responsavel, devem ser informados nome e CPF do mesmo');
         res.send('500', { status: 500, error: 'Caso tenha um responsavel, devem ser informados nome e CPF do mesmo' });
         return false;
     }
-    patient.resposibleName = patient.resposibleName.trim();
 
     if (!iz(patient.dateInclusion).required().date().valid) {
         console.log('Error adding patient: data de inclusao invalida');

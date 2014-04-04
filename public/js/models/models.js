@@ -60,7 +60,7 @@ window.Student = Backbone.Model.extend({
 
     initialize: function () {
         this.validators = {};
-        /*
+/*        
         this.validators.name = function (value) {
             return value.length > 0 ? { isValid: true } : { isValid: false, message: "Informe o Nome" };
         };
@@ -73,7 +73,7 @@ window.Student = Backbone.Model.extend({
             var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
             return emailRegex.test(value) == true ? { isValid: true } : { isValid: false, message: "Informe um email correto" };
         }
-        */
+  */      
     },
 
     validateItem: function (key) {
@@ -88,8 +88,10 @@ window.Student = Backbone.Model.extend({
         for (var key in this.validators) {
             if (this.validators.hasOwnProperty(key)) {
                 var check = this.validators[key](this.get(key));
+
                 if (check.isValid === false) {
                     messages[key] = check.message;
+
                 }
             }
         }
@@ -898,7 +900,7 @@ window.Treatment = Backbone.Model.extend({
         diagnosis: null,
         treatmentPerformed: false,
         canceledTreatment: false,
-        doctor: null,
+        octor: null,
         CRMDoctor: null,
         observations: null,
         dateInclusion: null,

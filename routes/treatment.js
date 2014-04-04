@@ -41,6 +41,7 @@ var validateTreatment = function (res, treatment) {
         res.send('500', { status: 500, error: 'O complemento deve ter maximo 20 caracteres' });
         return false;
     }
+    if (treatment.observations != null) { treatment.observations = treatment.observations.trim() };
 
     if (!(treatment.treatmentPerformed == 'true' || treatment.treatmentPerformed == true)) {
         treatment.treatmentPerformed = false;
