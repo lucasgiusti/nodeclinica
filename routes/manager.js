@@ -16,7 +16,7 @@ var UserModel = userRoute.UserModel;
 var getManagersAll = function (req, res) {
     var type = 'GESTOR';
 
-    return userRoute.UserModel.find({ 'type': type }, { _id: 1, name: 1, mail: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
+    return userRoute.UserModel.find({ 'type': type }, { _id: 1, name: 1, mail: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }).sort({ name: 1 }).exec(function (err, users) {
         if (!err) {
             return res.send(users);
         } else {
@@ -29,7 +29,7 @@ var getManagersByName = function (req, res) {
     var name = req.params.name;
     var type = 'GESTOR';
 
-    return userRoute.UserModel.find({ 'name': { '$regex': name, $options: 'i' }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
+    return userRoute.UserModel.find({ 'name': { '$regex': name, $options: 'i' }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }).sort({ name: 1 }).exec(function (err, users) {
         if (!err) {
             return res.send(users);
         } else {
@@ -42,7 +42,7 @@ var getManagersByCpf = function (req, res) {
     var cpf = req.params.cpf;
     var type = 'GESTOR';
 
-    return userRoute.UserModel.find({ 'cpf': { '$regex': cpf }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
+    return userRoute.UserModel.find({ 'cpf': { '$regex': cpf }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }).sort({ name: 1 }).exec(function (err, users) {
         if (!err) {
             return res.send(users);
         } else {
@@ -55,7 +55,7 @@ var getManagersByRegistration = function (req, res) {
     var registration = req.params.registration;
     var type = 'GESTOR';
 
-    return userRoute.UserModel.find({ 'registration': registration, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
+    return userRoute.UserModel.find({ 'registration': registration, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }).sort({ name: 1 }).exec(function (err, users) {
         if (!err) {
             return res.send(users);
         } else {

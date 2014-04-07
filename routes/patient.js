@@ -367,7 +367,7 @@ var delPatient = function (req, res) {
 
 var getPatientsAll = function (req, res) {
     PatientModel = mongoose.model('patients', Patient);
-    return PatientModel.find({}, { _id: 1, name: 1, dateBirth: 1, cpf: 1, sex: 1, dateInclusion: 1 }, function (err, patients) {
+    return PatientModel.find({}, { _id: 1, name: 1, dateBirth: 1, cpf: 1, sex: 1, dateInclusion: 1 }).sort({ name: 1 }).exec(function (err, patients) {
         if (!err) {
             return res.send(patients);
         } else {
@@ -379,7 +379,7 @@ var getPatientsAll = function (req, res) {
 var getPatientsByName = function (req, res) {
     var name = req.params.name;
     PatientModel = mongoose.model('patients', Patient);
-    return PatientModel.find({ 'name': { '$regex': name, $options: 'i'} }, { _id: 1, name: 1, dateBirth: 1, cpf: 1, sex: 1, dateInclusion: 1 }, function (err, patients) {
+    return PatientModel.find({ 'name': { '$regex': name, $options: 'i' } }, { _id: 1, name: 1, dateBirth: 1, cpf: 1, sex: 1, dateInclusion: 1 }).sort({ name: 1 }).exec(function (err, patients) {
         if (!err) {
             return res.send(patients);
         } else {
@@ -391,7 +391,7 @@ var getPatientsByName = function (req, res) {
 var getPatientsByCpf = function (req, res) {
     var cpf = req.params.cpf;
     PatientModel = mongoose.model('patients', Patient);
-    return PatientModel.find({ 'cpf': { '$regex': cpf} }, { _id: 1, name: 1, dateBirth: 1, cpf: 1, sex: 1, dateInclusion: 1 }, function (err, patients) {
+    return PatientModel.find({ 'cpf': { '$regex': cpf } }, { _id: 1, name: 1, dateBirth: 1, cpf: 1, sex: 1, dateInclusion: 1 }).sort({ name: 1 }).exec(function (err, patients) {
         if (!err) {
             return res.send(patients);
         } else {

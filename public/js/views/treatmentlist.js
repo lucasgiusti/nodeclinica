@@ -9,7 +9,6 @@
         var patient = this.model.models;
         patient = patient[0].toJSON();
         var treatments = patient.treatments;
-
         var len = treatments.length;
         var startPos = (this.options.page - 1) * 8;
         var endPos = Math.min(startPos + 8, len);
@@ -17,10 +16,24 @@
         var jsonObject = '';
 
 
-
         $(this.el).html(new TreatmentsView().render().el);
 
         if (len > 0) {
+
+            var aux;
+            var acabou = false;
+            while (!acabou) {
+                acabou = true;
+                for (var i = 1; i < treatments.length; i++) {
+                    if (treatments[i - 1].dateInclusion < treatments[i].dateInclusion) {
+                        aux = treatments[i];
+                        treatments[i] = treatments[i - 1];
+                        treatments[i - 1] = aux;
+                        acabou = false;
+                    }
+                }
+            }
+
             for (var i = startPos; i < endPos; i++) {
 
 

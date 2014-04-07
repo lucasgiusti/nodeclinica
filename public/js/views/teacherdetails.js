@@ -101,12 +101,17 @@
 
     saveTeacher: function () {
         var self = this;
+        var mensagem = '';
+        if (this.model.id == null)
+            mensagem = 'Professor cadastrado com sucesso';
+        else
+            mensagem = 'Professor atualizado com sucesso';
         console.log('before save');
         this.model.save(null, {
             success: function (model) {
                 self.render();
                 app.navigate('teachers/' + model.id, false);
-                utils.showAlert('Success!', 'Professor atualizado com sucesso', 'alert-success');
+                utils.showAlert('Success!', mensagem, 'alert-success');
             },
             error: function (err, message) {
                 utils.showAlert('Erro', $.parseJSON(message.responseText).error, 'alert-error');

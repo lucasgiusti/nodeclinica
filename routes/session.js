@@ -45,7 +45,7 @@ var validateSession = function (res, session) {
         res.send('500', { status: 500, error: 'A observacao deve ter maximo 3000 caracteres' });
         return false;
     }
-    session.observations = session.observations.trim();
+    if (session.observations != null) { session.observations = session.observations.trim(); }
 
 
     if (!iz(session.dateSchedulingStart).required().date().valid) {

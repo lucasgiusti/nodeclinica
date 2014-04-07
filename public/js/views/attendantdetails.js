@@ -101,12 +101,17 @@
 
     saveAttendant: function () {
         var self = this;
+        var mensagem = '';
         console.log('before save');
+        if (this.model.id == null)
+            mensagem = 'Atendente cadastrado com sucesso';
+        else
+            mensagem = 'Atendente atualizado com sucesso';
         this.model.save(null, {
             success: function (model) {
                 self.render();
                 app.navigate('attendants/' + model.id, false);
-                utils.showAlert('Success!', 'Atendente atualizado com sucesso', 'alert-success');
+                utils.showAlert('Success!', mensagem, 'alert-success');
             },
             error: function (err, message) {
                 utils.showAlert('Erro', $.parseJSON(message.responseText).error, 'alert-error');

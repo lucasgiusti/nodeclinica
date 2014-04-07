@@ -5,7 +5,6 @@
     },
 
     render: function () {
-
         var treatment = this.model.toJSON();
 
         $(this.el).html(this.template(treatment));
@@ -80,13 +79,18 @@
 
     saveTreatment: function () {
         var self = this;
+        var mensagem = '';
+        if (this.model.id == null)
+            mensagem = 'Tratamento cadastrado com sucesso';
+        else
+            mensagem = 'Tratamento atualizado com sucesso';
         console.log('before save');
         this.model.save(null, {
             success: function (model) {
                 self.render();
 
                 app.navigate('patients/' + model.idPatient + '/treatments/' + model.id, false);
-                utils.showAlert('Success!', 'Tratamento atualizado com sucesso', 'alert-success');
+                utils.showAlert('Success!', mensagem, 'alert-success');
             },
             error: function (err, message) {
                 utils.showAlert('Erro', $.parseJSON(message.responseText).error, 'alert-error');

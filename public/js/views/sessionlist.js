@@ -23,9 +23,22 @@
         $(this.el).html(new SessionsView().render().el);
 
         if (len > 0) {
+
+            var aux;
+            var acabou = false;
+            while (!acabou) {
+                acabou = true;
+                for (var i = 1; i < sessions.length; i++) {
+                    if (sessions[i - 1].dateSchedulingStart < sessions[i].dateSchedulingStart) {
+                        aux = sessions[i];
+                        sessions[i] = sessions[i - 1];
+                        sessions[i - 1] = aux;
+                        acabou = false;
+                    }
+                }
+            }
+
             for (var i = startPos; i < endPos; i++) {
-
-
                 jsonObject = sessions[i];
 
                 html += '<tr>';

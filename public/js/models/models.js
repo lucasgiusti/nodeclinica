@@ -900,7 +900,7 @@ window.Treatment = Backbone.Model.extend({
         diagnosis: null,
         treatmentPerformed: false,
         canceledTreatment: false,
-        octor: null,
+        doctor: null,
         CRMDoctor: null,
         observations: null,
         dateInclusion: null,

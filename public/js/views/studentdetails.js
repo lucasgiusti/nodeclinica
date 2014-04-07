@@ -101,12 +101,17 @@
 
     saveStudent: function () {
         var self = this;
+        var mensagem = '';
+        if (this.model.id == null)
+            mensagem = 'Aluno cadastrado com sucesso';
+        else
+            mensagem = 'Aluno atualizado com sucesso';
         console.log('before save');
         this.model.save(null, {
             success: function (model) {
                 self.render();
                 app.navigate('students/' + model.id, false);
-                utils.showAlert('Success!', 'Aluno atualizado com sucesso', 'alert-success');
+                utils.showAlert('Success!', mensagem, 'alert-success');
             },
             error: function (err, message) {
                 utils.showAlert('Erro', $.parseJSON(message.responseText).error, 'alert-error');

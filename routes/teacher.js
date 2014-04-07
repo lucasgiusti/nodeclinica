@@ -16,7 +16,7 @@ var UserModel = userRoute.UserModel;
 var getTeachersAll = function (req, res) {
     var type = 'PROFESSOR';
     UserModel = userRoute.UserModel;
-    return UserModel.find({ 'type': type }, { _id: 1, name: 1, mail: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
+    return UserModel.find({ 'type': type }, { _id: 1, name: 1, mail: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }).sort({ name: 1 }).exec(function (err, users) {
         if (!err) {
             return res.send(users);
         } else {
@@ -29,7 +29,7 @@ var getTeachersByName = function (req, res) {
     var name = req.params.name;
     var type = 'PROFESSOR';
     UserModel = userRoute.UserModel;
-    return UserModel.find({ 'name': { '$regex': name, $options: 'i' }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
+    return UserModel.find({ 'name': { '$regex': name, $options: 'i' }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }).sort({ name: 1 }).exec(function (err, users) {
         if (!err) {
             return res.send(users);
         } else {
@@ -42,7 +42,7 @@ var getTeachersByCpf = function (req, res) {
     var cpf = req.params.cpf;
     var type = 'PROFESSOR';
     UserModel = userRoute.UserModel;
-    return UserModel.find({ 'cpf': { '$regex': cpf }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
+    return UserModel.find({ 'cpf': { '$regex': cpf }, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }).sort({ name: 1 }).exec(function (err, users) {
         if (!err) {
             return res.send(users);
         } else {
@@ -55,7 +55,7 @@ var getTeachersByRegistration = function (req, res) {
     var registration = req.params.registration;
     var type = 'PROFESSOR';
     UserModel = userRoute.UserModel;
-    return UserModel.find({ 'registration': registration, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }, function (err, users) {
+    return UserModel.find({ 'registration': registration, 'type': type }, { _id: 1, name: 1, registration: 1, cpf: 1, dateInclusion: 1, active: 1 }).sort({ name: 1 }).exec(function (err, users) {
         if (!err) {
             return res.send(users);
         } else {
@@ -100,7 +100,7 @@ var getTeachersById = function (req, res) {
 
 var getTeachersActive = function (req, res) {
     var type = 'PROFESSOR';
-    return userRoute.UserModel.find({'active': true, 'type': type }, { _id: 1, name: 1 }, function (err, users) {
+    return userRoute.UserModel.find({ 'active': true, 'type': type }, { _id: 1, name: 1 }).sort({ name: 1 }).exec(function (err, users) {
         if (!err) {
             return res.send(users);
         } else {

@@ -8,6 +8,7 @@ var express = require("express"),
     LocalStrategy = require('passport-local').Strategy,
     passportLocalMongoose = require('passport-local-mongoose'),
     utilRoute = require("./util"),
+    patientRoute = require("./patient"),
     accountRoute = require("./account");
 //************************************************************
 
@@ -329,20 +330,34 @@ var delUser = function (res, req, id) {
             if (user) {
                 if ((user.mail != req.user.username)) {
 
-                    AccountModel.findOne({ 'username': user.mail }, { _id: 1 }, function (err, account) {
+                    return patientRoute.PatientModel.findOne( {$or:[ {'treatments.sessions.studentId': id },{'treatments.sessions.teacherId': id }]}, { _id: 1 }, function (err, patient) {
                         if (!err) {
-                            if (account) {
-                                account.remove(function () { user.remove(function () { res.send(user); }); });
+                            if(patient)
+                            {
+                                res.send('500', { status: 500, error: 'Existem sessões vinculadas, não é possível excluir' });
                             }
-                            else {
-                                user.remove(function () { res.send(user); });
-                            }
+                            else{
+                                AccountModel.findOne({ 'username': user.mail }, { _id: 1 }, function (err, account) {
+                                    if (!err) {
+                                        if (account) {
+                                            account.remove(function () { user.remove(function () { res.send(user); }); });
+                                        }
+                                        else {
+                                            user.remove(function () { res.send(user); });
+                                        }
 
+                                    } else {
+                                        console.log('Error updating account: ' + err);
+                                        res.send('500', { status: 500, error: err });
+                                    }
+                                });
+                            }
                         } else {
-                            console.log('Error updating account: ' + err);
-                            res.send('500', { status: 500, error: err });
+                            return console.log(err);
                         }
                     });
+                
+
                 }
                 else {
                     res.send('500', { status: 500, error: 'Nao e possivel excluir o proprio usuario' });

@@ -94,11 +94,16 @@ window.SessionView = Backbone.View.extend({
 
     saveSession: function () {
         var self = this;
+        var mensagem = '';
+        if (this.model.id == null)
+            mensagem = 'Sessão cadastrada com sucesso';
+        else
+            mensagem = 'Sessão atualizada com sucesso';
         this.model.save(null, {
             success: function (model) {
                 self.render();
                 app.navigate('patients/' + model.idPatient + '/treatments/' + model.idTreatment + '/sessions/' + model.id, false);
-                utils.showAlert('Success!', 'Sessao atualizado com sucesso', 'alert-success');
+                utils.showAlert('Success!', mensagem, 'alert-success');
             },
             error: function (err, message) {
                 utils.showAlert('Erro', $.parseJSON(message.responseText).error, 'alert-error');

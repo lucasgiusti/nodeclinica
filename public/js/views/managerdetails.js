@@ -101,12 +101,17 @@
 
     saveManager: function () {
         var self = this;
+        var mensagem = '';
         console.log('before save');
+        if (this.model.id == null)
+            mensagem = 'Gestor cadastrado com sucesso';
+        else
+            mensagem = 'Gestor atualizado com sucesso';
         this.model.save(null, {
             success: function (model) {
                 self.render();
                 app.navigate('managers/' + model.id, false);
-                utils.showAlert('Success!', 'Gestor atualizado com sucesso', 'alert-success');
+                utils.showAlert('Success!', mensagem, 'alert-success');
             },
             error: function (err, message) {
                 utils.showAlert('Erro', $.parseJSON(message.responseText).error, 'alert-error');
