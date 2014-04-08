@@ -210,18 +210,18 @@ var verificaHorario = function (req, res, callback) {
     patientRoute.PatientModel.find({ 'treatments.sessions.studentId': session.studentId }, { _id: 1, 'treatments': 1 }, function (err, patients) {
         if (!err) {
             if (patients) {
-                
+
                 for (var i = 0; i < patients.length; i++) {
 
                     if (patients[i].treatments) {
 
                         for (var y = 0; y < patients[i].treatments.length; y++) {
-                            
+
                             if (patients[i].treatments[y].sessions) {
                                 for (var z = 0; z < patients[i].treatments[y].sessions.length; z++) {
                                     var data = new Date(session.dateSchedulingStart);
 
-                                    if (data  >= patients[i].treatments[y].sessions[z].dateSchedulingStart &&
+                                    if (data >= patients[i].treatments[y].sessions[z].dateSchedulingStart &&
                                        data <= patients[i].treatments[y].sessions[z].dateSchedulingEnd) {
                                         callback = false;
                                         console.log('Error adding session: o aluno selecionado já possui agenda para este horário');
@@ -232,6 +232,56 @@ var verificaHorario = function (req, res, callback) {
                         }
                     }
                 }
+            }
+            else {
+                patientRoute.PatientModel.find({ 'treatments.sessions.teacherId': session.teacherId }, { _id: 1, 'treatments': 1 }, function (err, patients) {
+                    if (!err) {
+                        if (patients) {
+
+                            for (var i = 0; i < patients.length; i++) {
+
+                                if (patients[i].treatments) {
+
+                                    for (var y = 0; y < patients[i].treatments.length; y++) {
+
+                                        if (patients[i].treatments[y].sessions) {
+
+                                            for (var z = 0; z < patients[i].treatments[y].sessions.length; z++) {
+                                                var data = new Date(session.dateSchedulingStart);
+
+                                                if (data >= patients[i].treatments[y].sessions[z].dateSchedulingStart &&
+                                                   data <= patients[i].treatments[y].sessions[z].dateSchedulingEnd) {
+                                                    callback = false;
+                                                    console.log('Error adding session: o professor selecionado já possui agenda para este horário');
+                                                    res.send('500', { status: 500, error: 'O professor selecionado já possui agenda para este horário' });
+                                                }
+                                            }
+
+                                        }
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+                        else {
+                            if (callback) {
+                                addSession(req, res);
+                            }
+                        }
+                    }
+                    else {
+                        console.log(err);
+                        res.send('500', { status: 500, error: err });
+                    }
+
+
+
+                });
+
+
 
             }
         }
@@ -240,58 +290,7 @@ var verificaHorario = function (req, res, callback) {
             res.send('500', { status: 500, error: err });
         }
 
-    }, function () {
-
-
-        patientRoute.PatientModel.find({ 'treatments.sessions.teacherId': session.teacherId }, { _id: 1, 'treatments': 1 }, function (err, patients) {
-            if (!err) {
-                if (patients) {
-
-                    for (var i = 0; i < patients.length; i++) {
-
-                        if (patients[i].treatments) {
-
-                            for (var y = 0; y < patients[i].treatments.length; y++) {
-
-                                if (patients[i].treatments[y].sessions) {
-
-                                    for (var z = 0; z < patients[i].treatments[y].sessions.length; z++) {
-                                        var data = new Date(session.dateSchedulingStart);
-
-                                        if (data >= patients[i].treatments[y].sessions[z].dateSchedulingStart &&
-                                           data <= patients[i].treatments[y].sessions[z].dateSchedulingEnd) {
-                                            callback = false;
-                                            console.log('Error adding session: o professor selecionado já possui agenda para este horário');
-                                            res.send('500', { status: 500, error: 'O professor selecionado já possui agenda para este horário' });
-                                        }
-                                    }
-
-                                }
-
-                            }
-
-                        }
-
-                    }
-
-                }
-            }
-            else {
-                console.log(err);
-                res.send('500', { status: 500, error: err });
-            }
-
-
-
-        });
     });
-
-
-
-    if (callback) {
-            addSession(req, res);
-        }
-
 }
 
 var addSession = function (req, res) {
