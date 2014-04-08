@@ -186,85 +186,198 @@ var postSession = function (req, res) {
         res.send('401', { status: 401, error: 'Acesso Negado' });
     }
     else {
-        var idPatient = req.params.idPatient;
-        var idTreatment = req.params.idTreatment;
-        var session = req.body;
-
-        for (i = 0; i <= 23; i++) {
-            delete session[i];
-        }
-        console.log('Adding session');
-        session.dateInclusion = new Date();
-        session.treatmentPerformed = false;
-        session.canceledTreatment = false;
 
 
-        if (validateSession(res, session)) {
-
-            patientRoute.PatientModel.findOne({ '_id': idPatient, 'treatments._id': idTreatment }, { _id: 1, 'treatments': 1 }, function (err, patient) {
-                if (!err) {
-                    if (patient) {
-
-                        delete session._id;
-                        session.idTreatment = idTreatment;
-
-                        for (var i = 0; i < patient.treatments.length; i++) {
-                            if (patient.treatments[i]._id == idTreatment) {
-                                {
-                                    if (patient.treatments[i].canceledTreatment || patient.treatments[i].treatmentPerformed) {
-                                        console.log('Error updating session: tratamento realizado ou cancelado');
-                                        res.send('500', { status: 500, error: 'Tratamento realizado ou cancelado' });
-                                    }
-                                    else {
-                                        patient.treatments[i].sessions.push(session);
-
-                                        patient.save(function (err, result) {
-                                            if (err) {
-                                                console.log('Error updating session: ' + err);
-                                                res.send('500', { status: 500, error: err });
-                                            } else {
-                                                console.log('document(s) updated');
-
-
-                                                patientRoute.PatientModel.findOne({ '_id': idPatient, 'treatments._id': idTreatment }, { _id: 1, 'treatments': 1 }, function (err, patient) {
-                                                    if (!err) {
-                                                        if (patient) {
-                                                            for (var i = 0; i < patient.treatments.length; i++) {
-                                                                if (patient.treatments[i]._id == idTreatment) {
-                                                                    res.send(patient.treatments[i].sessions[patient.treatments[i].sessions.length - 1]);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    else {
-                                                        console.log('Error updating session: ' + err);
-                                                        res.send('500', { status: 500, error: err });
-                                                    }
-                                                });
-
-
-                                            }
-                                        });
-                                    }
-                                }
-                            }
-                        }
-
-
-                    }
-                }
-                else {
-                    console.log(err);
-                    res.send('500', { status: 500, error: err });
-                }
-
-            });
-        }
-
+        verificaHorario(req, res, addSession);
 
 
     }
 }
+
+var verificaHorario = function (req, res, callback) {
+    var idPatient = req.params.idPatient;
+    var idTreatment = req.params.idTreatment;
+    var session = req.body;
+
+    for (i = 0; i <= 23; i++) {
+        delete session[i];
+    }
+
+    if (typeof callback !== 'function') {
+        callback = false;
+    }
+
+    patientRoute.PatientModel.find({ 'treatments.sessions.studentId': session.studentId }, { _id: 1, 'treatments': 1 }, function (err, patients) {
+        if (!err) {
+            if (patients) {
+                
+                for (var i = 0; i < patients.length; i++) {
+
+                    if (patients[i].treatments) {
+
+                        for (var y = 0; y < patients[i].treatments.length; y++) {
+                            
+                            if (patients[i].treatments[y].sessions) {
+                                for (var z = 0; z < patients[i].treatments[y].sessions.length; z++) {
+                                    var data = new Date(session.dateSchedulingStart);
+
+                                    if (data  >= patients[i].treatments[y].sessions[z].dateSchedulingStart &&
+                                       data <= patients[i].treatments[y].sessions[z].dateSchedulingEnd) {
+                                        callback = false;
+                                        console.log('Error adding session: o aluno selecionado já possui agenda para este horário');
+                                        res.send('500', { status: 500, error: 'O aluno selecionado já possui agenda para este horário' });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+        else {
+            console.log(err);
+            res.send('500', { status: 500, error: err });
+        }
+
+    }, function () {
+
+
+        patientRoute.PatientModel.find({ 'treatments.sessions.teacherId': session.teacherId }, { _id: 1, 'treatments': 1 }, function (err, patients) {
+            if (!err) {
+                if (patients) {
+
+                    for (var i = 0; i < patients.length; i++) {
+
+                        if (patients[i].treatments) {
+
+                            for (var y = 0; y < patients[i].treatments.length; y++) {
+
+                                if (patients[i].treatments[y].sessions) {
+
+                                    for (var z = 0; z < patients[i].treatments[y].sessions.length; z++) {
+                                        var data = new Date(session.dateSchedulingStart);
+
+                                        if (data >= patients[i].treatments[y].sessions[z].dateSchedulingStart &&
+                                           data <= patients[i].treatments[y].sessions[z].dateSchedulingEnd) {
+                                            callback = false;
+                                            console.log('Error adding session: o professor selecionado já possui agenda para este horário');
+                                            res.send('500', { status: 500, error: 'O professor selecionado já possui agenda para este horário' });
+                                        }
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+            }
+            else {
+                console.log(err);
+                res.send('500', { status: 500, error: err });
+            }
+
+
+
+        });
+    });
+
+
+
+    if (callback) {
+            addSession(req, res);
+        }
+
+}
+
+var addSession = function (req, res) {
+    var idPatient = req.params.idPatient;
+    var idTreatment = req.params.idTreatment;
+    var session = req.body;
+
+    for (i = 0; i <= 23; i++) {
+        delete session[i];
+    }
+    console.log('Adding session');
+    session.dateInclusion = new Date();
+    session.treatmentPerformed = false;
+    session.canceledTreatment = false;
+
+
+    if (validateSession(res, session)) {
+
+        patientRoute.PatientModel.findOne({ '_id': idPatient, 'treatments._id': idTreatment }, { _id: 1, 'treatments': 1 }, function (err, patient) {
+            if (!err) {
+                if (patient) {
+
+                    delete session._id;
+                    session.idTreatment = idTreatment;
+
+                    for (var i = 0; i < patient.treatments.length; i++) {
+                        if (patient.treatments[i]._id == idTreatment) {
+                            {
+                                if (patient.treatments[i].canceledTreatment || patient.treatments[i].treatmentPerformed) {
+                                    console.log('Error updating session: tratamento realizado ou cancelado');
+                                    res.send('500', { status: 500, error: 'Tratamento realizado ou cancelado' });
+                                }
+                                else {
+
+
+
+
+                                    patient.treatments[i].sessions.push(session);
+
+                                    patient.save(function (err, result) {
+                                        if (err) {
+                                            console.log('Error updating session: ' + err);
+                                            res.send('500', { status: 500, error: err });
+                                        } else {
+                                            console.log('document(s) updated');
+
+
+                                            patientRoute.PatientModel.findOne({ '_id': idPatient, 'treatments._id': idTreatment }, { _id: 1, 'treatments': 1 }, function (err, patient) {
+                                                if (!err) {
+                                                    if (patient) {
+                                                        for (var i = 0; i < patient.treatments.length; i++) {
+                                                            if (patient.treatments[i]._id == idTreatment) {
+                                                                res.send(patient.treatments[i].sessions[patient.treatments[i].sessions.length - 1]);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                else {
+                                                    console.log('Error updating session: ' + err);
+                                                    res.send('500', { status: 500, error: err });
+                                                }
+                                            });
+                                        }
+                                    });
+
+
+
+
+
+                                }
+                            }
+                        }
+                    }
+
+
+                }
+            }
+            else {
+                console.log(err);
+                res.send('500', { status: 500, error: err });
+            }
+
+        });
+    }
+}
+
 
 var delSession = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
