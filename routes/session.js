@@ -193,7 +193,7 @@ var postSession = function (req, res) {
     }
 }
 
-var horarioDisponivelPatient = function (req, res) {
+var horarioDisponivelPatient = function (req, res, callback) {
 
     var idPatient = req.params.idPatient;
     var idTreatment = req.params.idTreatment;
@@ -204,42 +204,43 @@ var horarioDisponivelPatient = function (req, res) {
         delete session[i];
     }
 
-    console.log(idPatient);
+    if (typeof callback !== 'function') {
+        callback = false;
+    }
 
     patientRoute.PatientModel.find({ '_id': idPatient, $or: [{ 'treatments.sessions.dateSchedulingStart': { '$gte': dateStart, '$lt': dateEnd } }, { 'treatments.sessions.dateSchedulingEnd': { '$gt': dateStart, '$lte': dateEnd } }] }, { _id: 1, 'treatments': 1 }, function (err, patients) {
         if (!err) {
             if (patients.length > 0) {
-                console.log("encontrou paciente");
                 for (var i = 0; i < patients.length; i++) {
                     for (var y = 0; y < patients[i].treatments.length; y++) {
                         if (patients[i].treatments[y].treatmentPerformed == false && patients[i].treatments[y].canceledTreatment == false) {
-                            console.log("encontrou tratamento");
-                            for (var z = 0; z < patients[i].treatments[y].length; z++) {
-                                if (patients[i].treatments[y].sessions[z].everHeld == false && patients[i].treatments[y].sessions[z].canceledSession == false) {
-                                    console.log("encontrou sessao");
-                                    console.log(dateStart);
-                                    console.log(patients[i].treatments[y].sessions[z].dateSchedulingStart);
-                                    console.log(dateEnd);
-                                    console.log(patients[i].treatments[y].sessions[z].dateSchedulingEnd);
-                                    if ((patients[i].treatments[y].sessions[z].dateSchedulingStart >= dateStart && patients[i].treatments[y].sessions[z].dateSchedulingStart < dateEnd) ||
-                                        (patients[i].treatments[y].sessions[z].dateSchedulingEnd > dateStart && patients[i].treatments[y].sessions[z].dateSchedulingEnd <= dateEnd)) {
+                            for (var z = 0; z < patients[i].treatments[y].sessions.length; z++) {
+                                if (patients[i].treatments[y].sessions[z]._id != session._id) {
+                                    if (patients[i].treatments[y].sessions[z].everHeld == false && patients[i].treatments[y].sessions[z].canceledSession == false) {
+                                        if ((patients[i].treatments[y].sessions[z].dateSchedulingStart >= dateStart && patients[i].treatments[y].sessions[z].dateSchedulingStart < dateEnd) ||
+                                            (patients[i].treatments[y].sessions[z].dateSchedulingEnd > dateStart && patients[i].treatments[y].sessions[z].dateSchedulingEnd <= dateEnd)) {
 
-                                        console.log('Error adding session: o paciente selecionado já possui agenda para este horário');
-                                        res.send('500', { status: 500, error: 'O paciente selecionado já possui agenda para este horário' });
-                                        return false;
+                                            console.log('Error adding session: o paciente selecionado já possui agenda para este horário');
+                                            res.send('500', { status: 500, error: 'O paciente selecionado já possui agenda para este horário' });
+                                            return;
+                                        }
+
                                     }
-
                                 }
                             }
                         }
                     }
                 }
-
-                return true;
+                console.log("retornando");
+                if (callback) {
+                    callback(req, res);
+                }
             }
             else {
 
-                return true;
+                if (callback) {
+                    callback(req, res);
+                }
             }
         }
         else {
@@ -251,7 +252,7 @@ var horarioDisponivelPatient = function (req, res) {
     });
 }
 
-var horarioDisponivelTeacher = function (req, res) {
+var horarioDisponivelTeacher = function (req, res, callback) {
 
     var idPatient = req.params.idPatient;
     var idTreatment = req.params.idTreatment;
@@ -269,15 +270,16 @@ var horarioDisponivelTeacher = function (req, res) {
                 for (var i = 0; i < patients.length; i++) {
                     for (var y = 0; y < patients[i].treatments.length; y++) {
                         if (patients[i].treatments[y].treatmentPerformed == false && patients[i].treatments[y].canceledTreatment == false) {
-                            for (var z = 0; z < patients[i].treatments[y].length; z++) {
+                            for (var z = 0; z < patients[i].treatments[y].sessions.length; z++) {
                                 if (patients[i].treatments[y].sessions[z].everHeld == false && patients[i].treatments[y].sessions[z].canceledSession == false) {
+                                    if (patients[i].treatments[y].sessions[z]._id != session._id) {
+                                        if ((patients[i].treatments[y].sessions[z].dateSchedulingStart >= dateStart && patients[i].treatments[y].sessions[z].dateSchedulingStart < dateEnd) ||
+                                            (patients[i].treatments[y].sessions[z].dateSchedulingEnd > dateStart && patients[i].treatments[y].sessions[z].dateSchedulingEnd <= dateEnd)) {
 
-
-                                    if ((patients[i].treatments[y].sessions[z].dateSchedulingStart >= dateStart && patients[i].treatments[y].sessions[z].dateSchedulingStart < dateEnd) ||
-                                        (patients[i].treatments[y].sessions[z].dateSchedulingEnd > dateStart && patients[i].treatments[y].sessions[z].dateSchedulingEnd <= dateEnd)) {
-
-                                        console.log('Error adding session: o professor selecionado já possui agenda para este horário');
-                                        res.send('500', { status: 500, error: 'O professor selecionado já possui agenda para este horário' });
+                                            console.log('Error adding session: o professor selecionado já possui agenda para este horário');
+                                            res.send('500', { status: 500, error: 'O professor selecionado já possui agenda para este horário' });
+                                            return;
+                                        }
                                     }
 
                                 }
@@ -286,11 +288,15 @@ var horarioDisponivelTeacher = function (req, res) {
                     }
                 }
 
-                return true;
+                if (callback) {
+                    callback(req, res);
+                }
             }
             else {
 
-                return true;
+                if (callback) {
+                    callback(req, res);
+                }
             }
         }
         else {
@@ -302,7 +308,7 @@ var horarioDisponivelTeacher = function (req, res) {
     });
 }
 
-var horarioDisponivelStudent = function (req, res) {
+var horarioDisponivelStudent = function (req, res, callback) {
 
     var idPatient = req.params.idPatient;
     var idTreatment = req.params.idTreatment;
@@ -320,28 +326,32 @@ var horarioDisponivelStudent = function (req, res) {
                 for (var i = 0; i < patients.length; i++) {
                     for (var y = 0; y < patients[i].treatments.length; y++) {
                         if (patients[i].treatments[y].treatmentPerformed == false && patients[i].treatments[y].canceledTreatment == false) {
-                            for (var z = 0; z < patients[i].treatments[y].length; z++) {
+                            for (var z = 0; z < patients[i].treatments[y].sessions.length; z++) {
                                 if (patients[i].treatments[y].sessions[z].everHeld == false && patients[i].treatments[y].sessions[z].canceledSession == false) {
+                                    if (patients[i].treatments[y].sessions[z]._id != session._id) {
+                                        if ((patients[i].treatments[y].sessions[z].dateSchedulingStart >= dateStart && patients[i].treatments[y].sessions[z].dateSchedulingStart < dateEnd) ||
+                                            (patients[i].treatments[y].sessions[z].dateSchedulingEnd > dateStart && patients[i].treatments[y].sessions[z].dateSchedulingEnd <= dateEnd)) {
 
-
-                                    if ((patients[i].treatments[y].sessions[z].dateSchedulingStart >= dateStart && patients[i].treatments[y].sessions[z].dateSchedulingStart < dateEnd) ||
-                                        (patients[i].treatments[y].sessions[z].dateSchedulingEnd > dateStart && patients[i].treatments[y].sessions[z].dateSchedulingEnd <= dateEnd)) {
-
-                                        console.log('Error adding session: o aluno selecionado já possui agenda para este horário');
-                                        res.send('500', { status: 500, error: 'O aluno selecionado já possui agenda para este horário' });
+                                            console.log('Error adding session: o aluno selecionado já possui agenda para este horário');
+                                            res.send('500', { status: 500, error: 'O aluno selecionado já possui agenda para este horário' });
+                                            return;
+                                        }
                                     }
-
                                 }
                             }
                         }
                     }
                 }
 
-                return true;
+                if (callback) {
+                    callback(req, res);
+                }
             }
             else {
 
-                return true;
+                if (callback) {
+                    callback(req, res);
+                }
             }
         }
         else {
@@ -368,19 +378,15 @@ var verificaHorario = function (req, res, callback) {
         callback = false;
     }
 
-
-    if (horarioDisponivelPatient(req, res)) {
-
-        if (horarioDisponivelTeacher(req, res)) {
-
-            if (horarioDisponivelStudent(req, res)) {
+    horarioDisponivelPatient(req, res, function () {
+        horarioDisponivelTeacher(req, res, function () {
+            horarioDisponivelStudent(req, res, function () {
                 if (callback) {
                     callback(req, res);
                 }
-            }
-
-        }
-    }
+            });
+        });
+    });
 }
 
 var addSession = function (req, res) {
@@ -414,9 +420,6 @@ var addSession = function (req, res) {
                                     res.send('500', { status: 500, error: 'Tratamento realizado ou cancelado' });
                                 }
                                 else {
-
-
-
 
                                     patient.treatments[i].sessions.push(session);
 
