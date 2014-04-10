@@ -86,17 +86,15 @@ var AppRouter = Backbone.Router.extend({
     },
 
     home: function (id) {
-        if (!this.homeView) {
-            this.homeView = new HomeView();
-        }
+        this.homeView = new HomeView();
+        
         $('#content').html(this.homeView.el);
         selectMenuItem('home-menu');
     },
 
     calendar: function (id) {
-        if (!this.calendarView) {
-            this.calendarView = new CalendarView();
-        }
+        this.calendarView = new CalendarView();
+
         $('#content').html(this.calendarView.el);
         selectMenuItem('calendar-menu');
     },

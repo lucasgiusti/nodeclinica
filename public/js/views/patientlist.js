@@ -12,7 +12,7 @@
         var html = '';
         var jsonObject = '';
 
-
+        
 
         $(this.el).html(new PatientsView().render().el);
 
