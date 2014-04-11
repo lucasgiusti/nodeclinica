@@ -1,12 +1,98 @@
-﻿<legend>Painel de Atendimentos</legend>
-<div class="row">
-  <div class="col-lg-5">
-    <div class="control-group">
-                        
+﻿<legend>Pacientes em Espera</legend>
+<div id='pE'>
+    <div class="btn btn-primary" style="margin-right: 20px; height: 100px; width: 130px">
+        <div style="text-align: left">Neuro</div>
+        <div id="pENA" class="control-label" style="font-size: 30px; text-align: center"></div>
+        <div style="text-align: right">Adulto</div>
     </div>
-  </div><!-- /.col-lg-6 -->
-</div><!-- /.row -->
-
-
+    <div class="btn btn-primary" style="margin-right: 20px; height: 100px; width: 130px">
+        <div style="text-align: left">Neuro</div>
+        <div id="pENP" class="control-label" style="font-size: 30px; text-align: center"></div>
+        <div style="text-align: right">Pediatria</div>
+    </div>
+    <div class="btn btn-primary" style="margin-right: 20px; height: 100px; width: 130px">
+        <div style="text-align: left">Ortopedia</div>
+        <div id="pEOT" class="control-label" style="font-size: 30px; text-align: center"></div>
+        <div style="text-align: right">Traumatologia</div>
+    </div>
+    <div class="btn btn-primary" style="margin-right: 20px; height: 100px; width: 130px">
+        <div style="text-align: left">Urogenicologia</div>
+        <div id="pEUM" class="control-label" style="font-size: 30px; text-align: center"></div>
+        <div style="text-align: right">Mastologia</div>
+    </div>
+    <div class="btn btn-primary" style="margin-right: 20px; height: 100px; width: 130px">
+        <div style="text-align: left">Hidroterapia</div>
+        <div id="pEH" class="control-label" style="font-size: 30px; text-align: center"></div>
+    </div>
+    <div class="btn btn-primary" style="margin-right: 20px; height: 100px; width: 130px">
+        <div style="text-align: left">Saúde Coletiva</div>
+        <div id="pESC" class="control-label" style="font-size: 30px; text-align: center"></div>
+    </div>
+</div>
 <br/>
-<div id='painel'></div>
+<br/>
+<legend>Pacientes Triados</legend>
+<div id='pT'>
+    <div class="btn btn-primary" style="margin-right: 20px; height: 100px; width: 130px">
+        <div style="text-align: left">Neuro</div>
+        <div id="pTNA" class="control-label" style="font-size: 30px; text-align: center"></div>
+        <div style="text-align: right">Adulto</div>
+    </div>
+    <div class="btn btn-primary" style="margin-right: 20px; height: 100px; width: 130px">
+        <div style="text-align: left">Neuro</div>
+        <div id="pTNP" class="control-label" style="font-size: 30px; text-align: center"></div>
+        <div style="text-align: right">Pediatria</div>
+    </div>
+    <div class="btn btn-primary" style="margin-right: 20px; height: 100px; width: 130px">
+        <div style="text-align: left">Ortopedia</div>
+        <div id="pTOT" class="control-label" style="font-size: 30px; text-align: center"></div>
+        <div style="text-align: right">Traumatologia</div>
+    </div>
+    <div class="btn btn-primary" style="margin-right: 20px; height: 100px; width: 130px">
+        <div style="text-align: left">Urogenicologia</div>
+        <div id="pTUM" class="control-label" style="font-size: 30px; text-align: center"></div>
+        <div style="text-align: right">Mastologia</div>
+    </div>
+    <div class="btn btn-primary" style="margin-right: 20px; height: 100px; width: 130px">
+        <div style="text-align: left">Hidroterapia</div>
+        <div id="pTH" class="control-label" style="font-size: 30px; text-align: center"></div>
+    </div>
+    <div class="btn btn-primary" style="margin-right: 20px; height: 100px; width: 130px">
+        <div style="text-align: left">Saúde Coletiva</div>
+        <div id="pTSC" class="control-label" style="font-size: 30px; text-align: center"></div>
+    </div>
+</div>
+<br/>
+<br/>
+<legend>Paciente em Atendimento</legend>
+<div id='pA'>
+    <div class="btn btn-primary" style="margin-right: 20px; height: 100px; width: 130px">
+        <div style="text-align: left">Neuro</div>
+        <div id="pANA" class="control-label" style="font-size: 30px; text-align: center"></div>
+        <div style="text-align: right">Adulto</div>
+    </div>
+    <div class="btn btn-primary" style="margin-right: 20px; height: 100px; width: 130px">
+        <div style="text-align: left">Neuro</div>
+        <div id="pANP" class="control-label" style="font-size: 30px; text-align: center"></div>
+        <div style="text-align: right">Pediatria</div>
+    </div>
+    <div class="btn btn-primary" style="margin-right: 20px; height: 100px; width: 130px">
+        <div style="text-align: left">Ortopedia</div>
+        <div id="pAOT" class="control-label" style="font-size: 30px; text-align: center"></div>
+        <div style="text-align: right">Traumatologia</div>
+    </div>
+    <div class="btn btn-primary" style="margin-right: 20px; height: 100px; width: 130px">
+        <div style="text-align: left">Urogenicologia</div>
+        <div id="pAUM" class="control-label" style="font-size: 30px; text-align: center"></div>
+        <div style="text-align: right">Mastologia</div>
+    </div>
+    <div class="btn btn-primary" style="margin-right: 20px; height: 100px; width: 130px">
+        <div style="text-align: left">Hidroterapia</div>
+        <div id="pAH" class="control-label" style="font-size: 30px; text-align: center"></div>
+    </div>
+    <div class="btn btn-primary" style="margin-right: 20px; height: 100px; width: 130px">
+        <div style="text-align: left">Saúde Coletiva</div>
+        <div id="pASC" class="control-label" style="font-size: 30px; text-align: center"></div>
+    </div>
+</div>
+

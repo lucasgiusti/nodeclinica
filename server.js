@@ -19,7 +19,8 @@ var application_root = __dirname,
     managerRoute = require("./routes/manager"),
     patientRoute = require("./routes/patient"),
     treatmentRoute = require("./routes/treatment"),
-    sessionRoute = require("./routes/session");
+    sessionRoute = require("./routes/session"),
+    painelRoute = require("./routes/painel");
 
 
 // Config
@@ -141,6 +142,9 @@ app.get('/sessions/:id/type/:type', auth, sessionRoute.getSessionsByType);
 app.post('/patients/:idPatient/treatments/:idTreatment/sessions', auth, sessionRoute.postSession);
 app.del('/patients/:idPatient/treatments/:idTreatment/sessions/:id', auth, sessionRoute.delSession);
 app.put('/patients/:idPatient/treatments/:idTreatment/sessions/:id', auth, sessionRoute.putSession);
+
+// PAINEL
+app.get('/painel', auth, painelRoute.getPainelAll);
 
 // Launch server
 http.createServer(app).listen(app.get('port'), function () {
