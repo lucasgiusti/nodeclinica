@@ -763,6 +763,20 @@ window.PatientByCPFCollection = Backbone.Collection.extend({
     },
 });
 
+window.PatientByPainelCollection = Backbone.Collection.extend({
+
+    model: Patient,
+
+    url: function () {
+
+        return '/patients/painel/' + this.type;
+    },
+
+    initialize: function (options) {
+        options || (options = {});
+        this.type = options.type;
+    },
+});
 
 
 

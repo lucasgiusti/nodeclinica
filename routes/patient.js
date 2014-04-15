@@ -434,11 +434,61 @@ var getPatientsById = function (req, res) {
     });
 };
 
+var getPatientsByPainel = function (req, res) {
+    var type = req.params.type;
+    var serviceArea = '';
+
+    if (type == 'pENA' || type == 'pTNA' || type == 'pANA') { serviceArea = 'NEURO ADULTO'; }
+    if (type == 'pENP' || type == 'pTNP' || type == 'pANP') { serviceArea = 'NEURO PEDIATRIA'; }
+    if (type == 'pEOT' || type == 'pTOT' || type == 'pAOT') { serviceArea = 'ORTOPEDIA TRAUMATOLOGIA'; }
+    if (type == 'pEUM' || type == 'pTUM' || type == 'pAUM') { serviceArea = 'UROGENICOLOGIA MASTOLOGIA'; }
+    if (type == 'pEH' || type == 'pTH' || type == 'pAH') { serviceArea = 'HIDROTERAPIA'; }
+    if (type == 'pESC' || type == 'pTSC' || type == 'pASC') { serviceArea = 'SAUDE COLETIVA'; }
+
+
+    PatientModel = mongoose.model('patients', Patient);
+
+    
+    if (type.substring(0, 2) == 'pE') {
+        return PatientModel.find({ 'treatments.sessions': { $size: 0 }, 'treatments.serviceArea': serviceArea }, { _id: 1, name: 1, dateBirth: 1, cpf: 1, sex: 1, dateInclusion: 1, treatments: 1 }).sort({ name: 1 }).exec(function (err, patients) {
+            if (!err) {
+                return res.send(patients);
+            } else {
+                return console.log(err);
+            }
+
+        });
+    }
+    else if (type.substring(0, 2) == 'pT') {
+        return PatientModel.find({ 'treatments.serviceArea': serviceArea, 'treatments.sessions.typeSession': 'TRIAGEM', 'treatments.sessions.everHeld': true, 'treatments.canceledTreatment': false, 'treatments.treatmentPerformed': false }, { _id: 1, name: 1, dateBirth: 1, cpf: 1, sex: 1, dateInclusion: 1, treatments: 1 }).sort({ name: 1 }).exec(function (err, patients) {
+            if (!err) {
+                    return res.send(patients);
+
+            } else {
+                return console.log(err);
+            }
+
+        });
+    }
+    else if (type.substring(0, 2) == 'pA') {
+        return PatientModel.find({ 'treatments.serviceArea': serviceArea, 'treatments.sessions': { $size: 1 }, 'treatments.sessions.typeSession': 'TRIAGEM', 'treatments.sessions.everHeld': true, 'treatments.canceledTreatment': false, 'treatments.treatmentPerformed': false }, { _id: 1, name: 1, dateBirth: 1, cpf: 1, sex: 1, dateInclusion: 1, treatments: 1 }).sort({ name: 1 }).exec(function (err, patients) {
+            if (!err) {
+                return res.send(patients);
+
+            } else {
+                return console.log(err);
+            }
+
+        });
+    }
+};
+
 module.exports.PatientModel = PatientModel;
 module.exports.getPatientsAll = getPatientsAll;
 module.exports.getPatientsByName = getPatientsByName;
 module.exports.getPatientsByCpf = getPatientsByCpf;
 module.exports.getPatientsById = getPatientsById;
+module.exports.getPatientsByPainel = getPatientsByPainel;
 module.exports.putPatient = putPatient;
 module.exports.delPatient = delPatient;
 module.exports.postPatient = postPatient;

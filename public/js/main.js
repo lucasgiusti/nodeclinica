@@ -65,6 +65,8 @@ var AppRouter = Backbone.Router.extend({
         "patients/:idPatient/treatments/:idTreatment/sessions": "sessionList",
         "patients/:idPatient/treatments/:idTreatment/sessions/add": "addSession",
         "patients/:idPatient/treatments/:idTreatment/sessions/:id": "sessionDetails",
+        "patients/painel/:type": "patientListByPainel",
+        "patients/painel/:type/page/:page": "patientListByPainel",
         "about": "about"
     },
 
@@ -86,10 +88,21 @@ var AppRouter = Backbone.Router.extend({
     },
 
     home: function (id) {
-        this.homeView = new HomeView();
-        
-        $('#content').html(this.homeView.el);
-        selectMenuItem('home-menu');
+        var logged = new LoggedTest();
+        logged.fetch({
+            success: function (data) {
+                this.homeView = new HomeView();
+
+                $('#content').html(this.homeView.el);
+                selectMenuItem('home-menu');
+            },
+            error: function (err, message) {
+                var erro = $.parseJSON(message.responseText).status;
+                if (erro == 401) {
+                    signin();
+                }
+            }
+        });
     },
 
     calendar: function (id) {
@@ -679,6 +692,31 @@ var AppRouter = Backbone.Router.extend({
         $('#content').html(new PatientView({ model: patient }).el);
         selectMenuItem('patients-menu');
 
+    },
+
+    patientListByPainel: function (n, page) {
+
+        var n = n == null ? '' : n;
+        var p = page ? parseInt(page, 10) : 1;
+
+        if (n.length == 0)
+            var patientList = new PatientCollection();
+        else {
+            var patientList = new PatientByPainelCollection({ type: n });
+        }
+
+        patientList.fetch({
+            success: function () {
+                $("#content").html(new PatientListView({ model: patientList, page: p }).el);
+            },
+            error: function (err, message) {
+                var erro = $.parseJSON(message.responseText).status;
+                if (erro == 401) {
+                    signin();
+                }
+            }
+        });
+        selectMenuItem();
     },
 
     treatmentList: function (idPatient, page) {
