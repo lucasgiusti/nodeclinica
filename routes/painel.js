@@ -103,8 +103,7 @@ var getPainelAll = function (req, res) {
 
                                     if (!patients[i].treatments[y].sessions[z].canceledSession) {
 
-                                        console.log(patients[i].treatments[y].sessions[z].typeSession);
-
+             
                                         if (patients[i].treatments[y].sessions[z].typeSession == "TRIAGEM" && patients[i].treatments[y].sessions[z].everHeld) {
                                             if (patients[i].treatments[y].serviceArea == "NEURO ADULTO") {
                                                 pintegerpTNA = 1;

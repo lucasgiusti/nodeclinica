@@ -445,10 +445,9 @@ var getPatientsByPainel = function (req, res) {
     if (type == 'pEH' || type == 'pTH' || type == 'pAH') { serviceArea = 'HIDROTERAPIA'; }
     if (type == 'pESC' || type == 'pTSC' || type == 'pASC') { serviceArea = 'SAUDE COLETIVA'; }
 
-
     PatientModel = mongoose.model('patients', Patient);
 
-    
+
     if (type.substring(0, 2) == 'pE') {
         return PatientModel.find({ 'treatments.sessions': { $size: 0 }, 'treatments.serviceArea': serviceArea }, { _id: 1, name: 1, dateBirth: 1, cpf: 1, sex: 1, dateInclusion: 1, treatments: 1 }).sort({ name: 1 }).exec(function (err, patients) {
             if (!err) {
@@ -459,10 +458,210 @@ var getPatientsByPainel = function (req, res) {
 
         });
     }
-    else if (type.substring(0, 2) == 'pT') {
-        return PatientModel.find({ 'treatments.serviceArea': serviceArea, 'treatments.sessions.typeSession': 'TRIAGEM', 'treatments.sessions.everHeld': true, 'treatments.canceledTreatment': false, 'treatments.treatmentPerformed': false }, { _id: 1, name: 1, dateBirth: 1, cpf: 1, sex: 1, dateInclusion: 1, treatments: 1 }).sort({ name: 1 }).exec(function (err, patients) {
+    else {
+        var stringpENAid = '';
+        var stringpENPid = '';
+        var stringpEOTid = '';
+        var stringpEUMid = '';
+        var stringpEHid = '';
+        var stringpESCid = '';
+        var stringpTNAid = '';
+        var stringpTNPid = '';
+        var stringpTOTid = '';
+        var stringpTUMid = '';
+        var stringpTHid = '';
+        var stringpTSCid = '';
+        var stringpANAid = '';
+        var stringpANPid = '';
+        var stringpAOTid = '';
+        var stringpAUMid = '';
+        var stringpAHid = '';
+        var stringpASCid = '';
+
+        var pENAid = '';
+        var pENPid = '';
+        var pEOTid = '';
+        var pEUMid = '';
+        var pEHid = '';
+        var pESCid = '';
+        var pTNAid = '';
+        var pTNPid = '';
+        var pTOTid = '';
+        var pTUMid = '';
+        var pTHid = '';
+        var pTSCid = '';
+        var pANAid = '';
+        var pANPid = '';
+        var pAOTid = '';
+        var pAUMid = '';
+        var pAHid = '';
+        var pASCid = '';
+
+
+        return PatientModel.find({ 'treatments.serviceArea': serviceArea }, { _id: 1, name: 1, dateBirth: 1, cpf: 1, sex: 1, dateInclusion: 1, treatments: 1 }).sort({ name: 1 }).exec(function (err, patients) {
             if (!err) {
-                    return res.send(patients);
+
+                for (var i = 0; i < patients.length; i++) {
+
+                    pENAid = ''; pENPid = ''; pEOTid = '';
+                    pEUMid = ''; pEHid = ''; pESCid = ''; pTNAid = ''; pTNPid = '';
+                    pTOTid = ''; pTUMid = ''; pTHid = ''; pTSCid = ''; pANAid = '';
+                    pANPid = ''; pAOTid = ''; pAUMid = ''; pAHid = ''; pASCid = '';
+
+                    if (patients[i].treatments != null) {
+
+                        for (var y = 0; y < patients[i].treatments.length; y++) {
+
+                            if (!patients[i].treatments[y].treatmentPerformed && !patients[i].treatments[y].canceledTreatment) {
+
+                                if (patients[i].treatments[y].sessions.length > 0) {
+
+                                    for (var z = 0; z < patients[i].treatments[y].sessions.length; z++) {
+
+                                            if (!patients[i].treatments[y].sessions[z].canceledSession) {
+
+                                                    if (patients[i].treatments[y].sessions[z].typeSession == "TRIAGEM" && patients[i].treatments[y].sessions[z].everHeld) {
+                                                        if (patients[i].treatments[y].serviceArea == "NEURO ADULTO") {
+                                                            pTNAid = patients[i]._id;
+                                                        }
+                                                        else if (patients[i].treatments[y].serviceArea == "NEURO PEDIATRIA") {
+                                                            pTNPid = patients[i]._id;
+                                                        }
+                                                        else if (patients[i].treatments[y].serviceArea == "ORTOPEDIA TRAUMATOLOGIA") {
+                                                            pTOTid = patients[i]._id;
+                                                        }
+                                                        else if (patients[i].treatments[y].serviceArea == "UROGENICOLOGIA MASTOLOGIA") {
+                                                            pTUMid = patients[i]._id;
+                                                        }
+                                                        else if (patients[i].treatments[y].serviceArea == "HIDROTERAPIA") {
+                                                            pTHid = patients[i]._id;
+                                                        }
+                                                        else if (patients[i].treatments[y].serviceArea == "SAUDE COLETIVA") {
+                                                            pTSCid = patients[i]._id;
+                                                        }
+                                                    }
+
+                                                    if (!patients[i].treatments[y].sessions[z].everHeld) {
+                                                        if (patients[i].treatments[y].serviceArea == "NEURO ADULTO") {
+                                                            if (type.substring(0, 2) == 'pT' && pTNAid != '') {
+                                                                pANAid = '';
+                                                                pTNAid = '';
+                                                            }
+                                                            else {
+                                                                pANAid = patients[i]._id;
+                                                                pTNAid = '';
+                                                            }
+                                                            
+                                                        }
+                                                        else if (patients[i].treatments[y].serviceArea == "NEURO PEDIATRIA") {
+                                                            if (type.substring(0, 2) == 'pT' && pTNPid != '') {
+                                                                pANPid = '';
+                                                                pTNPid = '';
+                                                            }
+                                                            else {
+                                                                pANPid = patients[i]._id;
+                                                                pTNPid = '';
+                                                            }
+                                                        }
+                                                        else if (patients[i].treatments[y].serviceArea == "ORTOPEDIA TRAUMATOLOGIA") {
+                                                            if (type.substring(0, 2) == 'pT' && pTOTid != '') {
+                                                                pAOTid = '';
+                                                                pTOTid = '';
+                                                            }
+                                                            else {
+                                                                pAOTid = patients[i]._id;
+                                                                pTOTid = '';
+                                                            }
+                                                        }
+                                                        else if (patients[i].treatments[y].serviceArea == "UROGENICOLOGIA MASTOLOGIA") {
+                                                            if (type.substring(0, 2) == 'pT' && pTUMid != '') {
+                                                                pAUMid = '';
+                                                                pTUMid = '';
+                                                            }
+                                                            else {
+                                                                pAUMid = patients[i]._id;
+                                                                pTUMid = '';
+                                                            }
+                                                        }
+                                                        else if (patients[i].treatments[y].serviceArea == "HIDROTERAPIA") {
+                                                            if (type.substring(0, 2) == 'pT' && pTHid != '') {
+                                                                pAHid = '';
+                                                                pTHid = '';
+                                                            }
+                                                            else {
+                                                                pAHid = patients[i]._id;
+                                                                pTHid = '';
+                                                            }
+                                                        }
+                                                        else if (patients[i].treatments[y].serviceArea == "SAUDE COLETIVA") {
+                                                            if (type.substring(0, 2) == 'pT' && pTSCid != '') {
+                                                                pASCid = '';
+                                                                pTSCid = '';
+                                                            }
+                                                            else {
+                                                                pASCid = patients[i]._id;
+                                                                pTSCid = '';
+                                                            }
+                                                        }
+
+                                                    }
+                                            
+                                        }
+                                    }
+
+                                    if (pTNAid != '') { stringpTNAid += pTNAid + ','; };
+                                    if (pTNPid != '') { stringpTNPid += pTNPid + ','; };
+                                    if (pTOTid != '') { stringpTOTid += pTOTid + ','; };
+                                    if (pTUMid != '') { stringpTUMid += pTUMid + ','; };
+                                    if (pTHid != '') { stringpTHid += pTHid + ','; };
+                                    if (pTSCid != '') { stringpTSCid += pTSCid + ','; };
+                                    if (pANAid != '') { stringpANAid += pANAid + ','; };
+                                    if (pANPid != '') { stringpANPid += pANPid + ',' };
+                                    if (pAOTid != '') { stringpAOTid += pAOTid + ',' };
+                                    if (pAUMid != '') { stringpAUMid += pAUMid + ',' };
+                                    if (pAHid != '') { stringpAHid += pAHid + ',' };
+                                    if (pASCid != '') { stringpASCid += pASCid + ',' };
+
+
+                                    if (pTNAid != '' || pTNPid != '' ||
+                                            pTOTid != '' || pTUMid != '' || pTHid != '' || pTSCid != '' ||
+                                            pANAid != '' || pANPid != '' || pAOTid != '' || pAUMid != '' ||
+                                            pAHid != '' || pASCid != '') {
+                                        break;
+                                    }
+                                }
+
+                            }
+
+                        }
+                    }
+
+
+                }
+
+                var ids = stringpTNAid + stringpTNPid + stringpTOTid + stringpTUMid + stringpTHid + stringpTSCid;
+                ids += stringpANAid + stringpANPid + stringpAOTid + stringpAUMid + stringpAHid + stringpASCid;
+
+                ids = ids.substring(0, ids.length - 1);
+                if (ids == '') { ids = new ObjectID().toString(); };
+
+                var splitIds = ids.split(',');
+
+                var arrIds = new Array();
+
+                for (var i in splitIds) {
+                    arrIds.push(new ObjectID(splitIds[i].toString()));
+                }
+
+                return PatientModel.find({ '_id': { '$in': arrIds } }, { _id: 1, name: 1, dateBirth: 1, cpf: 1, sex: 1, dateInclusion: 1, treatments: 1 }).sort({ name: 1 }).exec(function (err, patients) {
+                    if (!err) {
+
+                        return res.send(patients);
+
+                    } else {
+                        return console.log(err);
+                    };
+                });
 
             } else {
                 return console.log(err);
@@ -470,18 +669,8 @@ var getPatientsByPainel = function (req, res) {
 
         });
     }
-    else if (type.substring(0, 2) == 'pA') {
-        return PatientModel.find({ 'treatments.serviceArea': serviceArea, 'treatments.sessions': { $size: 1 }, 'treatments.sessions.typeSession': 'TRIAGEM', 'treatments.sessions.everHeld': true, 'treatments.canceledTreatment': false, 'treatments.treatmentPerformed': false }, { _id: 1, name: 1, dateBirth: 1, cpf: 1, sex: 1, dateInclusion: 1, treatments: 1 }).sort({ name: 1 }).exec(function (err, patients) {
-            if (!err) {
-                return res.send(patients);
 
-            } else {
-                return console.log(err);
-            }
-
-        });
-    }
-};
+}
 
 module.exports.PatientModel = PatientModel;
 module.exports.getPatientsAll = getPatientsAll;
