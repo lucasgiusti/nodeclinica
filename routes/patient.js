@@ -155,8 +155,13 @@ var validatePatient = function (res, patient) {
         return false;
     }
 
-    var dateBirth = new Date(patient.dateBirth.substring(0, 4), patient.dateBirth.substring(5, 7) - 1, patient.dateBirth.substring(8, 10));
-    patient.dateBirth = dateBirth;
+    patient.dateBirth = new Date(patient.dateBirth);
+
+    if (patient.dateBirth > new Date()) {
+        console.log('Error adding patient: data de nascimento invalida');
+        res.send('500', { status: 500, error: 'Data de nascimento invalida' });
+        return false;
+    }
 
     if (patient.sex == null) {
         console.log('Error adding patient: sexo invalido');

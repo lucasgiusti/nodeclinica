@@ -66,6 +66,12 @@ var validateSession = function (res, session) {
         return false;
     }
 
+    if (Date.parse(session.dateSchedulingStart) < Date.parse(new Date())) {
+        console.log('Error adding session: data de Agendamento Inicio invalida');
+        res.send('500', { status: 500, error: 'Data de Agendamento Inicio invalida' });
+        return false;
+    }
+
     if (!(session.everHeld == 'true' || session.everHeld == true)) {
         session.everHeld = false;
     }
