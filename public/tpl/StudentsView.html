@@ -133,28 +133,20 @@
 
 
     // Account
-    function AccountData(fusername, fpassword) {
+    function AccountData(fusername, fpassword, fpasswordconfirm) {
         this.username = fusername;
         this.password = fpassword;
+        this.passwordconfirm = fpasswordconfirm;
         this.type = 'ALUNO';
         this.toJsonString = function () { return JSON.stringify(this); };
 
     };
 
-    function passwordValid() {
-        var pass = $(".modal-body #password").val();
-        var passConfirm = $(".modal-body #passwordconfirm").val();
-
-        return (pass != '' && passConfirm != '' && pass == passConfirm);
-    }
-
     function addAccess() {
+        $("#addAccountAlert").hide();
         var username = $(".modal-body #username").val();
 
-        if (!passwordValid())
-            return;
-
-        var accountData = new AccountData($(".modal-body #username").val(), $(".modal-body #password").val());
+        var accountData = new AccountData($(".modal-body #username").val(), $(".modal-body #password").val(), $(".modal-body #passwordconfirm").val());
 
         jQuery.ajax({
             type: "PUT",

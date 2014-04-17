@@ -116,22 +116,37 @@ var putAccount = function (req, res) {
 
         var id = req.params.id;
         var accountNew = req.body;
-        console.log('Updating account: ' + id);
 
-        AccountModel.findOne({ 'username': id }, { _id: 1 }, function (err, account) {
-            if (!err) {
-                if (account) {
-                    account.remove(function () { registerAccount(res, accountNew); });
-                }
-                else {
-                    registerAccount(res, accountNew);
-                }
+        if (accountNew.password.length < 6) {
+            console.log('Error updating account: a senha deve ter mais de 5 caracteres');
+            res.send('500', { status: 500, error: 'A senha deve ter mais de 5 caracteres' });
+        }
+        else {
 
-            } else {
-                console.log('Error updating account: ' + err);
-                res.send('500', { status: 500, error: err });
+            if (accountNew.password != accountNew.passwordconfirm) {
+                console.log('Error updating account: confirmacao de senha invalida');
+                res.send('500', { status: 500, error: 'Confirmação de senha inválida' });
             }
-        });
+            else {
+
+                console.log('Updating account: ' + id);
+
+                AccountModel.findOne({ 'username': id }, { _id: 1 }, function (err, account) {
+                    if (!err) {
+                        if (account) {
+                            account.remove(function () { registerAccount(res, accountNew); });
+                        }
+                        else {
+                            registerAccount(res, accountNew);
+                        }
+
+                    } else {
+                        console.log('Error updating account: ' + err);
+                        res.send('500', { status: 500, error: err });
+                    }
+                });
+            }
+        }
     }
 };
 //************************************************************
