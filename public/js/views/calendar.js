@@ -12,8 +12,6 @@
         this.carregaAlunos();
         this.carregaProfessores();
 
-        this.carregaAgenda('VAZIO', null);
-
         return this;
     },
 
@@ -48,27 +46,6 @@
         var y = date.getFullYear();
         
         $("#calendar", this.el).html('');
-
-        if (type == 'VAZIO') {
-            $("#calendar", this.el).fullCalendar({
-                header: {
-                    left: 'prev,next today',
-                    center: 'title'
-                },
-
-                defaultView: 'agendaWeek',
-                editable: false,
-                contentHeight: 400,
-                ignoreTimezone: false
-            });
-
-            var CurrentDate = new Date();
-            var CurrentYear = CurrentDate.getFullYear();
-            //$("#calendar", this.el).fullCalendar('render', 1);
-
-        }
-        else {
-
 
             $("#calendar", this.el).fullCalendar({
                 header: {
@@ -169,7 +146,6 @@
                 */
 
             })
-        }
         
     },
 
