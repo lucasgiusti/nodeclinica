@@ -111,7 +111,49 @@ var getSessionsByType = function (req, res) {
 
                             if (patients[i].treatments[j].sessions) {
                                 for (var z = 0; z < patients[i].treatments[j].sessions.length; z++) {
-                                    if (patients[i].treatments[j].sessions[z].studentId != id) {
+                                    if (patients[i].treatments[j].sessions[z].studentId != id || patients[i].treatments[j].sessions[z].everHeld || patients[i].treatments[j].sessions[z].canceledSession) {
+                                        patients[i].treatments[j].sessions.pull({ _id: patients[i].treatments[j].sessions[z]._id });
+                                        z--;
+                                    }
+                                }
+                            }
+
+                            if (patients[i].treatments[j].sessions.length == 0) {
+                                patients[i].treatments.pull({ _id: patients[i].treatments[j]._id });
+                                j--;
+                            }
+                        }
+
+                        if (patients[i].treatments.length == 0) {
+                            //patients[i].pull({ _id: patients[i]._id });
+                            //i--;
+                        }
+
+
+                    }
+
+                }
+
+
+                return res.send(patients);
+            } else {
+                return console.log(err);
+            }
+        });
+    }
+    else {
+        return patientRoute.PatientModel.find({ 'treatments.sessions.teacherId': id }, { _id: 1, name: 1, 'treatments': 1 }, function (err, patients) {
+            if (!err) {
+
+
+                for (var i = 0; i < patients.length; i++) {
+
+                    if (patients[i].treatments) {
+                        for (var j = 0; j < patients[i].treatments.length; j++) {
+
+                            if (patients[i].treatments[j].sessions) {
+                                for (var z = 0; z < patients[i].treatments[j].sessions.length; z++) {
+                                    if (patients[i].treatments[j].sessions[z].teacherId != id || patients[i].treatments[j].sessions[z].everHeld || patients[i].treatments[j].sessions[z].canceledSession) {
                                         patients[i].treatments[j].sessions.pull({ _id: patients[i].treatments[j].sessions[z]._id });
                                         z--;
                                     }
@@ -135,15 +177,6 @@ var getSessionsByType = function (req, res) {
                 }
 
 
-                return res.send(patients);
-            } else {
-                return console.log(err);
-            }
-        });
-    }
-    else {
-        return patientRoute.PatientModel.find({ 'treatments.sessions.teacherId': id }, { _id: 1, name: 1, 'treatments.$': 1 }, function (err, patients) {
-            if (!err) {
                 return res.send(patients);
             } else {
                 return console.log(err);
