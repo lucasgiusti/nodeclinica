@@ -368,11 +368,12 @@ function Calendar(element, options, eventSources) {
 
 
 	function renderView(inc) {
+
 		if (
 			!currentView.start || // never rendered before
 			inc || date < currentView.start || date >= currentView.end // or new date range
 		) {
-			if (elementVisible()) {
+		    if (elementVisible()) {
 				_renderView(inc);
 			}
 		}
@@ -610,11 +611,13 @@ function Calendar(element, options, eventSources) {
 
 	
 	function gotoDate(year, month, dateOfMonth) {
+	    
 		if (year instanceof Date) {
 			date = cloneDate(year); // provided 1 argument, a Date
 		}else{
 			setYMD(date, year, month, dateOfMonth);
 		}
+		
 		renderView();
 	}
 	

@@ -12,6 +12,8 @@
         this.carregaAlunos();
         this.carregaProfessores();
 
+        this.carregaAgenda('VAZIO', null);
+
         return this;
     },
 
@@ -45,108 +47,129 @@
         var m = date.getMonth();
         var y = date.getFullYear();
         
-        
         $("#calendar", this.el).html('');
-        $("#calendar", this.el).fullCalendar({
-            header: {
-                left: 'prev,next today',
-                center: 'title'
-            },
-            
-            defaultView: 'agendaWeek',
-            editable: false,
-            contentHeight: 400,
-            ignoreTimezone: false,
-            events: function (start, end, callback)
-            {
-                $.getJSON('sessions/' + id + '/type/' + type + '', function (data) {
-                    var events = [];
 
-                    $.each(data, function (key, val) {
-                        var idPatient = val._id;
-                        $.each(val.treatments, function (key, val) {data
-                            var idTreatment = val._id;
-                            
-                            $.each(val.sessions, function (key, val) {
+        if (type == 'VAZIO') {
+            $("#calendar", this.el).fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title'
+                },
 
-                                events.push({
-                                    title: val.typeSession,
-                                    start:  val.dateSchedulingStart,
-                                    end: val.dateSchedulingEnd,
-                                    url: '#patients/' + idPatient + '/treatments/' + idTreatment + '/sessions/' + val._id
+                defaultView: 'agendaWeek',
+                editable: false,
+                contentHeight: 400,
+                ignoreTimezone: false
+            });
+
+            var CurrentDate = new Date();
+            var CurrentYear = CurrentDate.getFullYear();
+            //$("#calendar", this.el).fullCalendar('render', 1);
+
+        }
+        else {
+
+
+            $("#calendar", this.el).fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title'
+                },
+
+                defaultView: 'agendaWeek',
+                editable: false,
+                contentHeight: 400,
+                ignoreTimezone: false,
+                events: function (start, end, callback) {
+                    $.getJSON('sessions/' + id + '/type/' + type + '', function (data) {
+                        var events = [];
+
+                        $.each(data, function (key, val) {
+                            var idPatient = val._id;
+                            $.each(val.treatments, function (key, val) {
+                                data
+                                var idTreatment = val._id;
+
+                                $.each(val.sessions, function (key, val) {
+
+                                    events.push({
+                                        title: val.typeSession,
+                                        start: val.dateSchedulingStart,
+                                        end: val.dateSchedulingEnd,
+                                        url: '#patients/' + idPatient + '/treatments/' + idTreatment + '/sessions/' + val._id
+                                    });
+
                                 });
-                                
-                                });
+
+                            });
+
 
                         });
-
-
+                        callback(events);
                     });
-                    callback(events);
-                });
-            }
-/*
-            events: {
-                url: 'sessions/' + id + '/type/' + type + '',
-                type: 'GET',
-                data: {
-                    custom_param1: dateSchedulingStart,
-                    custom_param2: dateSchedulingEnd
-                },
-                error: function() {
-                    alert('there was an error while fetching events!');
-                },
-                color: 'yellow',   // a non-ajax option
-                textColor: 'black' // a non-ajax option
-            }
-
-
-
-            events: [
-                {
-                    title: 'All Day Event',
-                    start: new Date(y, m, d , 19, 0),
-                    end: new Date(y, m, d, 20, 00),
-                },
-                {
-                    title: 'Long Event',
-                    start: new Date(y, m, d - 5, 19, 0),
-                    end: new Date(y, m, d - 5, 20, 00),
-                },
-                {
-                    id: 999,
-                    title: 'Repeating Event',
-                    start: new Date(y, m, d - 3, 16, 0),
-                    allDay: false
-                },
-                {
-                    id: 999,
-                    title: 'Repeating Event',
-                    start: new Date(y, m, d + 4, 16, 0),
-                    allDay: false
-                },
-                {
-                    title: 'Meeting',
-                    start: new Date(y, m, d, 10, 30),
-                    allDay: false
-                },
-                {
-                    title: 'Birthday Party',
-                    start: new Date(y, m, d + 1, 19, 0),
-                    end: new Date(y, m, d + 1, 20, 00),
-                    allDay: false
-                },
-                {
-                    title: 'Click for Google',
-                    start: new Date(y, m, 28, 11, 0),
-                    end: new Date(y, m, 28, 12, 00),
-                    url: 'http://google.com/'
                 }
-            ]
-*/
+                /*
+                            events: {
+                                url: 'sessions/' + id + '/type/' + type + '',
+                                type: 'GET',
+                                data: {
+                                    custom_param1: dateSchedulingStart,
+                                    custom_param2: dateSchedulingEnd
+                                },
+                                error: function() {
+                                    alert('there was an error while fetching events!');
+                                },
+                                color: 'yellow',   // a non-ajax option
+                                textColor: 'black' // a non-ajax option
+                            }
+                
+                
+                
+                            events: [
+                                {
+                                    title: 'All Day Event',
+                                    start: new Date(y, m, d , 19, 0),
+                                    end: new Date(y, m, d, 20, 00),
+                                },
+                                {
+                                    title: 'Long Event',
+                                    start: new Date(y, m, d - 5, 19, 0),
+                                    end: new Date(y, m, d - 5, 20, 00),
+                                },
+                                {
+                                    id: 999,
+                                    title: 'Repeating Event',
+                                    start: new Date(y, m, d - 3, 16, 0),
+                                    allDay: false
+                                },
+                                {
+                                    id: 999,
+                                    title: 'Repeating Event',
+                                    start: new Date(y, m, d + 4, 16, 0),
+                                    allDay: false
+                                },
+                                {
+                                    title: 'Meeting',
+                                    start: new Date(y, m, d, 10, 30),
+                                    allDay: false
+                                },
+                                {
+                                    title: 'Birthday Party',
+                                    start: new Date(y, m, d + 1, 19, 0),
+                                    end: new Date(y, m, d + 1, 20, 00),
+                                    allDay: false
+                                },
+                                {
+                                    title: 'Click for Google',
+                                    start: new Date(y, m, 28, 11, 0),
+                                    end: new Date(y, m, 28, 12, 00),
+                                    url: 'http://google.com/'
+                                }
+                            ]
+                */
 
-        })
-
+            })
+        }
         
     },
 
