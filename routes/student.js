@@ -7,7 +7,8 @@ var express = require("express"),
     LocalStrategy = require('passport-local').Strategy,
     passportLocalMongoose = require('passport-local-mongoose'),
     accountRoute = require("./account");
-    userRoute = require("./user");
+    userRoute = require("./user"),
+    patientRoute = require("./patient");
 //************************************************************
 
 
@@ -134,9 +135,22 @@ var delStudent = function (req, res) {
     else {
         var id = req.params.id;
         console.log('Deleting user: ' + id);
-        userRoute.delUser(res, req, id);
-    }
-};
+
+        return patientRoute.PatientModel.find({ 'treatments.sessions.studentId': id }, { _id: 1, name: 1, 'treatments': 1 }, function (err, patients) {
+            if (!err) {
+                if (patients.length > 0) {
+                    console.log('Error deleting student: o aluno já está vinculado a um atendimento. Só é permitido desativá-lo');
+                    res.send('500', { status: 500, error: 'O aluno já está vinculado a um atendimento. Só é permitido desativá-lo' });
+                }
+                else {
+                    userRoute.delUser(res, req, id);
+                }
+            } else {
+                return console.log(err);
+            }
+        });
+    };
+}
 
 var postStudent = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {

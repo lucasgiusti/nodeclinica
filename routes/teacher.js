@@ -6,8 +6,9 @@ var express = require("express"),
     passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
     passportLocalMongoose = require('passport-local-mongoose'),
-    accountRoute = require("./account");
-    userRoute = require("./user");
+    accountRoute = require("./account"),
+    userRoute = require("./user"),
+    patientRoute = require("./patient");
 //************************************************************
 
 
@@ -133,7 +134,20 @@ var delTeacher = function (req, res) {
     else {
         var id = req.params.id;
         console.log('Deleting user: ' + id);
-        userRoute.delUser(res, req, id);
+
+        return patientRoute.PatientModel.find({ 'treatments.sessions.teacherId': id }, { _id: 1, name: 1, 'treatments': 1 }, function (err, patients) {
+            if (!err) {
+                if (patients.length > 0) {
+                    console.log('Error deleting teacher: o professor já está vinculado a um atendimento. Só é permitido desativá-lo');
+                    res.send('500', { status: 500, error: 'O professor já está vinculado a um atendimento. Só é permitido desativá-lo' });
+                }
+                else {
+                    userRoute.delUser(res, req, id);
+                }
+            } else {
+                return console.log(err);
+            }
+        });
     }
 };
 
