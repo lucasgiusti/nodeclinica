@@ -1,4 +1,9 @@
-﻿var validaCpf = function (str) {
+﻿var path = require("path"),
+    mime = require('mime'),
+    http = require('http'),
+    fs = require('fs');
+
+var validaCpf = function (str) {
     if (str == null || str == '') {
         return false;
     }
@@ -39,4 +44,20 @@
         return false;
 }
 
+var downloadManualUsuario = function (req, res) {
+    
+    var file = __dirname.replace('routes','') + 'public/downloads/manualUsuario.pdf';
+
+    var filename = path.basename(file);
+    var mimetype = mime.lookup(file);
+
+    res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+    res.setHeader('Content-type', mimetype);
+
+    var filestream = fs.createReadStream(file);
+    filestream.pipe(res);
+
+}
+
 module.exports.validaCpf = validaCpf;
+module.exports.downloadManualUsuario = downloadManualUsuario;

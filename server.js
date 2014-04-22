@@ -3,7 +3,6 @@
 var application_root = __dirname,
     express = require("express"),
     path = require("path"),
-    mime = require('mime'),
     http = require('http'),
     fs = require('fs'),
     mongoose = require('mongoose'),
@@ -22,7 +21,8 @@ var application_root = __dirname,
     patientRoute = require("./routes/patient"),
     treatmentRoute = require("./routes/treatment"),
     sessionRoute = require("./routes/session"),
-    painelRoute = require("./routes/painel");
+    painelRoute = require("./routes/painel"),
+    utilRoute = require("./routes/util");
 
 
 // Config
@@ -150,20 +150,7 @@ app.put('/patients/:idPatient/treatments/:idTreatment/sessions/:id', auth, sessi
 app.get('/painel', auth, painelRoute.getPainelAll);
 
 // DOWNLOADS
-app.get('/downloads/manualUsuario', auth, function (req, res) {
-
-    var file = __dirname + '/public/downloads/manualUsuario.pdf';
-
-    var filename = path.basename(file);
-    var mimetype = mime.lookup(file);
-
-    res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-    res.setHeader('Content-type', mimetype);
-
-    var filestream = fs.createReadStream(file);
-    filestream.pipe(res);
-
-});
+app.get('/downloads/manualUsuario', auth, utilRoute.downloadManualUsuario);
 
 
 
