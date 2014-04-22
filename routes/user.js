@@ -263,7 +263,6 @@ var putUser = function (res, user, id) {
 
 var postUser = function (res, user) {
     UserModel = mongoose.model('users', User);
-    console.log(user.type);
     UserModel.findOne({ 'registration': user.registration, 'type': user.type }, function (err, u) {
         if (!err) {
             if (u) {

@@ -212,8 +212,6 @@ var postTreatment = function (req, res) {
         console.log('Adding treatment');
         treatment.dateInclusion = new Date();
 
-        console.log(treatment);
-
         if (validateTreatment(res, treatment)) {
 
             PatientModel = mongoose.model('patients', patientRoute.Patient);

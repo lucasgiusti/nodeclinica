@@ -270,7 +270,6 @@ var horarioDisponivelPatient = function (req, res, callback) {
                         }
                     }
                 }
-                console.log("retornando");
                 if (callback) {
                     callback(req, res);
                 }

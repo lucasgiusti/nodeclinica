@@ -518,8 +518,6 @@ var getPatientsByPainel = function (req, res) {
                     }
                 }
 
-                console.log(arrIds);
-
                 //incluindo novo objectId para ter pelo menos um
                 //o correto é nao pesquisar e retornar vazio
                 arrIds.push(new ObjectID());
