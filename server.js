@@ -3,6 +3,7 @@
 var application_root = __dirname,
     express = require("express"),
     path = require("path"),
+    mime = require('mime'),
     http = require('http'),
     fs = require('fs'),
     mongoose = require('mongoose'),
@@ -22,9 +23,6 @@ var application_root = __dirname,
     treatmentRoute = require("./routes/treatment"),
     sessionRoute = require("./routes/session"),
     painelRoute = require("./routes/painel");
-
-var leituraSincrona = require('./leitura_sync');
-var leituraAssincrona = require('./leitura_async');
 
 
 // Config
@@ -152,38 +150,19 @@ app.put('/patients/:idPatient/treatments/:idTreatment/sessions/:id', auth, sessi
 app.get('/painel', auth, painelRoute.getPainelAll);
 
 // DOWNLOADS
-app.get('/downloads/manualUsuario', function (res) {
+app.get('/downloads/manualUsuario', function (req, res) {
 
-    var file = './public/downloads/manualUsuario.pdf';
-    var stream = fs.createWriteStream(file);
+    var file = __dirname + '/public/downloads/manualUsuario.pdf';
 
-    console.log('start download node.');
+    var filename = path.basename(file);
+    var mimetype = mime.lookup(file);
 
-    //get total bits
-    var total = parseInt(res.headers['content-length']);
+    res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+    res.setHeader('Content-type', mimetype);
 
-    res.on('data', function (data) {
-        //console.log('baixando file...');
-        stream.write(data);
+    var filestream = fs.createReadStream(file);
+    filestream.pipe(res);
 
-        fs.stat(file, function (erro, stat) {
-
-            if (erro) throw erro;
-
-            if (total)
-                var porcent = ((stat.size / total).toFixed(2)) * 100;
-            console.log('downloading: ' + stat.size + ' bits ' + ' total: ' + total + 'bits' + ' % ' + porcent);
-        })
-
-    });
-
-    res.on('end', function () {
-        console.log('downloaded.');
-        stream.end();
-
-        leituraAssincrona(file);
-        leituraSincrona(file);
-    });
 });
 
 
