@@ -7,10 +7,6 @@ var AppRouter = Backbone.Router.extend({
     routes: {
         "": "home",
         "calendar": "calendar",
-        "wines": "wineList",
-        "wines/page/:page": "wineList",
-        "wines/add": "addWine",
-        "wines/:id": "wineDetails",
         "students": "studentList",
         "students/page/:page": "studentList",
         "students/name/:name": "studentListByName",
@@ -111,34 +107,6 @@ var AppRouter = Backbone.Router.extend({
         $('#content').html(this.calendarView.el);
         selectMenuItem('calendar-menu');
     },
-
-    wineList: function (page) {
-        var p = page ? parseInt(page, 10) : 1;
-        var wineList = new WineCollection();
-        wineList.fetch({ success: function () {
-            $("#content").html(new WineListView({ model: wineList, page: p }).el);
-        }
-        });
-        selectMenuItem('home-menu');
-    },
-
-    wineDetails: function (id) {
-        var wine = new Wine({ _id: id });
-        wine.fetch({ success: function () {
-            $("#content").html(new WineView({ model: wine }).el);
-        }
-        });
-        
-    },
-
-    addWine: function () {
-        var wine = new Wine();
-        $('#content').html(new WineView({ model: wine }).el);
-        selectMenuItem('add-menu');
-    },
-
-
-
 
     studentList: function (page) {
         var p = page ? parseInt(page, 10) : 1;
@@ -812,7 +780,7 @@ var AppRouter = Backbone.Router.extend({
 
 });
 
-utils.loadTemplate(['HomeView', 'HeaderView', 'CalendarView', 'WineView', 'WineListItemView', 'StudentsView', 'StudentView', 'TeachersView', 'TeacherView', 'AttendantsView', 'AttendantView', 'ManagersView', 'ManagerView', 'PatientsView', 'PatientView', 'TreatmentsView', 'TreatmentView', 'SessionsView', 'SessionView', 'AboutView', 'BaseModalView'], function () {
+utils.loadTemplate(['HomeView', 'HeaderView', 'CalendarView', 'StudentsView', 'StudentView', 'TeachersView', 'TeacherView', 'AttendantsView', 'AttendantView', 'ManagersView', 'ManagerView', 'PatientsView', 'PatientView', 'TreatmentsView', 'TreatmentView', 'SessionsView', 'SessionView', 'AboutView', 'BaseModalView'], function () {
     app = new AppRouter();
     Backbone.history.start();
 });
