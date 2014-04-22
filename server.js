@@ -150,7 +150,7 @@ app.put('/patients/:idPatient/treatments/:idTreatment/sessions/:id', auth, sessi
 app.get('/painel', auth, painelRoute.getPainelAll);
 
 // DOWNLOADS
-app.get('/downloads/manualUsuario', function (req, res) {
+app.get('/downloads/manualUsuario', auth, function (req, res) {
 
     var file = __dirname + '/public/downloads/manualUsuario.pdf';
 
