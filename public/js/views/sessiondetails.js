@@ -16,6 +16,11 @@ window.SessionView = Backbone.View.extend({
         $("#dateSchedulingStart", this.el).datetimepicker({ format: 'dd/mm/yyyy hh:ii', autoclose: true, minuteStep: 60 });
         $('#dateSchedulingEnd', this.el).datetimepicker({ format: 'dd/mm/yyyy hh:ii', autoclose: true, minuteStep: 60 });
 
+        if (Date.parse(session.dateSchedulingStart) < Date.parse(new Date())) {
+            $("#dateSchedulingStart", this.el).attr("disabled", "disabled");
+            $("#dateSchedulingEnd", this.el).attr("disabled", "disabled");
+        }
+
         //$('legend', this.el).append(patient.name);
         return this;
 
