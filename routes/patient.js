@@ -381,6 +381,28 @@ var getPatientsAll = function (req, res) {
     });
 };
 
+var getRelPatientsAll = function (req, res) {
+    PatientModel = mongoose.model('patients', Patient);
+    return PatientModel.find({}, {name: 1, dateBirth: 1, cpf: 1, sex: 1, phone1: 1, address: 1, number: 1, cep: 1, complement: 1, city: 1, state: 1, dateInclusion: 1}).sort({ name: 1 }).exec(function (err, patients) {
+        if (!err) {
+            return res.send(patients);
+        } else {
+            return console.log(err);
+        }
+    });
+};
+
+var getRelCompletePatientsAll = function (req, res) {
+    PatientModel = mongoose.model('patients', Patient);
+    return PatientModel.find({}).sort({ name: 1 }).exec(function (err, patients) {
+        if (!err) {
+            return res.send(patients);
+        } else {
+            return console.log(err);
+        }
+    });
+};
+
 var getPatientsByName = function (req, res) {
     var name = req.params.name;
     PatientModel = mongoose.model('patients', Patient);
@@ -557,6 +579,8 @@ module.exports.getPatientsByName = getPatientsByName;
 module.exports.getPatientsByCpf = getPatientsByCpf;
 module.exports.getPatientsById = getPatientsById;
 module.exports.getPatientsByPainel = getPatientsByPainel;
+module.exports.getRelPatientsAll = getRelPatientsAll;
+module.exports.getRelCompletePatientsAll = getRelCompletePatientsAll;
 module.exports.putPatient = putPatient;
 module.exports.delPatient = delPatient;
 module.exports.postPatient = postPatient;

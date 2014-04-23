@@ -45,6 +45,17 @@ var User = new Schema({
 
 var UserModel = mongoose.model('users', User);
 
+var getRelUsersAll = function (req, res) {
+    UserModel = mongoose.model('users', User);
+    return UserModel.find({}).sort({ type: 1, name: 1 }).exec(function (err, users) {
+        if (!err) {
+            return res.send(users);
+        } else {
+            return console.log(err);
+        }
+    });
+};
+
 var validateUser = function (res, user) {
 
     if (!(iz(user.type).required().equal('ALUNO').valid
@@ -375,6 +386,7 @@ var delUser = function (res, req, id) {
 
 module.exports.UserModel = UserModel;
 module.exports.validateUser = validateUser;
+module.exports.getRelUsersAll = getRelUsersAll;
 module.exports.putUser = putUser;
 module.exports.postUser = postUser;
 module.exports.delUser = delUser;

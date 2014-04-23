@@ -1,0 +1,214 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Clinica USCS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    
+    <style>
+        body {
+            padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+        }
+    </style>
+    <link href="../css/styles.css" rel="stylesheet">
+    
+</head>
+
+<body>
+
+<h4 style="margin: 0">Relatório de Pacientes - Completo</h4>
+    <br/>
+<div class="container">
+    <div class="row-fluid">
+        <div id="content" class="span12>">
+
+
+<div class="row">
+    <div id="divDados" class="col-md12">
+        <table id="tbData" class="table table-hover" style="width: 100%">
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+        </div>
+    </div>
+
+</div>
+<!-- /container -->
+
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="../lib/jquery-1.8.2.min.js"></script>
+<script src="../js/utils.js"></script>
+<script type="text/javascript">
+    
+    $.getJSON('../relcompletepatients', function (data) {
+
+        var html = '';
+
+        for (var i = 0; i < data.length; i++) {
+
+            html += '<tr><td colspan="7"><br /><div style="border: 1px solid"></div></td></tr>'
+            html += '<tr>';
+            html += '<th style="text-align: left; font-size: 12px">Nome</th>';
+            html += '<th style="text-align: left; font-size: 12px">Data Nascimento</th>';
+            html += '<th style="text-align: left; font-size: 12px">CPF</th>';
+            html += '<th style="text-align: left; font-size: 12px">Sexo</th>';
+            html += '<th style="text-align: left; font-size: 12px">Telefone</th>';
+            html += '<th style="text-align: left; font-size: 12px">Endereço</th>';
+            html += '<th style="text-align: left; font-size: 12px">Data Inclusão</th>';
+            html += '</tr>';
+
+            html += '<tr>';
+            html += '<td style="font-size: 12px">' + data[i].name + '</td>';
+
+            if (data[i].dateBirth != null)
+                html += '<td style="font-size: 12px">' + formattedDate(data[i].dateBirth) + '</td>';
+            else
+                html += '<td></td>';
+
+            if (data[i].cpf != null)
+                html += '<td style="font-size: 12px">' + data[i].cpf + '</td>';
+            else
+                html += '<td></td>';
+
+            if (data[i].sex != null)
+                html += '<td style="font-size: 12px">' + data[i].sex + '</td>';
+            else
+                html += '<td></td>';
+
+            if (data[i].phone1 != null)
+                html += '<td style="font-size: 12px">' + data[i].phone1 + '</td>';
+            else
+                html += '<td></td>';
+
+            html += '<td style="font-size: 12px">' + data[i].address + ', ' + data[i].number + ', ';
+
+            if (data[i].cep != null)
+                html += data[i].cep + ', ';
+
+            if (data[i].complement != null)
+                html += data[i].complement + ', ';
+
+            html += data[i].city + '-' + data[i].state + '</td>';
+
+            if (data[i].dateInclusion != null)
+                html += '<td style="font-size: 12px">' + formattedDate(data[i].dateInclusion) + '</td>';
+            else
+                html += '<td></td>';
+
+            html += '</tr>';
+
+            for (var y = 0; y < data[i].treatments.length; y++) {
+
+                html += '<tr><td>&nbsp;</td></tr>';
+                html += '<tr>';
+                html += '<th style="text-align: left; font-size: 12px">Tratamento</th>';
+                html += '<th style="text-align: left; font-size: 12px">Área Atendimento</th>';
+                html += '<th style="text-align: left; font-size: 12px">Médico</th>';
+                html += '<th style="text-align: left; font-size: 12px">Realizado</th>';
+                html += '<th style="text-align: left; font-size: 12px">Cancelado</th>';
+                html += '<th style="text-align: left; font-size: 12px">Data Inclusão</th>';
+                html += '</tr>';
+                html += '<tr></tr>'
+
+
+                html += '<tr>';
+                html += '<td></td>';
+                html += '<td style="font-size: 12px">' + data[i].treatments[y].serviceArea + '</td>';
+                html += '<td style="font-size: 12px">' + data[i].treatments[y].doctor + ' - ' + data[i].treatments[y].CRMDoctor + '</td>';
+
+                if (data[i].treatments[y].treatmentPerformed)
+                    html += '<td style="font-size: 12px">SIM</td>';
+                else
+                    html += '<td style="font-size: 12px">NAO</td>';
+
+                if (data[i].treatments[y].canceledTreatment)
+                    html += '<td style="font-size: 12px">SIM</td>';
+                else
+                    html += '<td style="font-size: 12px">NAO</td>';
+
+                if (data[i].treatments[y].dateInclusion != null)
+                    html += '<td style="font-size: 12px">' + formattedDate(data[i].treatments[y].dateInclusion) + '</td>';
+                else
+                    html += '<td></td>';
+
+
+                html += '</tr>';
+
+
+
+                html += '<tr>';
+                html += '<th style="text-align: left; font-size: 12px"></th>';
+                html += '<th style="text-align: left; font-size: 12px">Aluno</th>';
+                html += '<th style="text-align: left; font-size: 12px">Professor</th>';
+                html += '<th style="text-align: left; font-size: 12px">Realizada</th>';
+                html += '<th style="text-align: left; font-size: 12px">Cancelada</th>';
+                html += '<th style="text-align: left; font-size: 12px">Data Agendamento Inicio</th>';
+                html += '<th style="text-align: left; font-size: 12px">Data Agendamento Fim</th>';
+                html += '</tr>';
+                html += '<tr></tr>'
+
+                for (var z = 0; z < data[i].treatments[y].sessions.length; z++) {
+
+                    html += '<tr>';
+                    html += '<td style="font-size: 12px">' + data[i].treatments[y].sessions[z].typeSession + '</td>';
+                    html += '<td style="font-size: 12px">' + data[i].treatments[y].sessions[z].studentName + '</td>';
+                    html += '<td style="font-size: 12px">' + data[i].treatments[y].sessions[z].teacherName + '</td>';
+
+                    if (data[i].treatments[y].sessions[z].everHeld)
+                        html += '<td style="font-size: 12px">SIM</td>';
+                    else
+                        html += '<td style="font-size: 12px">NAO</td>';
+
+                    if (data[i].treatments[y].sessions[z].canceledSession)
+                        html += '<td style="font-size: 12px">SIM</td>';
+                    else
+                        html += '<td style="font-size: 12px">NAO</td>';
+
+
+                    if (data[i].treatments[y].sessions[z].dateSchedulingStart != null)
+                        html += '<td style="font-size: 12px">' + formattedDate(data[i].treatments[y].sessions[z].dateSchedulingStart) + '</td>';
+                    else
+                        html += '<td></td>';
+
+                    if (data[i].treatments[y].sessions[z].dateSchedulingEnd != null)
+                        html += '<td style="font-size: 12px">' + formattedDate(data[i].treatments[y].sessions[z].dateSchedulingEnd) + '</td>';
+                    else
+                        html += '<td></td>';
+
+                    html += '</tr>';
+
+
+                }
+
+                html += '</td></tr>'
+
+
+
+
+            }
+            html += '</td></tr>'
+
+        }
+
+        $('#tbData > tbody:last').append(html);
+        
+
+    });
+    
+</script>
+
+</body>
+</html>
+
+
+

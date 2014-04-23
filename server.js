@@ -153,6 +153,10 @@ app.get('/painel', auth, painelRoute.getPainelAll);
 app.get('/downloads/manualUsuario', auth, utilRoute.downloadManualUsuario);
 
 
+// RELATORIOS
+app.get('/relpatients', auth, patientRoute.getRelPatientsAll);
+app.get('/relcompletepatients', auth, patientRoute.getRelCompletePatientsAll);
+app.get('/relusers', auth, userRoute.getRelUsersAll);
 
 
 // Launch server
