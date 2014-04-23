@@ -116,6 +116,7 @@
                 html += '<th style="text-align: left; font-size: 12px">Médico</th>';
                 html += '<th style="text-align: left; font-size: 12px">Realizado</th>';
                 html += '<th style="text-align: left; font-size: 12px">Cancelado</th>';
+                html += '<th style="text-align: left; font-size: 12px">Diagnóstico</th>';
                 html += '<th style="text-align: left; font-size: 12px">Data Inclusão</th>';
                 html += '</tr>';
                 html += '<tr></tr>'
@@ -123,21 +124,23 @@
 
                 html += '<tr>';
                 html += '<td></td>';
-                html += '<td style="font-size: 12px">' + data[i].treatments[y].serviceArea + '</td>';
-                html += '<td style="font-size: 12px">' + data[i].treatments[y].doctor + ' - ' + data[i].treatments[y].CRMDoctor + '</td>';
+                html += '<td style="font-size: 12px; vertical-align: top">' + data[i].treatments[y].serviceArea + '</td>';
+                html += '<td style="font-size: 12px; vertical-align: top">' + data[i].treatments[y].doctor + ' - ' + data[i].treatments[y].CRMDoctor + '</td>';
 
                 if (data[i].treatments[y].treatmentPerformed)
-                    html += '<td style="font-size: 12px">SIM</td>';
+                    html += '<td style="font-size: 12px; vertical-align: top">SIM</td>';
                 else
-                    html += '<td style="font-size: 12px">NAO</td>';
+                    html += '<td style="font-size: 12px; vertical-align: top">NAO</td>';
 
                 if (data[i].treatments[y].canceledTreatment)
-                    html += '<td style="font-size: 12px">SIM</td>';
+                    html += '<td style="font-size: 12px; vertical-align: top">SIM</td>';
                 else
-                    html += '<td style="font-size: 12px">NAO</td>';
+                    html += '<td style="font-size: 12px; vertical-align: top">NAO</td>';
+
+                html += '<td style="text-align: left; vertical-align: top; font-size: 12px" width="30%">' + data[i].treatments[y].diagnosis + '</td>';
 
                 if (data[i].treatments[y].dateInclusion != null)
-                    html += '<td style="font-size: 12px">' + formattedDate(data[i].treatments[y].dateInclusion) + '</td>';
+                    html += '<td style="font-size: 12px; vertical-align: top">' + formattedDate(data[i].treatments[y].dateInclusion) + '</td>';
                 else
                     html += '<td></td>';
 
