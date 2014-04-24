@@ -388,108 +388,123 @@ var getPatientsAll = function (req, res) {
 };
 
 var getRelPatientsAll = function (req, res) {
-    PatientModel = mongoose.model('patients', Patient);
-    return PatientModel.find({}, {name: 1, dateBirth: 1, cpf: 1, sex: 1, phone1: 1, address: 1, number: 1, cep: 1, complement: 1, city: 1, state: 1, dateInclusion: 1}).sort({ name: 1 }).exec(function (err, patients) {
-        if (!err) {
-            return res.send(patients);
-        } else {
-            return console.log(err);
-        }
-    });
+    if (!accountRoute.isAuthorized(req.user.type, 'RELATORIO')) {
+        res.send('401', { status: 401, error: 'Acesso Negado' });
+    }
+    else {
+        PatientModel = mongoose.model('patients', Patient);
+        return PatientModel.find({}, { name: 1, dateBirth: 1, cpf: 1, sex: 1, phone1: 1, address: 1, number: 1, cep: 1, complement: 1, city: 1, state: 1, dateInclusion: 1 }).sort({ name: 1 }).exec(function (err, patients) {
+            if (!err) {
+                return res.send(patients);
+            } else {
+                return console.log(err);
+            }
+        });
+    }
 };
 
 var getRelCompletePatientsAll = function (req, res) {
-    PatientModel = mongoose.model('patients', Patient);
-    return PatientModel.find({}).sort({ name: 1 }).exec(function (err, patients) {
-        if (!err) {
-            return res.send(patients);
-        } else {
-            return console.log(err);
-        }
-    });
+    if (!accountRoute.isAuthorized(req.user.type, 'RELATORIO')) {
+        res.send('401', { status: 401, error: 'Acesso Negado' });
+    }
+    else {
+        PatientModel = mongoose.model('patients', Patient);
+        return PatientModel.find({}).sort({ name: 1 }).exec(function (err, patients) {
+            if (!err) {
+                return res.send(patients);
+            } else {
+                return console.log(err);
+            }
+        });
+    }
 };
 
 var getXmlCompletePatientsAll = function (req, res) {
-    PatientModel = mongoose.model('patients', Patient);
-    return PatientModel.find({}).sort({ name: 1 }).exec(function (err, patients) {
-        if (!err) {
-            var xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+    if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
+        res.send('401', { status: 401, error: 'Acesso Negado' });
+    }
+    else {
+        PatientModel = mongoose.model('patients', Patient);
+        return PatientModel.find({}).sort({ name: 1 }).exec(function (err, patients) {
+            if (!err) {
+                var xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
 
-            xml += '<patients>';
-            for (var i = 0; i < patients.length; i++) {
+                xml += '<patients>';
+                for (var i = 0; i < patients.length; i++) {
 
-                var str = JSON.stringify(patients[i]);
+                    var str = JSON.stringify(patients[i]);
 
-                while (str.indexOf('"observations":null,') != -1) {
-                    str = str.replace('"observations":null,', '');
-                }
-                while (str.indexOf('"dateUpdate":null,') != -1) {
-                    str = str.replace('"dateUpdate":null,', '');
-                }
-                while (str.indexOf('"mail":null,') != -1) {
-                    str = str.replace('"mail":null,', '');
-                }
-                while (str.indexOf('"complement":null,') != -1) {
-                    str = str.replace('"complement":null,', '');
-                }
-                while (str.indexOf('"cep":null,') != -1) {
-                    str = str.replace('"cep":null,', '');
-                }
-                while (str.indexOf('"phone2":null,') != -1) {
-                    str = str.replace('"phone2":null,', '');
-                }
-                while (str.indexOf('"phone3":null,') != -1) {
-                    str = str.replace('"phone3":null,', '');
-                }
-                while (str.indexOf('"cpf":null,') != -1) {
-                    str = str.replace('"cpf":null,', '');
-                }
-                while (str.indexOf('"responsibleName":null,') != -1) {
-                    str = str.replace('"responsibleName":null,', '');
-                }
-                while (str.indexOf('"responsibleCPF":null,') != -1) {
-                    str = str.replace('"responsibleCPF":null,', '');
-                }
+                    while (str.indexOf('"observations":null,') != -1) {
+                        str = str.replace('"observations":null,', '');
+                    }
+                    while (str.indexOf('"dateUpdate":null,') != -1) {
+                        str = str.replace('"dateUpdate":null,', '');
+                    }
+                    while (str.indexOf('"mail":null,') != -1) {
+                        str = str.replace('"mail":null,', '');
+                    }
+                    while (str.indexOf('"complement":null,') != -1) {
+                        str = str.replace('"complement":null,', '');
+                    }
+                    while (str.indexOf('"cep":null,') != -1) {
+                        str = str.replace('"cep":null,', '');
+                    }
+                    while (str.indexOf('"phone2":null,') != -1) {
+                        str = str.replace('"phone2":null,', '');
+                    }
+                    while (str.indexOf('"phone3":null,') != -1) {
+                        str = str.replace('"phone3":null,', '');
+                    }
+                    while (str.indexOf('"cpf":null,') != -1) {
+                        str = str.replace('"cpf":null,', '');
+                    }
+                    while (str.indexOf('"responsibleName":null,') != -1) {
+                        str = str.replace('"responsibleName":null,', '');
+                    }
+                    while (str.indexOf('"responsibleCPF":null,') != -1) {
+                        str = str.replace('"responsibleCPF":null,', '');
+                    }
 
-                var obj = JSON.parse(str);
+                    var obj = JSON.parse(str);
 
-                xml += '<patient>';
-                xml += jstoxml.toXML(obj);
-                xml += '</patient>';
+                    xml += '<patient>';
+                    xml += jstoxml.toXML(obj);
+                    xml += '</patient>';
+                }
+                xml += '</patients>';
+
+
+
+
+
+                var codigo = new ObjectID();
+                var file = __dirname.replace('routes', '') + 'public/downloads/exportPatients-' + codigo + '.xml';
+
+                fs.writeFile(file, xml, function (err, data) {
+
+                    if (err) {
+                        return console.log(err);
+                    }
+                    else {
+                        var filename = path.basename(file);
+                        var mimetype = mime.lookup(file);
+
+
+
+                        res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+                        res.setHeader('Content-type', mimetype);
+
+                        var filestream = fs.createReadStream(file);
+                        filestream.pipe(res);
+                    }
+                });
+
+
+            } else {
+                return console.log(err);
             }
-            xml += '</patients>';
-
-            
-
-
-
-            var codigo = new ObjectID();
-            var file = __dirname.replace('routes', '') + 'public/downloads/exportPatients-' + codigo + '.xml';
-
-            fs.writeFile(file, xml, function (err, data) {
-
-                if (err) {
-                    return console.log(err);
-                }
-                else {
-                    var filename = path.basename(file);
-                    var mimetype = mime.lookup(file);
-
-
-
-                    res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-                    res.setHeader('Content-type', mimetype);
-
-                    var filestream = fs.createReadStream(file);
-                    filestream.pipe(res);
-                }
-            });
-
-
-        } else {
-            return console.log(err);
-        }
-    });
+        });
+    }
 };
 
 var getPatientsByName = function (req, res) {

@@ -77,6 +77,9 @@ var isAuthorized = function (typeUser, typeAuthorization) {
     if (typeAuthorization == 'MANUTENCAO_CADASTRO') {
         return (typeUser == 'ADMIN' || typeUser == 'GESTOR');
     }
+    else if (typeAuthorization == 'RELATORIO') {
+        return (typeUser == 'ADMIN' || typeUser == 'GESTOR' || typeUser == 'ATENDENTE' || typeUser == 'PROFESSOR');
+    }
     else {
         return false;
     }
@@ -122,7 +125,6 @@ var putAccount = function (req, res) {
             res.send('500', { status: 500, error: 'A senha deve ter mais de 5 caracteres' });
         }
         else {
-
             if (accountNew.password != accountNew.passwordconfirm) {
                 console.log('Error updating account: confirmacao de senha invalida');
                 res.send('500', { status: 500, error: 'Confirmação de senha inválida' });

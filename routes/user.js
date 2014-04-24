@@ -52,85 +52,95 @@ var User = new Schema({
 var UserModel = mongoose.model('users', User);
 
 var getRelUsersAll = function (req, res) {
-    UserModel = mongoose.model('users', User);
-    return UserModel.find({}).sort({ type: 1, name: 1 }).exec(function (err, users) {
-        if (!err) {
-            return res.send(users);
-        } else {
-            return console.log(err);
-        }
-    });
+    if (!accountRoute.isAuthorized(req.user.type, 'RELATORIO')) {
+        res.send('401', { status: 401, error: 'Acesso Negado' });
+    }
+    else {
+        UserModel = mongoose.model('users', User);
+        return UserModel.find({}).sort({ type: 1, name: 1 }).exec(function (err, users) {
+            if (!err) {
+                return res.send(users);
+            } else {
+                return console.log(err);
+            }
+        });
+    }
 };
 
 var getXmlCompleteUsersAll = function (req, res) {
-    UserModel = mongoose.model('users', User);
-    return UserModel.find({}).sort({ name: 1 }).exec(function (err, users) {
-        if (!err) {
-            var xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+    if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
+        res.send('401', { status: 401, error: 'Acesso Negado' });
+    }
+    else {
+        UserModel = mongoose.model('users', User);
+        return UserModel.find({}).sort({ name: 1 }).exec(function (err, users) {
+            if (!err) {
+                var xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
 
-            xml += '<users>';
-            for (var i = 0; i < users.length; i++) {
+                xml += '<users>';
+                for (var i = 0; i < users.length; i++) {
 
-                var str = JSON.stringify(users[i]);
+                    var str = JSON.stringify(users[i]);
 
-                while (str.indexOf('"complement":null,') != -1) {
-                    str = str.replace('"complement":null,', '');
-                }
-                while (str.indexOf('"dateUpdate":null,') != -1) {
-                    str = str.replace('"dateUpdate":null,', '');
-                }
-                while (str.indexOf('"cep":null,') != -1) {
-                    str = str.replace('"cep":null,', '');
-                }
-                while (str.indexOf('"phone2":null,') != -1) {
-                    str = str.replace('"phone2":null,', '');
-                }
-                while (str.indexOf('"phone3":null,') != -1) {
-                    str = str.replace('"phone3":null,', '');
-                }
-                while (str.indexOf('"rg":null,') != -1) {
-                    str = str.replace('"rg":null,', '');
-                }
+                    while (str.indexOf('"complement":null,') != -1) {
+                        str = str.replace('"complement":null,', '');
+                    }
+                    while (str.indexOf('"dateUpdate":null,') != -1) {
+                        str = str.replace('"dateUpdate":null,', '');
+                    }
+                    while (str.indexOf('"cep":null,') != -1) {
+                        str = str.replace('"cep":null,', '');
+                    }
+                    while (str.indexOf('"phone2":null,') != -1) {
+                        str = str.replace('"phone2":null,', '');
+                    }
+                    while (str.indexOf('"phone3":null,') != -1) {
+                        str = str.replace('"phone3":null,', '');
+                    }
+                    while (str.indexOf('"rg":null,') != -1) {
+                        str = str.replace('"rg":null,', '');
+                    }
 
-                var obj = JSON.parse(str);
+                    var obj = JSON.parse(str);
 
-                xml += '<user>';
-                xml += jstoxml.toXML(obj);
-                xml += '</user>';
+                    xml += '<user>';
+                    xml += jstoxml.toXML(obj);
+                    xml += '</user>';
+                }
+                xml += '</users>';
+
+
+
+
+
+                var codigo = new ObjectID();
+                var file = __dirname.replace('routes', '') + 'public/downloads/exportUsers-' + codigo + '.xml';
+
+                fs.writeFile(file, xml, function (err, data) {
+
+                    if (err) {
+                        return console.log(err);
+                    }
+                    else {
+                        var filename = path.basename(file);
+                        var mimetype = mime.lookup(file);
+
+
+
+                        res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+                        res.setHeader('Content-type', mimetype);
+
+                        var filestream = fs.createReadStream(file);
+                        filestream.pipe(res);
+                    }
+                });
+
+
+            } else {
+                return console.log(err);
             }
-            xml += '</users>';
-
-
-
-
-
-            var codigo = new ObjectID();
-            var file = __dirname.replace('routes', '') + 'public/downloads/exportUsers-' + codigo + '.xml';
-
-            fs.writeFile(file, xml, function (err, data) {
-
-                if (err) {
-                    return console.log(err);
-                }
-                else {
-                    var filename = path.basename(file);
-                    var mimetype = mime.lookup(file);
-
-
-
-                    res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-                    res.setHeader('Content-type', mimetype);
-
-                    var filestream = fs.createReadStream(file);
-                    filestream.pipe(res);
-                }
-            });
-
-
-        } else {
-            return console.log(err);
-        }
-    });
+        });
+    }
 };
 
 var validateUser = function (res, user) {

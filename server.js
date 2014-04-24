@@ -158,7 +158,7 @@ app.get('/relpatients', auth, patientRoute.getRelPatientsAll);
 app.get('/relcompletepatients', auth, patientRoute.getRelCompletePatientsAll);
 app.get('/xmlcompletepatients', patientRoute.getXmlCompletePatientsAll);
 app.get('/relusers', auth, userRoute.getRelUsersAll);
-app.get('/xmlcompleteusers', userRoute.getXmlCompleteUsersAll);
+app.get('/xmlcompleteusers', auth, userRoute.getXmlCompleteUsersAll);
 
 
 // Launch server
