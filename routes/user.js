@@ -1,15 +1,21 @@
 ﻿
 //************************************************************
-var express = require("express"),
+var
+    path = require("path"),
+    mime = require('mime'),
+    http = require('http'),
+    express = require("express"),
+    fs = require('fs'),
     mongoose = require('mongoose'),
     iz = require('iz'),
     ObjectID = require('mongodb').ObjectID,
     passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
     passportLocalMongoose = require('passport-local-mongoose'),
-    utilRoute = require("./util"),
     patientRoute = require("./patient"),
-    accountRoute = require("./account");
+    accountRoute = require("./account"),
+    utilRoute = require("./util"),
+    jstoxml = require('./jstoxml');
 //************************************************************
 
 
@@ -50,6 +56,77 @@ var getRelUsersAll = function (req, res) {
     return UserModel.find({}).sort({ type: 1, name: 1 }).exec(function (err, users) {
         if (!err) {
             return res.send(users);
+        } else {
+            return console.log(err);
+        }
+    });
+};
+
+var getXmlCompleteUsersAll = function (req, res) {
+    UserModel = mongoose.model('users', User);
+    return UserModel.find({}).sort({ name: 1 }).exec(function (err, users) {
+        if (!err) {
+            var xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+
+            xml += '<users>';
+            for (var i = 0; i < users.length; i++) {
+
+                var str = JSON.stringify(users[i]);
+
+                while (str.indexOf('"complement":null,') != -1) {
+                    str = str.replace('"complement":null,', '');
+                }
+                while (str.indexOf('"dateUpdate":null,') != -1) {
+                    str = str.replace('"dateUpdate":null,', '');
+                }
+                while (str.indexOf('"cep":null,') != -1) {
+                    str = str.replace('"cep":null,', '');
+                }
+                while (str.indexOf('"phone2":null,') != -1) {
+                    str = str.replace('"phone2":null,', '');
+                }
+                while (str.indexOf('"phone3":null,') != -1) {
+                    str = str.replace('"phone3":null,', '');
+                }
+                while (str.indexOf('"rg":null,') != -1) {
+                    str = str.replace('"rg":null,', '');
+                }
+
+                var obj = JSON.parse(str);
+
+                xml += '<user>';
+                xml += jstoxml.toXML(obj);
+                xml += '</user>';
+            }
+            xml += '</users>';
+
+
+
+
+
+            var codigo = new ObjectID();
+            var file = __dirname.replace('routes', '') + 'public/downloads/exportUsers-' + codigo + '.xml';
+
+            fs.writeFile(file, xml, function (err, data) {
+
+                if (err) {
+                    return console.log(err);
+                }
+                else {
+                    var filename = path.basename(file);
+                    var mimetype = mime.lookup(file);
+
+
+
+                    res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+                    res.setHeader('Content-type', mimetype);
+
+                    var filestream = fs.createReadStream(file);
+                    filestream.pipe(res);
+                }
+            });
+
+
         } else {
             return console.log(err);
         }
@@ -387,6 +464,7 @@ var delUser = function (res, req, id) {
 module.exports.UserModel = UserModel;
 module.exports.validateUser = validateUser;
 module.exports.getRelUsersAll = getRelUsersAll;
+module.exports.getXmlCompleteUsersAll = getXmlCompleteUsersAll;
 module.exports.putUser = putUser;
 module.exports.postUser = postUser;
 module.exports.delUser = delUser;

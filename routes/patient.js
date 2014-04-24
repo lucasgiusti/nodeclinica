@@ -1,6 +1,11 @@
 ﻿
 //************************************************************
-var express = require("express"),
+var
+    path = require("path"),
+    mime = require('mime'),
+    http = require('http'),
+    express = require("express"),
+    fs = require('fs'),
     mongoose = require('mongoose'),
     iz = require('iz'),
     ObjectID = require('mongodb').ObjectID,
@@ -35,11 +40,11 @@ var Session = new Schema({
 // Treatment Model
 var Treatment = new Schema({
     serviceArea: { type: String, required: true },
-    diagnosis: { type: String, required: false },
+    diagnosis: { type: String, required: true },
     treatmentPerformed: { type: Boolean, required: true },
     canceledTreatment: { type: Boolean, required: true },
-    doctor: { type: String, required: false },
-    CRMDoctor: { type: String, required: false },
+    doctor: { type: String, required: true },
+    CRMDoctor: { type: String, required: true },
     observations: { type: String, required: false },
     idPatient: {type: String, required: true},
     dateInclusion: { type: Date, required: true },
@@ -47,7 +52,7 @@ var Treatment = new Schema({
     sessions: [Session]
 });
 
-// Patient Mod  el
+// Patient Model
 var Patient = new Schema({
     name: { type: String, required: true },
     mail: { type: String, required: false },
@@ -408,11 +413,79 @@ var getXmlCompletePatientsAll = function (req, res) {
     PatientModel = mongoose.model('patients', Patient);
     return PatientModel.find({}).sort({ name: 1 }).exec(function (err, patients) {
         if (!err) {
+            var xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
 
-            var str = JSON.stringify(patients);
-            var obj = JSON.parse(str);
-            var xml = jstoxml.toXML(obj, { header: true });
-            return res.send(xml);
+            xml += '<patients>';
+            for (var i = 0; i < patients.length; i++) {
+
+                var str = JSON.stringify(patients[i]);
+
+                while (str.indexOf('"observations":null,') != -1) {
+                    str = str.replace('"observations":null,', '');
+                }
+                while (str.indexOf('"dateUpdate":null,') != -1) {
+                    str = str.replace('"dateUpdate":null,', '');
+                }
+                while (str.indexOf('"mail":null,') != -1) {
+                    str = str.replace('"mail":null,', '');
+                }
+                while (str.indexOf('"complement":null,') != -1) {
+                    str = str.replace('"complement":null,', '');
+                }
+                while (str.indexOf('"cep":null,') != -1) {
+                    str = str.replace('"cep":null,', '');
+                }
+                while (str.indexOf('"phone2":null,') != -1) {
+                    str = str.replace('"phone2":null,', '');
+                }
+                while (str.indexOf('"phone3":null,') != -1) {
+                    str = str.replace('"phone3":null,', '');
+                }
+                while (str.indexOf('"cpf":null,') != -1) {
+                    str = str.replace('"cpf":null,', '');
+                }
+                while (str.indexOf('"responsibleName":null,') != -1) {
+                    str = str.replace('"responsibleName":null,', '');
+                }
+                while (str.indexOf('"responsibleCPF":null,') != -1) {
+                    str = str.replace('"responsibleCPF":null,', '');
+                }
+
+                var obj = JSON.parse(str);
+
+                xml += '<patient>';
+                xml += jstoxml.toXML(obj);
+                xml += '</patient>';
+            }
+            xml += '</patients>';
+
+            
+
+
+
+            var codigo = new ObjectID();
+            var file = __dirname.replace('routes', '') + 'public/downloads/exportPatients-' + codigo + '.xml';
+
+            fs.writeFile(file, xml, function (err, data) {
+
+                if (err) {
+                    return console.log(err);
+                }
+                else {
+                    var filename = path.basename(file);
+                    var mimetype = mime.lookup(file);
+
+
+
+                    res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+                    res.setHeader('Content-type', mimetype);
+
+                    var filestream = fs.createReadStream(file);
+                    filestream.pipe(res);
+                }
+            });
+
+
         } else {
             return console.log(err);
         }
