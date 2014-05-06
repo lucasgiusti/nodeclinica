@@ -42,7 +42,7 @@
 
                 if (jsonObject.active) {
 
-                    if (userAccountAccess.type == 'ADMIN') {
+                    if (userAccountAccess.type == 'ADMIN' || userAccountAccess.type == 'GESTOR') {
                         html += '<td><a data-toggle="modal" data-id="' + jsonObject.mail + '" href="#addAccount" class="openAddAccount">Sim</a></td>';
                     }
                     else {
