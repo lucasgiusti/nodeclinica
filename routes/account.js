@@ -75,7 +75,7 @@ var auth = function (req, res, next) {
 var isAuthorized = function (typeUser, typeAuthorization) {
 
     if (typeAuthorization == 'MANUTENCAO_CADASTRO') {
-        return (typeUser == 'ADMIN' || typeUser == 'GESTOR' || typeUser == 'ATENDENTE');
+        return (typeUser == 'ADMIN' || typeUser == 'GESTOR');
     }
     else if (typeAuthorization == 'RELATORIO') {
         return (typeUser == 'ADMIN' || typeUser == 'GESTOR' || typeUser == 'ATENDENTE' || typeUser == 'PROFESSOR');
