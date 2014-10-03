@@ -21,18 +21,21 @@ var Painel = new Schema({
     pEUM: { type: String, required: true },
     pEH: { type: String, required: true },
     pESC: { type: String, required: true },
+    pEPN: { type: String, required: true },
     pTNA: { type: String, required: true },
     pTNP: { type: String, required: true },
     pTOT: { type: String, required: true },
     pTUM: { type: String, required: true },
     pTH: { type: String, required: true },
     pTSC: { type: String, required: true },
+    pTPN: { type: String, required: true },
     pANA: { type: String, required: true },
     pANP: { type: String, required: true },
     pAOT: { type: String, required: true },
     pAUM: { type: String, required: true },
     pAH: { type: String, required: true },
-    pASC: { type: String, required: true }
+    pASC: { type: String, required: true },
+    pAPN: { type: String, required: true }
 });
 
 var getPainelAll = function (req, res) {
@@ -45,18 +48,21 @@ var getPainelAll = function (req, res) {
     var integerpEUM = 0;
     var integerpEH = 0;
     var integerpESC = 0;
+    var integerpEPN = 0;
     var integerpTNA = 0;
     var integerpTNP = 0;
     var integerpTOT = 0;
     var integerpTUM = 0;
     var integerpTH = 0;
     var integerpTSC = 0;
+    var integerpTPN = 0;
     var integerpANA = 0;
     var integerpANP = 0;
     var integerpAOT = 0;
     var integerpAUM = 0;
     var integerpAH = 0;
     var integerpASC = 0;
+    var integerpAPN = 0;
 
     var pintegerpENA = 0;
     var pintegerpENP = 0;
@@ -64,18 +70,21 @@ var getPainelAll = function (req, res) {
     var pintegerpEUM = 0;
     var pintegerpEH = 0;
     var pintegerpESC = 0;
+    var pintegerpEPN = 0;
     var pintegerpTNA = 0;
     var pintegerpTNP = 0;
     var pintegerpTOT = 0;
     var pintegerpTUM = 0;
     var pintegerpTH = 0;
     var pintegerpTSC = 0;
+    var pintegerpTPN = 0;
     var pintegerpANA = 0;
     var pintegerpANP = 0;
     var pintegerpAOT = 0;
     var pintegerpAUM = 0;
     var pintegerpAH = 0;
     var pintegerpASC = 0;
+    var pintegerpAPN = 0;
 
 
     return patientRoute.PatientModel.find(function (err, patients) {
@@ -84,10 +93,10 @@ var getPainelAll = function (req, res) {
             for (var i = 0; i < patients.length; i++) {
 
                 pintegerpENA = 0; pintegerpENP = 0;
-                pintegerpEOT = 0; pintegerpEUM = 0; pintegerpEH = 0; pintegerpESC = 0;
+                pintegerpEOT = 0; pintegerpEUM = 0; pintegerpEH = 0; pintegerpESC = 0; pintegerpEPN = 0;
                 pintegerpTNA = 0; pintegerpTNP = 0; pintegerpTOT = 0; pintegerpTUM = 0;
-                pintegerpTH = 0; pintegerpTSC = 0; pintegerpANA = 0; pintegerpANP = 0;
-                pintegerpAOT = 0; pintegerpAUM = 0; pintegerpAH = 0; pintegerpASC = 0;
+                pintegerpTH = 0; pintegerpTSC = 0; pintegerpTPN = 0; pintegerpANA = 0; pintegerpANP = 0;
+                pintegerpAOT = 0; pintegerpAUM = 0; pintegerpAH = 0; pintegerpASC = 0; pintegerpAPN = 0;
 
 
 
@@ -123,6 +132,9 @@ var getPainelAll = function (req, res) {
                                             else if (patients[i].treatments[y].serviceArea == "SAUDE COLETIVA") {
                                                 pintegerpTSC = 1;
                                             }
+                                            else if (patients[i].treatments[y].serviceArea == "PNEUMOLOGIA") {
+                                                pintegerpTPN = 1;
+                                            }
                                         }
 
                                         if (!patients[i].treatments[y].sessions[z].everHeld) {
@@ -150,6 +162,10 @@ var getPainelAll = function (req, res) {
                                                 pintegerpASC = 1;
                                                 pintegerpTSC = 0;
                                             }
+                                            else if (patients[i].treatments[y].serviceArea == "PNEUMOLOGIA") {
+                                                pintegerpAPN = 1;
+                                                pintegerpTPN = 0;
+                                            }
 
                                             break;
                                         }
@@ -157,10 +173,10 @@ var getPainelAll = function (req, res) {
                                     }
                                 }
                                 if (pintegerpENA > 0 || pintegerpENP > 0 || pintegerpEOT > 0 || pintegerpEUM > 0 ||
-                                        pintegerpEH > 0 || pintegerpESC > 0 || pintegerpTNA > 0 || pintegerpTNP > 0 ||
-                                        pintegerpTOT > 0 || pintegerpTUM > 0 || pintegerpTH > 0 || pintegerpTSC > 0 ||
+                                        pintegerpEH > 0 || pintegerpESC > 0 || pintegerpEPN > 0 || pintegerpTNA > 0 || pintegerpTNP > 0 ||
+                                        pintegerpTOT > 0 || pintegerpTUM > 0 || pintegerpTH > 0 || pintegerpTSC > 0 || pintegerpTPN > 0 ||
                                         pintegerpANA > 0 || pintegerpANP > 0 || pintegerpAOT > 0 || pintegerpAUM > 0 ||
-                                        pintegerpAH > 0 || pintegerpASC > 0) {
+                                        pintegerpAH > 0 || pintegerpASC > 0 || pintegerpAPN > 0) {
                                     break;
                                 }
                             }
@@ -183,6 +199,9 @@ var getPainelAll = function (req, res) {
                                 else if (patients[i].treatments[y].serviceArea == "SAUDE COLETIVA") {
                                     pintegerpESC++;
                                 }
+                                else if (patients[i].treatments[y].serviceArea == "PNEUMOLOGIA") {
+                                    pintegerpEPN++;
+                                }
                             }
 
                         }
@@ -196,18 +215,21 @@ var getPainelAll = function (req, res) {
                 integerpEUM += pintegerpEUM;
                 integerpEH += pintegerpEH;
                 integerpESC += pintegerpESC;
+                integerpEPN += pintegerpEPN;
                 integerpTNA += pintegerpTNA;
                 integerpTNP += pintegerpTNP;
                 integerpTOT += pintegerpTOT;
                 integerpTUM += pintegerpTUM;
                 integerpTH += pintegerpTH;
                 integerpTSC += pintegerpTSC;
+                integerpTPN += pintegerpTPN;
                 integerpANA += pintegerpANA;
                 integerpANP += pintegerpANP;
                 integerpAOT += pintegerpAOT;
                 integerpAUM += pintegerpAUM;
                 integerpAH += pintegerpAH;
                 integerpASC += pintegerpASC;
+                integerpAPN += pintegerpAPN;
             }
 
 
@@ -217,18 +239,21 @@ var getPainelAll = function (req, res) {
             Painel.pEUM = integerpEUM;
             Painel.pEH = integerpEH;
             Painel.pESC = integerpESC;
+            Painel.pEPN = integerpEPN;
             Painel.pTNA = integerpTNA;
             Painel.pTNP = integerpTNP;
             Painel.pTOT = integerpTOT;
             Painel.pTUM = integerpTUM;
             Painel.pTH = integerpTH;
             Painel.pTSC = integerpTSC;
+            Painel.pTPN = integerpTPN;
             Painel.pANA = integerpANA;
             Painel.pANP = integerpANP;
             Painel.pAOT = integerpAOT;
             Painel.pAUM = integerpAUM;
             Painel.pAH = integerpAH;
             Painel.pASC = integerpASC;
+            Painel.pAPN = integerpAPN;
 
 
 

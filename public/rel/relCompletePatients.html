@@ -178,12 +178,12 @@
 
 
                     if (data[i].treatments[y].sessions[z].dateSchedulingStart != null)
-                        html += '<td style="font-size: 12px">' + formattedDate(data[i].treatments[y].sessions[z].dateSchedulingStart) + '</td>';
+                        html += '<td style="font-size: 12px">' + formattedDateTime(data[i].treatments[y].sessions[z].dateSchedulingStart) + '</td>';
                     else
                         html += '<td></td>';
 
                     if (data[i].treatments[y].sessions[z].dateSchedulingEnd != null)
-                        html += '<td style="font-size: 12px">' + formattedDate(data[i].treatments[y].sessions[z].dateSchedulingEnd) + '</td>';
+                        html += '<td style="font-size: 12px">' + formattedDateTime(data[i].treatments[y].sessions[z].dateSchedulingEnd) + '</td>';
                     else
                         html += '<td></td>';
 

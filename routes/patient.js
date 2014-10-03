@@ -575,6 +575,7 @@ var getPatientsByPainel = function (req, res) {
     if (type == 'pEUM' || type == 'pTUM' || type == 'pAUM') { serviceArea = 'UROGENICOLOGIA MASTOLOGIA'; }
     if (type == 'pEH' || type == 'pTH' || type == 'pAH') { serviceArea = 'HIDROTERAPIA'; }
     if (type == 'pESC' || type == 'pTSC' || type == 'pASC') { serviceArea = 'SAUDE COLETIVA'; }
+    if (type == 'pEPN' || type == 'pTPN' || type == 'pAPN') { serviceArea = 'PNEUMOLOGIA'; }
 
     PatientModel = mongoose.model('patients', Patient);
 

@@ -13,8 +13,8 @@ window.SessionView = Backbone.View.extend({
 
         $(this.el).html(this.template(session));
 
-        $("#dateSchedulingStart", this.el).datetimepicker({ format: 'dd/mm/yyyy hh:ii', autoclose: true, minuteStep: 60 });
-        $('#dateSchedulingEnd', this.el).datetimepicker({ format: 'dd/mm/yyyy hh:ii', autoclose: true, minuteStep: 60 });
+        $("#dateSchedulingStart", this.el).datetimepicker({ format: 'dd/mm/yyyy hh:ii', autoclose: true, minuteStep: 15 });
+        $('#dateSchedulingEnd', this.el).datetimepicker({ format: 'dd/mm/yyyy hh:ii', autoclose: true, minuteStep: 15 });
 
         if (Date.parse(session.dateSchedulingStart) < Date.parse(new Date())) {
             $("#dateSchedulingStart", this.el).attr("disabled", "disabled");

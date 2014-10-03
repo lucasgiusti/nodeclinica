@@ -176,6 +176,7 @@ var getSessionsByType = function (req, res) {
                         }
 
                         if (patients[i].treatments.length == 0) {
+                            console.log(patients[i]);
                             patients[i].pull({ _id: patients[i]._id });
                             i--;
                         }
@@ -298,6 +299,7 @@ var horarioDisponivelTeacher = function (req, res, callback) {
     var idPatient = req.params.idPatient;
     var idTreatment = req.params.idTreatment;
     var session = req.body;
+    var typeServiceNew = session.typeService;
     var dateStart = new Date(session.dateSchedulingStart);
     var dateEnd = new Date(session.dateSchedulingEnd);
     for (i = 0; i <= 23; i++) {
@@ -314,8 +316,8 @@ var horarioDisponivelTeacher = function (req, res, callback) {
                             for (var z = 0; z < patients[i].treatments[y].sessions.length; z++) {
                                 if (patients[i].treatments[y].sessions[z].everHeld == false && patients[i].treatments[y].sessions[z].canceledSession == false) {
                                     if (patients[i].treatments[y].sessions[z]._id != session._id) {
-                                        if ((patients[i].treatments[y].sessions[z].dateSchedulingStart >= dateStart && patients[i].treatments[y].sessions[z].dateSchedulingStart < dateEnd) ||
-                                            (patients[i].treatments[y].sessions[z].dateSchedulingEnd > dateStart && patients[i].treatments[y].sessions[z].dateSchedulingEnd <= dateEnd)) {
+                                        if ((patients[i].treatments[y].sessions[z].dateSchedulingStart >= dateStart && patients[i].treatments[y].sessions[z].dateSchedulingStart < dateEnd && (patients[i].treatments[y].sessions[z].typeService == 'INDIVIDUAL' || typeServiceNew == 'INDIVIDUAL')) ||
+                                            (patients[i].treatments[y].sessions[z].dateSchedulingEnd > dateStart && patients[i].treatments[y].sessions[z].dateSchedulingEnd <= dateEnd && (patients[i].treatments[y].sessions[z].typeService == 'INDIVIDUAL' || typeServiceNew == 'INDIVIDUAL'))) {
 
                                             console.log('Error adding session: o professor selecionado já possui agenda para este horário');
                                             res.send('500', { status: 500, error: 'O professor selecionado já possui agenda para este horário' });
@@ -354,6 +356,7 @@ var horarioDisponivelStudent = function (req, res, callback) {
     var idPatient = req.params.idPatient;
     var idTreatment = req.params.idTreatment;
     var session = req.body;
+    var typeServiceNew = session.typeService;
     var dateStart = new Date(session.dateSchedulingStart);
     var dateEnd = new Date(session.dateSchedulingEnd);
     for (i = 0; i <= 23; i++) {
@@ -370,8 +373,8 @@ var horarioDisponivelStudent = function (req, res, callback) {
                             for (var z = 0; z < patients[i].treatments[y].sessions.length; z++) {
                                 if (patients[i].treatments[y].sessions[z].everHeld == false && patients[i].treatments[y].sessions[z].canceledSession == false) {
                                     if (patients[i].treatments[y].sessions[z]._id != session._id) {
-                                        if ((patients[i].treatments[y].sessions[z].dateSchedulingStart >= dateStart && patients[i].treatments[y].sessions[z].dateSchedulingStart < dateEnd) ||
-                                            (patients[i].treatments[y].sessions[z].dateSchedulingEnd > dateStart && patients[i].treatments[y].sessions[z].dateSchedulingEnd <= dateEnd)) {
+                                        if ((patients[i].treatments[y].sessions[z].dateSchedulingStart >= dateStart && patients[i].treatments[y].sessions[z].dateSchedulingStart < dateEnd && (patients[i].treatments[y].sessions[z].typeService == 'INDIVIDUAL' || typeServiceNew == 'INDIVIDUAL')) ||
+                                            (patients[i].treatments[y].sessions[z].dateSchedulingEnd > dateStart && patients[i].treatments[y].sessions[z].dateSchedulingEnd <= dateEnd && (patients[i].treatments[y].sessions[z].typeService == 'INDIVIDUAL' || typeServiceNew == 'INDIVIDUAL'))) {
 
                                             console.log('Error adding session: o aluno selecionado já possui agenda para este horário');
                                             res.send('500', { status: 500, error: 'O aluno selecionado já possui agenda para este horário' });
