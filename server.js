@@ -2,6 +2,9 @@
 
 var application_root = __dirname,
     express = require("express"),
+    session = require("express-session"),
+    cookieParser = require('cookie-parser'),
+    bodyParser = require('body-parser'),
     path = require("path"),
     http = require('http'),
     fs = require('fs'),
@@ -12,6 +15,7 @@ var application_root = __dirname,
     iz = require('iz'),
     ObjectID = require('mongodb').ObjectID,
     passportLocalMongoose = require('passport-local-mongoose'),
+
     accountRoute = require("./routes/account"),
     userRoute = require("./routes/user"),
     studentRoute = require("./routes/student"),
@@ -28,8 +32,9 @@ var application_root = __dirname,
 // Config
         app.set('port', process.env.PORT || 3000);
         app.use(express.static(path.join(__dirname, 'public')));
-        app.use(express.cookieParser('your secret here'));
-        app.use(express.session());
+        app.use(cookieParser());
+        app.use(session({ secret: 'somesecrettokenhere' }));
+        app.use(bodyParser());
         app.use(function (req, res, next) {
             if (req.method == 'POST' && req.url == '/login') {
 
