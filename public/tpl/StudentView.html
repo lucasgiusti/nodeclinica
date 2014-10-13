@@ -1,0 +1,234 @@
+﻿<div class="row-fluid">
+
+    <form class="form-horizontal span12">
+
+        <fieldset>
+
+            <legend>Aluno</legend>
+
+            <div class="row" style="padding: 0px 10px;">
+                <div class="span8">
+                    <section style="float: left; width: 48%">
+                    <div class="control-group">
+                        <label for="name" class="control-label">Nome:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="name" name="name" value="<%= name == null ? '' : name %>" maxlength="100" placeholder="Obrigatório"/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    <section>
+                    <article style="float: left; width: 61%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Endereço:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="address" name="address" value="<%= address == null ? '' : address %>" maxlength="100" placeholder="Obrigatório"/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    <article style="float: right">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Número:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="number" name="number" value="<%= number == null ? '' : number %>" placeholder="Obrigatório"/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    </section>
+                    <article style="float: left; width: 45%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Complemento:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="complement" name="complement" value="<%= complement === null ? '' : complement %>"/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    <article style="float: right; width: 52%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Bairro:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="district" name="district" value="<%= district === null ? '' : district %>" placeholder="Obrigatório"/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                        <!-- DIV ESTADOS E CIDADES -->
+                        <div id="divEstadosCidades">
+                        </div>
+                        <!-- DIV ESTADOS E CIDADES -->
+                    <article style="float: left; width: 35%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">CEP:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="cep" name="cep" value="<%= cep === null ? '' : cep %>"/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    <article style="float: right; width: 62%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Matrícula:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="registration" name="registration" value="<%= registration == null ? '' : registration %>" placeholder="Obrigatório"/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    </section>
+                    
+                    <section style="float: right; width: 48%;">
+                    <article style="float: left; width: 48%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Telefone:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="phone1" name="phone1" value="<%= phone1 === null ? '' : phone1 %>" placeholder="Obrigatório"/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    <article style="float: right; width: 49%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Ativo:</label>
+
+                        <div class="checkbox">
+                            <input type="checkbox" id="active" name="active" <%= active ? 'checked="checked"' : '' %> >
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    </section>
+
+                    <section style="float: right; width: 48%;">
+                    <article style="float: left; width: 48%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">RG:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="rg" name="rg" value="<%= rg === null ? '' : rg %>"/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    <article style="float: right; width: 49%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Telefone Alternativo 1:</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" id="phone2" name="phone2" value="<%= phone2 === null ? '' : phone2 %>"/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    <article style="float: left; width: 48%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">CPF:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="cpf" name="cpf" value="<%= cpf === null ? '' : cpf %>" placeholder="Obrigatório"/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    <article style="float: right; width: 49%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Telefone Alternativo 2:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="phone3" name="phone3" value="<%= phone3 === null ? '' : phone3 %>"/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    <article>
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Email:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="mail" name="mail" value="<%= mail == null ? '' : mail %>" maxlength="100" placeholder="Obrigatório"/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    <article style="float: left; width: 48%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Data Inclusão:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="dateInclusion" name="dateInclusion" value="<%= dateInclusion == null ? '' : new Date(dateInclusion).toLocaleDateString() %>" readonly/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    <article style="float: right; width: 49%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Data Alteração:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="dateUpdate" name="dateUpdate" value="<%= dateUpdate === null ? '' : new Date(dateUpdate).toLocaleDateString() %>" readonly/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    </section>
+                </div>
+            </div>
+
+        </fieldset>
+        <div class="footer">
+            <button type="button" class="btn btn-primary" onclick="voltar();">Voltar à lista de alunos</button>
+            <button type="button" class="btn" onclick="novo();" <%= _id === null ? 'style="display: none"' : '' %>>Novo</button>
+            <button type="button" class="btn btn-primary btn-large save" style="margin-left: 20px">Salvar</button>
+            <button type="button" class="btn" data-toggle="modal" href="#delUser" <%= _id === null ? 'style="display: none"' : '' %>>Excluir</button>
+        </div>
+
+    </form>
+
+</div>
+
+    <div id="delUser" class="modal container hide fade" tabindex="-1" style="width: 500px; margin-left: -250px;">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Excluir Aluno ?</h3>
+  </div>
+  <div class="modal-footer">
+    <button type="button" data-dismiss="modal" class="btn">Cancelar</button>
+    <button type="button" data-dismiss="modal" class="btn btn-primary btn-large delete">Sim</button>
+  </div>
+  <br/>
+</div>
+<br />
+<div class="row-fluid status-bar">
+    <div class="span12">
+        <div class="alert alert-success" style="display: none">
+            <b>Success!</b> Studant saved successfully
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+    function back()
+    {
+        history.back(1);
+    }
+
+    function voltar() {
+        window.location.assign(window.location.href.substring(0, window.location.href.indexOf("students/")) + "students");
+    }
+
+    function novo() {
+        window.location.assign(window.location.href.substring(0, window.location.href.indexOf("students/")) + "students/add");
+    }
+
+	</script>

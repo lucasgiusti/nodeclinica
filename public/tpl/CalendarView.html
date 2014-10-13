@@ -1,0 +1,59 @@
+﻿<legend>Agenda</legend>
+<div class="row">
+  <div class="col-lg-5" style="width: 38%">
+    <div class="control-group">
+                        <label for="name" class="control-label">Aluno:</label>
+                        <!-- DIV ALUNOS -->
+                        <div id="divAlunos" class="controls">
+                        </div>
+                    </div>
+  </div><!-- /.col-lg-6 -->
+  <div class="col-lg-5">
+    <div class="control-group">
+                        <label for="name" class="control-label">Professor:</label>
+                        <!-- DIV PROFESSORES -->
+                        <div id="divProfessores" class="controls">
+                        </div>
+    </div>
+  </div><!-- /.col-lg-6 -->
+</div><!-- /.row -->
+
+
+<br/>
+<div id='calendar'></div>
+
+
+<div id="PopSessao" class="modal container hide fade" tabindex="-1">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Pacientes do Grupo</h3>
+  </div>
+  <fieldset>
+  <div class="modal-body">
+    <section style="float: left; width: 48%">
+            <table id="tbPatients" class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                 </tr>
+             </thead>
+            <tbody>
+            </tbody>
+        </table>
+    <section>
+  </div>
+  </fieldset>
+  <br />
+  <br />
+</div>
+
+<script>
+    $(document).on("click", "#linkPopSessao", function () {
+        $('#tbPatients > tbody:last', this.el).html(window.htmlGrupos[$(this).data('id')]);
+    });
+
+    function linkGrupoSessao(link) {
+	$("#PopSessao").modal('hide').remove();
+	window.location.href = link;
+    }
+</script>

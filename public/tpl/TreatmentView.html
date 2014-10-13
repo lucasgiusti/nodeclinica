@@ -1,0 +1,194 @@
+﻿<div class="row-fluid">
+
+    <form class="form-horizontal span12">
+        <fieldset>
+
+            <legend>Tratamento - </legend>
+
+            <div class="row" style="padding: 0px 10px;">
+                <div class="span8">
+                    <section style="float: left; width: 48%">
+                    <div class="control-group">
+                        <label for="name" class="control-label">Área de Atendimento:</label>
+
+                        <div class="controls">
+                            <select class="form-control" id="serviceArea" name="serviceArea" value="<%= serviceArea %>">
+                                <option  disabled="disabled" selected style='display:none'>Obrigatório</option>
+                                <option <%= serviceArea === 'NEURO ADULTO' ? 'selected' : '' %>>NEURO ADULTO</option>
+                                <option <%= serviceArea === 'NEURO PEDIATRIA' ? 'selected' : '' %>>NEURO PEDIATRIA</option>
+                                <option <%= serviceArea === 'ORTOPEDIA TRAUMATOLOGIA' ? 'selected' : '' %>>ORTOPEDIA TRAUMATOLOGIA</option>
+                                <option <%= serviceArea === 'UROGINECOLOGIA MASTOLOGIA' ? 'selected' : '' %>>UROGINECOLOGIA MASTOLOGIA</option>
+                                <option <%= serviceArea === 'HIDROTERAPIA' ? 'selected' : '' %>>HIDROTERAPIA</option>
+                                <option <%= serviceArea === 'SAUDE COLETIVA' ? 'selected' : '' %>>SAUDE COLETIVA</option>
+                                <option <%= serviceArea === 'PNEUMOLOGIA' ? 'selected' : '' %>>PNEUMOLOGIA</option>
+                            </select>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    <article>
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Nome do Médico:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="doctor" name="doctor" value="<%= doctor === null ? '' : doctor %>" maxlength="100" placeholder="Obrigatório"/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    <article style="float: left; width: 48%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">CRM do Médico:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="CRMDoctor" name="CRMDoctor" value="<%= CRMDoctor === null ? '' : CRMDoctor %>" placeholder="Obrigatório"/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    <article style="float: left; width: 100%">
+                    <div class="control-group">
+                        <label for="name" class="control-label">Observações:</label>
+
+                        <div class="controls">
+                            <textarea class="form-control" id="observations" name="observations" maxlength="3000" style="height: 97px"><%= observations === null ? '' : observations %></textarea>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                        <div id="divBotoes">
+                    <article style="float: left; width: 100%; <%= _id === null ? 'display: none' : '' %>" >
+                        <input type="checkbox" id="canceledTreatment" style="display: none" name="canceledTreatment" <%= canceledTreatment ? 'checked="checked"' : '' %> >
+                        <button type="button" class="btn btn-large" id="btnTratamentoCancelado" name="canceledTreatment" <%= canceledTreatment ? '' : 'onclick="cancelarTratamento(false);"' %> style="width: 100%; margin-top: 25px; <%= canceledTreatment ? '' : 'display: none' %>">Tratamento Cancelado !</button>
+                        <button type="button" id="btnTratamentoRealizado" name="treatmentPerformed" <%= treatmentPerformed ? '' : 'onclick="realizarTratamento(false);"' %> class=" btn"style="width: 100%; margin-top: 25px; <%= treatmentPerformed ? '' : 'display: none' %>">Tratamento Realizado !</button>
+                    </article>
+                    <article style="float: left; width: 48%; <%= _id === null || canceledTreatment ? 'display: none' : '' %>">
+                        <input type="checkbox" id="treatmentPerformed" style="display: none" name="treatmentPerformed" <%= treatmentPerformed ? 'checked="checked"' : '' %> >
+                        <button type="button" id="btnTratamentoNaoRealizado" name="treatmentPerformed" onclick="realizarTratamento(true);" class="btn btn-primary btn-large" style="width: 100%; margin-top: 25px; <%= treatmentPerformed ? 'display: none' : '' %>" >Tratamento já Realizado ?</button>
+                    </article>
+                    <article style="float: right; width: 48%; <%= _id === null || canceledTreatment ? 'display: none' : '' %>">
+                        <button type="button" id="btnTratamentoNaoCancelado" name="canceledTreatment" onclick="cancelarTratamento(true);" class="btn btn-primary btn-large" style="width: 100%; margin-top: 25px; <%= canceledTreatment || treatmentPerformed ? 'display: none' : '' %>">Cancelar Tratamento ?</button>
+                    </article>
+                            </div>
+                    </section>
+                   
+
+                    <section style="float: right; width: 48%;">
+                    <article style="float: left; width: 100%">
+                    <div class="control-group">
+                        <label for="name" class="control-label">Diagnóstico:</label>
+
+                        <div class="controls">
+                            <textarea class="form-control" id="diagnosis" name="diagnosis" maxlength="3000" style="height: 278px" placeholder="Obrigatório"><%= diagnosis === null ? '' : diagnosis %></textarea>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    <article style="float: left; width: 48%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Data Inclusão:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="dateInclusion" name="dateInclusion" value="<%= dateInclusion == null ? '' : new Date(dateInclusion).toLocaleDateString() %>" readonly/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    <article style="float: right; width: 49%">
+                    <div class="control-group">
+                        <label for="grapes" class="control-label">Data Alteração:</label>
+
+                        <div class="controls">
+                            <input type="text" class="form-control" id="dateUpdate" name="dateUpdate" value="<%= dateUpdate === null ? '' : new Date(dateUpdate).toLocaleDateString() %>" readonly/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+                    </article>
+                    </section>
+                </div>
+            </div>
+
+        </fieldset>
+        <div class="footer">
+            <button type="button" class="btn btn-primary" onclick="voltar();">Voltar à lista de tratamentos</button>
+            <button type="button" class="btn btn-primary btn-large " onclick="sessions();" <%= _id === null ? 'style="display: none"' : '' %> style="margin-right: 20px">Sessões</button>
+            <button type="button" class="btn btn-primary btn-large save"<%= canceledTreatment || treatmentPerformed ? 'style="display: none"' : '' %>>Salvar</button>
+            <button type="button" id="btnExcluir" class="btn" data-toggle="modal" href="#delTreatment">Excluir</button>
+        </div>
+
+    </form>
+
+</div>
+
+    <div id="delTreatment" class="modal container hide fade" tabindex="-1" style="width: 500px; margin-left: -250px;">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Excluir Tratamento ?</h3>
+  </div>
+  <div class="modal-footer">
+    <button type="button" data-dismiss="modal" class="btn">Cancelar</button>
+    <button type="button" data-dismiss="modal" class="btn btn-primary btn-large delete">Sim</button>
+  </div>
+  <br/>
+</div>
+<br />
+<div class="row-fluid status-bar">
+    <div class="span12">
+        <div class="alert alert-success" style="display: none">
+            <b>Success!</b> Treatment saved successfully
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function sessions()
+    {
+        window.location.assign(window.location.href + "/sessions");
+    }
+
+    function realizarTratamento(realizar) {
+
+        if (realizar) {
+            $('#treatmentPerformed').attr('checked', 'checked');
+            $('#btnTratamentoRealizado').show();
+            $('#btnTratamentoNaoRealizado').hide();
+            $('#btnTratamentoNaoCancelado').hide();
+        }
+        else {
+            $('#treatmentPerformed').removeAttr('checked');
+            $('#btnTratamentoRealizado').hide();
+            $('#btnTratamentoNaoRealizado').show();
+            $('#btnTratamentoNaoCancelado').show();
+        }
+    }
+
+    function cancelarTratamento(cancelar) {
+
+        if (cancelar) {
+            $('#canceledTreatment').attr('checked', 'checked');
+            $('#btnTratamentoCancelado').show();
+            $('#btnTratamentoNaoCancelado').hide();
+            $('#btnTratamentoRealizado').hide();
+            $('#btnTratamentoNaoRealizado').hide();
+        }
+        else {
+            $('#canceledTreatment').removeAttr('checked');
+            $('#btnTratamentoCancelado').hide();
+            $('#btnTratamentoNaoCancelado').show();
+            $('#btnTratamentoRealizado').hide();
+            $('#btnTratamentoNaoRealizado').show();
+        }
+    }
+
+    function voltar() {
+        window.location.assign(window.location.href.substring(0, window.location.href.indexOf("treatments/")) + "treatments");
+    }
+
+
+
+    var url = window.location.href.replace("#","").substring(0, window.location.href.indexOf("treatments")-2);
+    $.getJSON(url, function (data) {
+        $('legend').append(data.name);
+        });
+
+	</script>

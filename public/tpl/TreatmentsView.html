@@ -1,0 +1,36 @@
+﻿<legend>Tratamentos - </legend>
+
+<br/>
+
+<div class="row">
+<button class="btn btn-primary btn-large" onclick="voltar();">Voltar ao Paciente</button>
+<button class="btn btn-primary btn-large" onclick="addTreatment();">Incluir Tratamento</button>
+</div><!-- /.row -->
+
+<br/>
+
+<div class="row">
+    <div id="divTreatments" class="col-md12">
+        <table id="tbTreatments" class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Área Atendimento</th>
+                    <th>Nome do Médico</th>
+                    <th>Data de Inclusão</th>
+                    <th>Situação</th>
+                 </tr>
+             </thead>            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function addTreatment() {
+        window.location.assign(window.location.href + "/add"); 
+    }
+
+    function voltar() {
+        window.location.assign(window.location.href.replace('/treatments',''));
+    }
+</script>
