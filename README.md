@@ -10,8 +10,10 @@ mesmos.
 <br/>
 <br/>
 Acesse a aplicação:
-http://nodeclinica.azurewebsites.net/
+<a href="http://nodeclinica.azurewebsites.net/">http://nodeclinica.azurewebsites.net/</a>
+<br/>
  usuário: admin
+<br/>
  senha: admin
 <br/>
 <br/>
