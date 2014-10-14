@@ -18,3 +18,22 @@ Referências:
  - http://fullcalendar.io/ (excelente componente de calendário para Bootstrap)
  - https://mongodb.org (banco de dados NoSQL orientado a documentos)
  - https://github.com/ccoenraets/nodecellar
+
+Tela de Login
+![alt tag](https://raw.githubusercontent.com/lucasgiusti/nodeclinica/master/public/img/login.png)
+
+<br/>
+Painel
+![alt tag](https://raw.githubusercontent.com/lucasgiusti/nodeclinica/master/public/img/painel.png)
+
+<br/>
+Consulta de Pacientes
+![alt tag](https://raw.githubusercontent.com/lucasgiusti/nodeclinica/master/public/img/pacientes.png)
+
+<br/>
+Cadastro de Pacientes
+![alt tag](https://raw.githubusercontent.com/lucasgiusti/nodeclinica/master/public/img/paciente.png)
+
+<br/>
+Agenda
+![alt tag](https://raw.githubusercontent.com/lucasgiusti/nodeclinica/master/public/img/agenda.png)
