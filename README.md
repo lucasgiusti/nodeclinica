@@ -10,7 +10,7 @@ mesmos.
 <br/>
 <br/>
 # Exemplo:<br/>
-http://nodeclinica.azurewebsites.net/
+<a href="http://nodeclinica.azurewebsites.net/" target="_blank">http://nodeclinica.azurewebsites.net/</a>
 <br/>
 <br/>
  usuário: admin
@@ -19,14 +19,14 @@ http://nodeclinica.azurewebsites.net/
 <br/>
 <br/>
 # Referências:
- - http://nodejs.org (linguagem javascript no servidor)
+ - <a href="http://nodejs.org" target="_blank">http://nodejs.org</a> (linguagem javascript no servidor)
  - Restfull API
- - http://getbootstrap.com (Design)
- - https://github.com/Aymkdn/Datepicker-for-Bootstrap (componente DatePicker para Bootstrap)
- - http://www.malot.fr/bootstrap-datetimepicker (componente DateTimePicker para Bootstrap)
- - http://fullcalendar.io/ (excelente componente de calendário para Bootstrap)
- - https://mongodb.org (banco de dados NoSQL orientado a documentos)
- - https://github.com/ccoenraets/nodecellar
+ - <a href="http://getbootstrap.com" target="_blank">http://getbootstrap.com</a> (Design)
+ - <a href="https://github.com/Aymkdn/Datepicker-for-Bootstrap" target="_blank">https://github.com/Aymkdn/Datepicker-for-Bootstrap</a> (componente DatePicker para Bootstrap)
+ - <a href="http://www.malot.fr/bootstrap-datetimepicker" target="_blank">http://www.malot.fr/bootstrap-datetimepicker</a> (componente DateTimePicker para Bootstrap)
+ - <a href="http://fullcalendar.io/" target="_blank">http://fullcalendar.io/</a> (excelente componente de calendário para Bootstrap)
+ - <a href="https://mongodb.org" target="_blank">https://mongodb.org</a> (banco de dados NoSQL orientado a documentos)
+ - <a href="https://github.com/ccoenraets/nodecellar" target="_blank">https://github.com/ccoenraets/nodecellar</a>
 
 ===========
 # Tela de Login
