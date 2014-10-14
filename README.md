@@ -10,7 +10,8 @@ mesmos.
 <br/>
 <br/>
 Acesse a aplicação:<br/>
-<a href="http://nodeclinica.azurewebsites.net/" about="_blank">http://nodeclinica.azurewebsites.net/</a>
+![ScreenShot]http://nodeclinica.azurewebsites.net/
+<br/>
 <br/>
  usuário: admin
 <br/>
