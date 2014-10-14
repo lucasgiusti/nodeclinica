@@ -9,11 +9,12 @@ mesmos.
 
 <br/>
 <br/>
-Utilizamos Nodejs
- - http://nodejs.org
+Referências:
+ - http://nodejs.org (linguagem javascript no servidor)
  - Restfull API
  - http://getbootstrap.com (Design)
+ - https://github.com/Aymkdn/Datepicker-for-Bootstrap (componente DatePicker para Bootstrap)
+ - http://www.malot.fr/bootstrap-datetimepicker (componente DateTimePicker para Bootstrap)
+ - http://fullcalendar.io/ (excelente componente de calendário para Bootstrap)
  - https://mongodb.org (banco de dados NoSQL orientado a documentos)
-  
- Referência:
  - https://github.com/ccoenraets/nodecellar
