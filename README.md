@@ -9,7 +9,7 @@ mesmos.
 
 <br/>
 <br/>
-Acesse a aplicação:<br/>
+# Exemplo:<br/>
 http://nodeclinica.azurewebsites.net/
 <br/>
 <br/>
@@ -18,7 +18,7 @@ http://nodeclinica.azurewebsites.net/
  senha: admin
 <br/>
 <br/>
-Referências:
+# Referências:
  - http://nodejs.org (linguagem javascript no servidor)
  - Restfull API
  - http://getbootstrap.com (Design)
@@ -29,25 +29,25 @@ Referências:
  - https://github.com/ccoenraets/nodecellar
 
 ===========
-Tela de Login
+# Tela de Login
 ![alt tag](https://raw.githubusercontent.com/lucasgiusti/nodeclinica/master/public/img/login.png)
 ===========
 <br/>
 <br/>
-Painel
+# Painel
 ![alt tag](https://raw.githubusercontent.com/lucasgiusti/nodeclinica/master/public/img/painel.png)
 ===========
 <br/>
 <br/>
-Consulta de Pacientes
+# Consulta de Pacientes
 ![alt tag](https://raw.githubusercontent.com/lucasgiusti/nodeclinica/master/public/img/pacientes.png)
 ===========
 <br/>
 <br/>
-Cadastro de Pacientes
+# Cadastro de Pacientes
 ![alt tag](https://raw.githubusercontent.com/lucasgiusti/nodeclinica/master/public/img/paciente.png)
 ===========
 <br/>
 <br/>
-Agenda
+# Agenda
 ![alt tag](https://raw.githubusercontent.com/lucasgiusti/nodeclinica/master/public/img/agenda.png)
