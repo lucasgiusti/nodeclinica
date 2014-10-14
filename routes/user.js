@@ -53,7 +53,7 @@ var UserModel = mongoose.model('users', User);
 
 var getRelUsersAll = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'RELATORIO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
     }
     else {
         UserModel = mongoose.model('users', User);
@@ -69,7 +69,7 @@ var getRelUsersAll = function (req, res) {
 
 var getXmlCompleteUsersAll = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
     }
     else {
         UserModel = mongoose.model('users', User);
@@ -150,34 +150,34 @@ var validateUser = function (res, user) {
         || iz(user.type).required().equal('ATENDENTE').valid
         || iz(user.type).required().equal('GESTOR').valid)) {
         console.log('Error adding user: tipo de usuario invalido');
-        res.send('500', { status: 500, error: 'Tipo de usuario invalido' });
+        res.status('500').send({ status: 500, error: 'Tipo de usuario invalido' });
         return false;
     }
 
     if ((user.name == null) || (user.name != null && !iz.between(user.name.trim().length, 1, 100))) {
         console.log('Error adding user: o nome deve ter 1 a 100 caracteres');
-        res.send('500', { status: 500, error: 'O nome deve ter 1 a 100 caracteres' });
+        res.status('500').send({ status: 500, error: 'O nome deve ter 1 a 100 caracteres' });
         return false;
     }
     user.name = user.name.trim();
     
     if ((user.address == null) || (user.address != null && !iz.between(user.address.trim().length, 1, 100))) {
         console.log('Error adding user: o endereco deve ter 1 a 100 caracteres');
-        res.send('500', { status: 500, error: 'O endereco deve ter 1 a 100 caracteres' });
+        res.status('500').send({ status: 500, error: 'O endereco deve ter 1 a 100 caracteres' });
         return false;
     }
     user.address = user.address.trim();
 
     if ((user.number == null) || (user.number != null && !iz.between(user.number.trim().length, 1, 10))) {
         console.log('Error adding user: o numero deve ter 1 a 10 caracteres');
-        res.send('500', { status: 500, error: 'O numero deve ter 1 a 10 caracteres' });
+        res.status('500').send({ status: 500, error: 'O numero deve ter 1 a 10 caracteres' });
         return false;
     }
     user.number = user.number.trim();
 
     if (!iz.maxLength(user.complement, 20)) {
         console.log('Error adding user: o complemento deve ter maximo 20 caracteres');
-        res.send('500', { status: 500, error: 'O complemento deve ter maximo 20 caracteres' });
+        res.status('500').send({ status: 500, error: 'O complemento deve ter maximo 20 caracteres' });
         return false;
     }
     if ((user.complement == null)) { delete user.complement; } else { user.complement = user.complement.trim();}
@@ -185,42 +185,42 @@ var validateUser = function (res, user) {
 
     if ((user.district == null) || (user.district != null && !iz.between(user.district.trim().length, 1, 50))) {
         console.log('Error adding user: o bairro deve ter 1 a 50 caracteres');
-        res.send('500', { status: 500, error: 'O bairro deve ter 1 a 50 caracteres' });
+        res.status('500').send({ status: 500, error: 'O bairro deve ter 1 a 50 caracteres' });
         return false;
     }
     user.district = user.district.trim();
 
     if ((user.state == null) || (user.state != null && !iz.between(user.state.trim().length, 1, 50))) {
         console.log('Error adding user: estado invalido');
-        res.send('500', { status: 500, error: 'Estado invalido' });
+        res.status('500').send({ status: 500, error: 'Estado invalido' });
         return false;
     }
     user.state = user.state.trim();
 
     if ((user.city == null) || (user.city != null && !iz.between(user.city.trim().length, 1, 50))) {
         console.log('Error adding user: cidade invalida');
-        res.send('500', { status: 500, error: 'Cidade invalida' });
+        res.status('500').send({ status: 500, error: 'Cidade invalida' });
         return false;
     }
     user.city = user.city.trim();
 
     if (!iz.maxLength(user.cep, 9)) {
         console.log('Error adding user: o cep deve ter maximo 9 caracteres');
-        res.send('500', { status: 500, error: 'O cep deve ter maximo 9 caracteres' });
+        res.status('500').send({ status: 500, error: 'O cep deve ter maximo 9 caracteres' });
         return false;
     }
     if ((user.cep == null)) { delete user.cep; } else { user.cep = user.cep.trim();}
 
     if ((user.registration == null) || (user.registration != null && !iz.between(user.registration.trim().length, 1, 30))) {
         console.log('Error adding user: a matricula ou registro deve ter 1 a 30 caracteres');
-        res.send('500', { status: 500, error: 'A matricula ou registro deve ter 1 a 30 caracteres' });
+        res.status('500').send({ status: 500, error: 'A matricula ou registro deve ter 1 a 30 caracteres' });
         return false;
     }
     user.registration = user.registration.trim();
 
     if ((user.phone1 == null) || (user.phone1 != null && !iz.between(user.phone1.trim().length, 1, 20))) {
         console.log('Error adding user: o telefone 1 deve ter 1 a 20 caracteres');
-            res.send('500', { status: 500, error: 'O telefone 1 deve ter 1 a 20 caracteres' });
+        res.status('500').send({ status: 500, error: 'O telefone 1 deve ter 1 a 20 caracteres' });
         return false;
     }
     user.phone1 = user.phone1.trim();
@@ -231,42 +231,42 @@ var validateUser = function (res, user) {
 
     if (!iz.maxLength(user.rg, 20)) {
         console.log('Error adding user: o RG deve ter maximo 20 caracteres');
-        res.send('500', { status: 500, error: 'O RG deve ter maximo 20 caracteres' });
+        res.status('500').send({ status: 500, error: 'O RG deve ter maximo 20 caracteres' });
         return false;
     }
     if ((user.rg == null)) { delete user.rg; } else { user.rg = user.rg.trim();}
 
     if (!iz.maxLength(user.phone2, 20)) {
         console.log('Error adding user: o telefone 2 deve ter maximo 20 caracteres');
-        res.send('500', { status: 500, error: 'O telefone 2 deve ter maximo 20 caracteres' });
+        res.status('500').send({ status: 500, error: 'O telefone 2 deve ter maximo 20 caracteres' });
         return false;
     }
     if ((user.phone2 == null)) { delete user.phone2; } else { user.phone2 = user.phone2.trim();}
 
     if (user.cpf == null || !validaCpf(user.cpf)) {
         console.log('Error adding user: CPF invalido');
-        res.send('500', { status: 500, error: 'CPF invalido' });
+        res.status('500').send({ status: 500, error: 'CPF invalido' });
         return false;
     }
     user.cpf = user.cpf.trim();
 
     if (!iz.maxLength(user.phone3, 20)) {
         console.log('Error adding user: o telefone 3 deve ter maximo 20 caracteres');
-        res.send('500', { status: 500, error: 'O telefone 3 deve ter maximo 20 caracteres' });
+        res.status('500').send({ status: 500, error: 'O telefone 3 deve ter maximo 20 caracteres' });
         return false;
     }
     if ((user.phone3 == null)) { delete user.phone3; } else { user.phone3 = user.phone3.trim();}
 
     if (!iz(user.mail).required().email().valid) {
         console.log('Error adding user: email invalido');
-        res.send('500', { status: 500, error: 'Email invalido' });
+        res.status('500').send({ status: 500, error: 'Email invalido' });
         return false;
     }
     user.mail = user.mail.trim();
 
     if (!iz(user.dateInclusion).required().date().valid) {
         console.log('Error adding user: data de inclusao invalida');
-        res.send('500', { status: 500, error: 'Data de inclusao invalida' });
+        res.status('500').send({ status: 500, error: 'Data de inclusao invalida' });
         return false;
     }
 
@@ -282,21 +282,21 @@ var putUser = function (res, user, id) {
         if (!err) {
             if (u) {
                 console.log('Error updating user: a matricula ou registro ja existe');
-                res.send('500', { status: 500, error: 'A matricula ou registro ja existe' });
+                res.status('500').send({ status: 500, error: 'A matricula ou registro ja existe' });
             }
             else {
                 UserModel.findOne({ 'cpf': user.cpf, '_id': { $nin: [objectID]} }, function (err, u) {
                     if (!err) {
                         if (u) {
                             console.log('Error updating user: o CPF ja existe');
-                            res.send('500', { status: 500, error: 'O CPF ja existe' });
+                            res.status('500').send({ status: 500, error: 'O CPF ja existe' });
                         }
                         else {
                             UserModel.findOne({ 'mail': user.mail, '_id': { $nin: [objectID]} }, function (err, u) {
                                 if (!err) {
                                     if (u) {
                                         console.log('Error updating user: o Email ja existe');
-                                        res.send('500', { status: 500, error: 'O Email ja existe' });
+                                        res.status('500').send({ status: 500, error: 'O Email ja existe' });
                                     }
                                     else {
                                         //UPDATE USER
@@ -331,7 +331,7 @@ var putUser = function (res, user, id) {
                                         UserModel.update({ '_id': id }, user, { safe: true }, function (err, result) {
                                             if (err) {
                                                 console.log('Error updating user: ' + err);
-                                                res.send('500', { status: 500, error: err });
+                                                res.status('500').send({ status: 500, error: err });
                                             } else {
                                                 console.log('' + result + ' document(s) updated');
 
@@ -341,19 +341,19 @@ var putUser = function (res, user, id) {
                                     }
                                 } else {
                                     console.log(err);
-                                    res.send('500', { status: 500, error: err });
+                                    res.status('500').send({ status: 500, error: err });
                                 }
                             });
                         }
                     } else {
                         console.log(err);
-                        res.send('500', { status: 500, error: err });
+                        res.status('500').send({ status: 500, error: err });
                     }
                 });
             }
         } else {
             console.log(err);
-            res.send('500', { status: 500, error: err });
+            res.status('500').send({ status: 500, error: err });
         }
     });
 
@@ -365,7 +365,7 @@ var postUser = function (res, user) {
         if (!err) {
             if (u) {
                 console.log('Error adding user: a matricula ou registro ja existe');
-                res.send('500', { status: 500, error: 'A matricula ou registro ja existe' });
+                res.status('500').send({ status: 500, error: 'A matricula ou registro ja existe' });
                 return;
             }
             else {
@@ -373,7 +373,7 @@ var postUser = function (res, user) {
                     if (!err) {
                         if (u) {
                             console.log('Error adding user: o CPF ja existe');
-                            res.send('500', { status: 500, error: 'O CPF ja existe' });
+                            res.status('500').send({ status: 500, error: 'O CPF ja existe' });
                             return;
                         }
                         else {
@@ -381,7 +381,7 @@ var postUser = function (res, user) {
                                 if (!err) {
                                     if (u) {
                                         console.log('Error adding user: o Email ja existe');
-                                        res.send('500', { status: 500, error: 'O Email ja existe' });
+                                        res.status('500').send({ status: 500, error: 'O Email ja existe' });
                                         return;
                                     }
                                     else {
@@ -392,7 +392,7 @@ var postUser = function (res, user) {
                                         UserModel.save(function (err, user, result) {
                                             if (err) {
                                                 console.log('Error inserting user: ' + err);
-                                                res.send('500', { status: 500, error: err });
+                                                res.status('500').send({ status: 500, error: err });
                                             } else {
                                                 console.log('' + result + ' document(s) inserted');
                                                 res.send(user);
@@ -401,19 +401,19 @@ var postUser = function (res, user) {
                                     }
                                 } else {
                                     console.log(err);
-                                    res.send('500', { status: 500, error: err });
+                                    res.status('500').send({ status: 500, error: err });
                                 }
                             });
                         }
                     } else {
                         console.log(err);
-                        res.send('500', { status: 500, error: err });
+                        res.status('500').send({ status: 500, error: err });
                     }
                 });
             }
         } else {
             console.log(err);
-            res.send('500', { status: 500, error: err });
+            res.status('500').send({ status: 500, error: err });
             return;
         }
     });
@@ -431,7 +431,7 @@ var delUser = function (res, req, id) {
                         if (!err) {
                             if(patient)
                             {
-                                res.send('500', { status: 500, error: 'Existem sessões vinculadas, não é possível excluir' });
+                                res.status('500').send({ status: 500, error: 'Existem sessões vinculadas, não é possível excluir' });
                             }
                             else{
                                 AccountModel.findOne({ 'username': user.mail }, { _id: 1 }, function (err, account) {
@@ -445,7 +445,7 @@ var delUser = function (res, req, id) {
 
                                     } else {
                                         console.log('Error updating account: ' + err);
-                                        res.send('500', { status: 500, error: err });
+                                        res.status('500').send({ status: 500, error: err });
                                     }
                                 });
                             }
@@ -457,16 +457,16 @@ var delUser = function (res, req, id) {
 
                 }
                 else {
-                    res.send('500', { status: 500, error: 'Nao e possivel excluir o proprio usuario' });
+                    res.status('500').send({ status: 500, error: 'Nao e possivel excluir o proprio usuario' });
                 }
             }
             else {
-                res.send('500', { status: 500, error: 'Usuario nao encontrado' });
+                res.status('500').send({ status: 500, error: 'Usuario nao encontrado' });
             }
 
         } else {
             console.log('Error deleting user: ' + err);
-            res.send('500', { status: 500, error: err });
+            res.status('500').send({ status: 500, error: err });
         }
     });
 }

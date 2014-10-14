@@ -95,7 +95,7 @@ var getAttendantsById = function (req, res) {
 
 var putAttendant = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
     }
     else {
         var id = req.params.id;
@@ -112,7 +112,7 @@ var putAttendant = function (req, res) {
 
 var delAttendant = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
     }
     else {
         var id = req.params.id;
@@ -123,7 +123,7 @@ var delAttendant = function (req, res) {
 
 var postAttendant = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
     }
     else {
         var user = req.body;

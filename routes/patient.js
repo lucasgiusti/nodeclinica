@@ -84,63 +84,63 @@ var validatePatient = function (res, patient) {
 
     if ((patient.name == null) || (patient.name != null && !iz.between(patient.name.trim().length, 1, 100))) {
         console.log('Error adding patient: o nome deve ter 1 a 100 caracteres');
-        res.send('500', { status: 500, error: 'O nome deve ter 1 a 100 caracteres' });
+        res.status('500').send({ status: 500, error: 'O nome deve ter 1 a 100 caracteres' });
         return false;
     }
     patient.name = patient.name.trim();
 
     if ((patient.address == null) || (patient.address != null && !iz.between(patient.address.trim().length, 1, 100))) {
         console.log('Error adding patient: o endereco deve ter 1 a 100 caracteres');
-        res.send('500', { status: 500, error: 'O endereco deve ter 1 a 100 caracteres' });
+        res.status('500').send({ status: 500, error: 'O endereco deve ter 1 a 100 caracteres' });
         return false;
     }
     patient.address = patient.address.trim();
 
     if ((patient.number == null) || (patient.number != null && !iz.between(patient.number.trim().length, 1, 10))) {
         console.log('Error adding patient: o numero deve ter 1 a 10 caracteres');
-        res.send('500', { status: 500, error: 'O numero deve ter 1 a 10 caracteres' });
+        res.status('500').send({ status: 500, error: 'O numero deve ter 1 a 10 caracteres' });
         return false;
     }
     patient.number = patient.number.trim();
 
     if (!iz.maxLength(patient.complement, 20)) {
         console.log('Error adding patient: o complemento deve ter maximo 20 caracteres');
-        res.send('500', { status: 500, error: 'O complemento deve ter maximo 20 caracteres' });
+        res.status('500').send({ status: 500, error: 'O complemento deve ter maximo 20 caracteres' });
         return false;
     }
     if ((patient.complement == null)) { delete patient.complement; } else { patient.complement = patient.complement.trim();}
 
     if ((patient.district == null) || (patient.district != null && !iz.between(patient.district.trim().length, 1, 50))) {
         console.log('Error adding patient: o bairro deve ter 1 a 50 caracteres');
-        res.send('500', { status: 500, error: 'O bairro deve ter 1 a 50 caracteres' });
+        res.status('500').send({ status: 500, error: 'O bairro deve ter 1 a 50 caracteres' });
         return false;
     }
     patient.district = patient.district.trim();
     
     if ((patient.state == null) || (patient.state != null && !iz.between(patient.state.trim().length, 1, 50))) {
         console.log('Error adding patient: estado invalido');
-        res.send('500', { status: 500, error: 'Estado invalido' });
+        res.status('500').send({ status: 500, error: 'Estado invalido' });
         return false;
     }
     patient.state = patient.state.trim();
 
     if ((patient.city == null) || (patient.city != null && !iz.between(patient.city.trim().length, 1, 50))) {
         console.log('Error adding patient: cidade invalida');
-        res.send('500', { status: 500, error: 'Cidade invalida' });
+        res.status('500').send({ status: 500, error: 'Cidade invalida' });
         return false;
     }
     patient.city = patient.city.trim();
 
     if (!iz.maxLength(patient.cep, 9)) {
         console.log('Error adding patient: o cep deve ter maximo 9 caracteres');
-        res.send('500', { status: 500, error: 'O cep deve ter maximo 9 caracteres' });
+        res.status('500').send({ status: 500, error: 'O cep deve ter maximo 9 caracteres' });
         return false;
     }
     if ((patient.cep == null)) { delete patient.cep; } else { patient.cep = patient.cep.trim();}
 
     if (patient.maritalStatus == null || patient.maritalStatus == '') {
         console.log('Error adding patient: estado civil invalido');
-        res.send('500', { status: 500, error: 'Estado civil invalido' });
+        res.status('500').send({ status: 500, error: 'Estado civil invalido' });
         return false;
     }
     patient.maritalStatus = patient.maritalStatus.trim();
@@ -150,14 +150,14 @@ var validatePatient = function (res, patient) {
 
     if ((patient.phone1 == null) || (patient.phone1 != null && !iz.between(patient.phone1.trim().length, 1, 20))) {
         console.log('Error adding user: o telefone 1 deve ter 1 a 20 caracteres');
-        res.send('500', { status: 500, error: 'O telefone 1 deve ter 1 a 20 caracteres' });
+        res.status('500').send({ status: 500, error: 'O telefone 1 deve ter 1 a 20 caracteres' });
         return false;
     }
     patient.phone1 = patient.phone1.trim();
 
     if (!iz(patient.dateBirth).required().date().valid) {
         console.log('Error adding patient: data de nascimento invalida');
-        res.send('500', { status: 500, error: 'Data de nascimento invalida' });
+        res.status('500').send({ status: 500, error: 'Data de nascimento invalida' });
         return false;
     }
 
@@ -165,34 +165,34 @@ var validatePatient = function (res, patient) {
 
     if (patient.dateBirth > new Date()) {
         console.log('Error adding patient: data de nascimento invalida');
-        res.send('500', { status: 500, error: 'Data de nascimento invalida' });
+        res.status('500').send({ status: 500, error: 'Data de nascimento invalida' });
         return false;
     }
 
     if (patient.sex == null) {
         console.log('Error adding patient: sexo invalido');
-        res.send('500', { status: 500, error: 'Sexo invalido' });
+        res.status('500').send({ status: 500, error: 'Sexo invalido' });
         return false;
     }
     patient.sex = patient.sex.trim();
 
     if (!iz.maxLength(patient.phone2, 20)) {
         console.log('Error adding patient: o telefone 2 deve ter maximo 20 caracteres');
-        res.send('500', { status: 500, error: 'O telefone 2 deve ter maximo 20 caracteres' });
+        res.status('500').send({ status: 500, error: 'O telefone 2 deve ter maximo 20 caracteres' });
         return false;
     }
     if ((patient.phone2 == null)) { delete patient.phone2; } else { patient.phone2 = patient.phone2.trim();}
 
     if (!iz.maxLength(patient.phone3, 20)) {
         console.log('Error adding patient: o telefone 3 deve ter maximo 20 caracteres');
-        res.send('500', { status: 500, error: 'O telefone 3 deve ter maximo 20 caracteres' });
+        res.status('500').send({ status: 500, error: 'O telefone 3 deve ter maximo 20 caracteres' });
         return false;
     }
     if ((patient.phone3 == null)) { delete patient.phone3; } else { patient.phone3 = patient.phone3.trim();}
 
     if ((patient.cpf == null || !utilRoute.validaCpf(patient.cpf)) && (patient.responsibleCPF == null || !utilRoute.validaCpf(patient.responsibleCPF))) {
         console.log('Error adding patient: um CPF valido deve ser informado para o paciente ou o responsavel');
-        res.send('500', { status: 500, error: 'Um CPF valido deve ser informado para o paciente ou o responsavel' });
+        res.status('500').send({ status: 500, error: 'Um CPF valido deve ser informado para o paciente ou o responsavel' });
         return false;
     }
     if ((patient.cpf != null)) { patient.cpf = patient.cpf.trim(); }
@@ -201,7 +201,7 @@ var validatePatient = function (res, patient) {
 
     if (patient.responsibleName != null && !iz.maxLength(patient.responsibleName.trim(), 100)) {
         console.log('Error adding patient: o nome do responsavel deve ter maximo 100 caracteres');
-        res.send('500', { status: 500, error: 'O nome do responsavel deve ter maximo 100 caracteres' });
+        res.status('500').send({ status: 500, error: 'O nome do responsavel deve ter maximo 100 caracteres' });
         return false;
     }
     if ((patient.responsibleName == !null)) { patient.responsibleName = patient.responsibleName.trim(); }
@@ -210,13 +210,13 @@ var validatePatient = function (res, patient) {
     if (((patient.responsibleCPF != null && patient.responsibleCPF != '') && (patient.responsibleName == null || (patient.responsibleName != null && patient.responsibleName.trim() == '')))
         || ((patient.responsibleName != null && patient.responsibleName != '') && (patient.responsibleCPF == null || (patient.responsibleCPF != null && patient.responsibleCPF.trim() == '')))) {
         console.log('Error adding patient: caso tenha um responsavel, devem ser informados nome e CPF do mesmo');
-        res.send('500', { status: 500, error: 'Caso tenha um responsavel, devem ser informados nome e CPF do mesmo' });
+        res.status('500').send({ status: 500, error: 'Caso tenha um responsavel, devem ser informados nome e CPF do mesmo' });
         return false;
     }
 
     if (!iz(patient.dateInclusion).required().date().valid) {
         console.log('Error adding patient: data de inclusao invalida');
-        res.send('500', { status: 500, error: 'Data de inclusao invalida' });
+        res.status('500').send({ status: 500, error: 'Data de inclusao invalida' });
         return false;
     }
 
@@ -226,7 +226,7 @@ var validatePatient = function (res, patient) {
 
 var putPatient = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
     }
     else {
         var id = req.params.id;
@@ -248,7 +248,7 @@ var putPatient = function (req, res) {
                     if (!err) {
                         if (u) {
                             console.log('Error updating patient: o CPF ja existe');
-                            res.send('500', { status: 500, error: 'O CPF ja existe' });
+                            res.status('500').send({ status: 500, error: 'O CPF ja existe' });
                         }
                         else {
                             //UPDATE PATIENT
@@ -256,7 +256,7 @@ var putPatient = function (req, res) {
                             PatientModel.update({ '_id': id }, patient, { safe: true }, function (err, result) {
                                 if (err) {
                                     console.log('Error updating patient: ' + err);
-                                    res.send('500', { status: 500, error: err });
+                                    res.status('500').send({ status: 500, error: err });
                                 } else {
                                     console.log('' + result + ' document(s) updated');
 
@@ -266,7 +266,7 @@ var putPatient = function (req, res) {
                         }
                     } else {
                         console.log(err);
-                        res.send('500', { status: 500, error: err });
+                        res.status('500').send({ status: 500, error: err });
                     }
                 });
             }
@@ -275,7 +275,7 @@ var putPatient = function (req, res) {
                 PatientModel.update({ '_id': id }, patient, { safe: true }, function (err, result) {
                     if (err) {
                         console.log('Error updating patient: ' + err);
-                        res.send('500', { status: 500, error: err });
+                        res.status('500').send({ status: 500, error: err });
                     } else {
                         console.log('' + result + ' document(s) updated');
 
@@ -290,7 +290,7 @@ var putPatient = function (req, res) {
 var postPatient = function (req, res) {
     
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
     }
     else {
         var patient = req.body;
@@ -305,7 +305,7 @@ var postPatient = function (req, res) {
                     if (!err) {
                         if (u) {
                             console.log('Error adding patient: o CPF ja existe');
-                            res.send('500', { status: 500, error: 'O CPF ja existe' });
+                            res.status('500').send({ status: 500, error: 'O CPF ja existe' });
                             return;
                         }
                         else {
@@ -317,7 +317,7 @@ var postPatient = function (req, res) {
                             PatientModel.save(function (err, patient, result) {
                                 if (err) {
                                     console.log('Error inserting patient: ' + err);
-                                    res.send('500', { status: 500, error: err });
+                                    res.status('500').send({ status: 500, error: err });
                                 } else {
                                     console.log('' + result + ' document(s) inserted');
                                     res.send(patient);
@@ -326,7 +326,7 @@ var postPatient = function (req, res) {
                         }
                     } else {
                         console.log(err);
-                        res.send('500', { status: 500, error: err });
+                        res.status('500').send({ status: 500, error: err });
                     }
                 });
             }
@@ -339,7 +339,7 @@ var postPatient = function (req, res) {
                 PatientModel.save(function (err, patient, result) {
                     if (err) {
                         console.log('Error inserting patient: ' + err);
-                        res.send('500', { status: 500, error: err });
+                        res.status('500').send({ status: 500, error: err });
                     } else {
                         console.log('' + result + ' document(s) inserted');
                         res.send(patient);
@@ -352,7 +352,7 @@ var postPatient = function (req, res) {
 
 var delPatient = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
     }
     else {
         console.log('Deleting patient: ' + req.params.id);
@@ -362,7 +362,7 @@ var delPatient = function (req, res) {
             if (!err) {
                 if (patient) {
                     if (patient.treatments.length > 0) {
-                        res.send('500', { status: 500, error: 'Existe tratamento para este paciente' });
+                        res.status('500').send({ status: 500, error: 'Existe tratamento para este paciente' });
                     }
                     else {
                         patient.remove(function () { res.send(patient); });
@@ -370,7 +370,7 @@ var delPatient = function (req, res) {
                 }
             }
             else {
-                res.send('500', { status: 500, error: 'Usuario nao encontrado' });
+                res.status('500').send({ status: 500, error: 'Usuario nao encontrado' });
             }
         });
     }
@@ -389,7 +389,7 @@ var getPatientsAll = function (req, res) {
 
 var getRelPatientsAll = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'RELATORIO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
     }
     else {
         PatientModel = mongoose.model('patients', Patient);
@@ -405,7 +405,7 @@ var getRelPatientsAll = function (req, res) {
 
 var getRelCompletePatientsAll = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'RELATORIO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
     }
     else {
         PatientModel = mongoose.model('patients', Patient);
@@ -421,7 +421,7 @@ var getRelCompletePatientsAll = function (req, res) {
 
 var getXmlCompletePatientsAll = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
     }
     else {
         PatientModel = mongoose.model('patients', Patient);

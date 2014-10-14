@@ -112,7 +112,7 @@ var getTeachersActive = function (req, res) {
 
 var putTeacher = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
     }
     else {
         var id = req.params.id;
@@ -129,7 +129,7 @@ var putTeacher = function (req, res) {
 
 var delTeacher = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
     }
     else {
         var id = req.params.id;
@@ -139,7 +139,7 @@ var delTeacher = function (req, res) {
             if (!err) {
                 if (patients.length > 0) {
                     console.log('Error deleting teacher: o professor já está vinculado a um atendimento. Só é permitido desativá-lo');
-                    res.send('500', { status: 500, error: 'O professor já está vinculado a um atendimento. Só é permitido desativá-lo' });
+                    res.status('500').send({ status: 500, error: 'O professor já está vinculado a um atendimento. Só é permitido desativá-lo' });
                 }
                 else {
                     userRoute.delUser(res, req, id);
@@ -153,7 +153,7 @@ var delTeacher = function (req, res) {
 
 var postTeacher = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
     }
     else {
         var user = req.body;

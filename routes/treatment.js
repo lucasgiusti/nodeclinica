@@ -18,27 +18,27 @@ var validateTreatment = function (res, treatment) {
 
     if (treatment.serviceArea == null || treatment.serviceArea == '') {
         console.log('Error adding treatment: area de atendimento invalida');
-        res.send('500', { status: 500, error: 'Area de atendimento invalida' });
+        res.status('500').send({ status: 500, error: 'Area de atendimento invalida' });
         return false;
     }
 
     if ((treatment.doctor == null) || (treatment.doctor != null && !iz.between(treatment.doctor.trim().length, 1, 100))) {
         console.log('Error adding treatment: o nome do medico deve ter 1 a 100 caracteres');
-        res.send('500', { status: 500, error: 'O nome do medico deve ter 1 a 100 caracteres' });
+        res.status('500').send({ status: 500, error: 'O nome do medico deve ter 1 a 100 caracteres' });
         return false;
     }
     treatment.doctor = treatment.doctor.trim();
 
     if ((treatment.CRMDoctor == null) || (treatment.CRMDoctor != null && !iz.between(treatment.CRMDoctor.trim().length, 1, 20))) {
         console.log('Error adding treatment: o CRM do medico deve ter 1 a 20 caracteres');
-        res.send('500', { status: 500, error: 'O CRM do medico deve ter 1 a 20 caracteres' });
+        res.status('500').send({ status: 500, error: 'O CRM do medico deve ter 1 a 20 caracteres' });
         return false;
     }
     treatment.CRMDoctor = treatment.CRMDoctor.trim();
 
     if (!iz.maxLength(treatment.observations, 3000)) {
         console.log('Error adding treatment: o complemento deve ter maximo 20 caracteres');
-        res.send('500', { status: 500, error: 'O complemento deve ter maximo 20 caracteres' });
+        res.status('500').send({ status: 500, error: 'O complemento deve ter maximo 20 caracteres' });
         return false;
     }
     if (treatment.observations != null) { treatment.observations = treatment.observations.trim() };
@@ -53,14 +53,14 @@ var validateTreatment = function (res, treatment) {
 
     if ((treatment.diagnosis == null) || (treatment.diagnosis != null && !iz.between(treatment.diagnosis.trim().length, 1, 3000))) {
         console.log('Error adding treatment: o diagnostico deve ter 1 a 3000 caracteres');
-        res.send('500', { status: 500, error: 'O diagnostico deve ter 1 a 3000 caracteres' });
+        res.status('500').send({ status: 500, error: 'O diagnostico deve ter 1 a 3000 caracteres' });
         return false;
     }
     treatment.diagnosis = treatment.diagnosis.trim();
 
     if (!iz(treatment.dateInclusion).required().date().valid) {
         console.log('Error adding treatment: data de inclusao invalida');
-        res.send('500', { status: 500, error: 'Data de inclusao invalida' });
+        res.status('500').send({ status: 500, error: 'Data de inclusao invalida' });
         return false;
     }
 
@@ -92,7 +92,7 @@ var getTreatmentsById = function (req, res) {
 
 var putTreatment = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
     }
     else {
 
@@ -123,13 +123,13 @@ var putTreatment = function (req, res) {
 
                                             if (treatment.canceledTreatment == true && patient.treatments[i].sessions[j].everHeld == true) {
                                                 console.log('Error updating treatment: existe sessão realizada');
-                                                res.send('500', { status: 500, error: 'Existe sessão realizada' });
+                                                res.status('500').send({ status: 500, error: 'Existe sessão realizada' });
                                             }
                                             else {
                                                 if (patient.treatments[i].sessions[j].canceledSession == false && patient.treatments[i].sessions[j].everHeld == false) {
                                                     {
                                                         console.log('Error updating treatment: existe sessão aberta');
-                                                        res.send('500', { status: 500, error: 'Existe sessão aberta' });
+                                                        res.status('500').send({ status: 500, error: 'Existe sessão aberta' });
                                                     }
                                                 }
                                                 else {
@@ -137,7 +137,7 @@ var putTreatment = function (req, res) {
                                                         patientRoute.PatientModel.update({ '_id': idPatient, 'treatments._id': id }, { $set: { 'treatments.$': treatment } }, function (err, patient) {
                                                             if (err) {
                                                                 console.log('Error updating treatment: ' + err);
-                                                                res.send('500', { status: 500, error: err });
+                                                                res.status('500').send({ status: 500, error: err });
                                                             } else {
                                                                 console.log('document(s) updated');
 
@@ -154,7 +154,7 @@ var putTreatment = function (req, res) {
                                             patientRoute.PatientModel.update({ '_id': idPatient, 'treatments._id': id }, { $set: { 'treatments.$': treatment } }, function (err, patient) {
                                                 if (err) {
                                                     console.log('Error updating treatment: ' + err);
-                                                    res.send('500', { status: 500, error: err });
+                                                    res.status('500').send({ status: 500, error: err });
                                                 } else {
                                                     console.log('document(s) updated');
 
@@ -169,7 +169,7 @@ var putTreatment = function (req, res) {
                                         patientRoute.PatientModel.update({ '_id': idPatient, 'treatments._id': id }, { $set: { 'treatments.$': treatment } }, function (err, patient) {
                                             if (err) {
                                                 console.log('Error updating treatment: ' + err);
-                                                res.send('500', { status: 500, error: err });
+                                                res.status('500').send({ status: 500, error: err });
                                             } else {
                                                 console.log('document(s) updated');
 
@@ -188,7 +188,7 @@ var putTreatment = function (req, res) {
             }
             else {
                 console.log(err);
-                res.send('500', { status: 500, error: err });
+                res.status('500').send({ status: 500, error: err });
             }
         });
     }
@@ -197,7 +197,7 @@ var putTreatment = function (req, res) {
 var postTreatment = function (req, res) {
 
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
     }
     else {
         var idPatient = req.params.idPatient;
@@ -227,7 +227,7 @@ var postTreatment = function (req, res) {
                         patient.save(function (err, result) {
                             if (err) {
                                 console.log('Error updating treatment: ' + err);
-                                res.send('500', { status: 500, error: err });
+                                res.status('500').send({ status: 500, error: err });
                             } else {
                                 console.log('document(s) updated');
                                 res.send(patient.treatments[patient.treatments.length - 1]);
@@ -237,7 +237,7 @@ var postTreatment = function (req, res) {
                 }
                 else {
                     console.log(err);
-                    res.send('500', { status: 500, error: err });
+                    res.status('500').send({ status: 500, error: err });
                 }
 
             });
@@ -247,7 +247,7 @@ var postTreatment = function (req, res) {
 
 var delTreatment = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
     }
     else {
         console.log('Deleting treatment: ' + req.params.id);
@@ -261,7 +261,7 @@ var delTreatment = function (req, res) {
                 }
             }
             else {
-                res.send('500', { status: 500, error: 'Tratamento nao encontrado' });
+                res.status('500').send({ status: 500, error: 'Tratamento nao encontrado' });
             }
         });
     }

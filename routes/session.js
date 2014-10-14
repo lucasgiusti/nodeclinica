@@ -27,31 +27,31 @@ var validateSession = function (res, session) {
 
     if (session.typeSession == null) {
         console.log('Error adding session: tipo de Sessao invalida');
-        res.send('500', { status: 500, error: 'Tipo de Sessao invalida' });
+        res.status('500').send({ status: 500, error: 'Tipo de Sessao invalida' });
         return false;
     }
 
     if (session.typeService == null) {
         console.log('Error adding session: modalidade de Atendimento invalida');
-        res.send('500', { status: 500, error: 'Modalidade de Atendimento invalida' });
+        res.status('500').send({ status: 500, error: 'Modalidade de Atendimento invalida' });
         return false;
     }
 
     if (session.studentId == null) {
         console.log('Error adding session: aluno invalido');
-        res.send('500', { status: 500, error: 'Aluno Invalido' });
+        res.status('500').send({ status: 500, error: 'Aluno Invalido' });
         return false;
     }
 
     if (session.teacherId == null) {
         console.log('Error adding session: professor invalido');
-        res.send('500', { status: 500, error: 'Professor Invalido' });
+        res.status('500').send({ status: 500, error: 'Professor Invalido' });
         return false;
     }
 
     if (!iz.maxLength(session.observations, 3000)) {
         console.log('Error adding session: a observacao deve ter maximo 3000 caracteres');
-        res.send('500', { status: 500, error: 'A observacao deve ter maximo 3000 caracteres' });
+        res.status('500').send({ status: 500, error: 'A observacao deve ter maximo 3000 caracteres' });
         return false;
     }
     if (session.observations != null) { session.observations = session.observations.trim(); }
@@ -59,33 +59,33 @@ var validateSession = function (res, session) {
 
     if (!iz(session.dateSchedulingStart).required().date().valid) {
         console.log('Error adding session: data de Agendamento Inicio invalida');
-        res.send('500', { status: 500, error: 'Data de Agendamento Inicio invalida' });
+        res.status('500').send({ status: 500, error: 'Data de Agendamento Inicio invalida' });
         return false;
     }
 
     if (!iz(session.dateSchedulingEnd).required().date().valid) {
         console.log('Error adding session: data de Agendamento Final invalida');
-        res.send('500', { status: 500, error: 'Data de Agendamento Final invalida' });
+        res.status('500').send({ status: 500, error: 'Data de Agendamento Final invalida' });
         return false;
     }
 
     if (session.dateSchedulingEnd <= session.dateSchedulingStart) {
         console.log('Error adding session: data de Agendamento Final invalida');
-        res.send('500', { status: 500, error: 'Data de Agendamento Final invalida' });
+        res.status('500').send({ status: 500, error: 'Data de Agendamento Final invalida' });
         return false;
     }
 
     if (session.canceledSession == false && session.everHeld == false) {
         if (Date.parse(session.dateSchedulingStart) < Date.parse(new Date())) {
             console.log('Error adding session: data de Agendamento Inicio invalida');
-            res.send('500', { status: 500, error: 'Data de Agendamento Inicio invalida' });
+            res.status('500').send({ status: 500, error: 'Data de Agendamento Inicio invalida' });
             return false;
         }
     }
 
     if (!iz(session.dateInclusion).required().date().valid) {
         console.log('Error adding session: data de inclusao invalida');
-        res.send('500', { status: 500, error: 'Data de inclusao invalida' });
+        res.status('500').send({ status: 500, error: 'Data de inclusao invalida' });
         return false;
     }
 
@@ -235,7 +235,7 @@ var getSessionsById = function (req, res) {
 var postSession = function (req, res) {
 
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
     }
     else {
 
@@ -273,7 +273,7 @@ var horarioDisponivelPatient = function (req, res, callback) {
                                             (patients[i].treatments[y].sessions[z].dateSchedulingEnd > dateStart && patients[i].treatments[y].sessions[z].dateSchedulingEnd <= dateEnd)) {
 
                                             console.log('Error adding session: o paciente selecionado já possui agenda para este horário');
-                                            res.send('500', { status: 500, error: 'O paciente selecionado já possui agenda para este horário' });
+                                            res.status('500').send({ status: 500, error: 'O paciente selecionado já possui agenda para este horário' });
                                             return;
                                         }
 
@@ -296,7 +296,7 @@ var horarioDisponivelPatient = function (req, res, callback) {
         }
         else {
             console.log(err);
-            res.send('500', { status: 500, error: err });
+            res.status('500').send({ status: 500, error: err });
         }
         
 
@@ -329,7 +329,7 @@ var horarioDisponivelTeacher = function (req, res, callback) {
                                             (patients[i].treatments[y].sessions[z].dateSchedulingEnd > dateStart && patients[i].treatments[y].sessions[z].dateSchedulingEnd <= dateEnd && (patients[i].treatments[y].sessions[z].typeService == 'INDIVIDUAL' || typeServiceNew == 'INDIVIDUAL'))) {
 
                                             console.log('Error adding session: o professor selecionado já possui agenda para este horário');
-                                            res.send('500', { status: 500, error: 'O professor selecionado já possui agenda para este horário' });
+                                            res.status('500').send({ status: 500, error: 'O professor selecionado já possui agenda para este horário' });
                                             return;
                                         }
                                     }
@@ -353,7 +353,7 @@ var horarioDisponivelTeacher = function (req, res, callback) {
         }
         else {
             console.log(err);
-            res.send('500', { status: 500, error: err });
+            res.status('500').send({ status: 500, error: err });
         }
 
 
@@ -386,7 +386,7 @@ var horarioDisponivelStudent = function (req, res, callback) {
                                             (patients[i].treatments[y].sessions[z].dateSchedulingEnd > dateStart && patients[i].treatments[y].sessions[z].dateSchedulingEnd <= dateEnd && (patients[i].treatments[y].sessions[z].typeService == 'INDIVIDUAL' || typeServiceNew == 'INDIVIDUAL'))) {
 
                                             console.log('Error adding session: o aluno selecionado já possui agenda para este horário');
-                                            res.send('500', { status: 500, error: 'O aluno selecionado já possui agenda para este horário' });
+                                            res.status('500').send({ status: 500, error: 'O aluno selecionado já possui agenda para este horário' });
                                             return;
                                         }
                                     }
@@ -409,7 +409,7 @@ var horarioDisponivelStudent = function (req, res, callback) {
         }
         else {
             console.log(err);
-            res.send('500', { status: 500, error: err });
+            res.status('500').send({ status: 500, error: err });
         }
 
 
@@ -470,7 +470,7 @@ var addSession = function (req, res) {
                             {
                                 if (patient.treatments[i].canceledTreatment || patient.treatments[i].treatmentPerformed) {
                                     console.log('Error updating session: tratamento realizado ou cancelado');
-                                    res.send('500', { status: 500, error: 'Tratamento realizado ou cancelado' });
+                                    res.status('500').send({ status: 500, error: 'Tratamento realizado ou cancelado' });
                                 }
                                 else {
 
@@ -479,7 +479,7 @@ var addSession = function (req, res) {
                                     patient.save(function (err, result) {
                                         if (err) {
                                             console.log('Error updating session: ' + err);
-                                            res.send('500', { status: 500, error: err });
+                                            res.status('500').send({ status: 500, error: err });
                                         } else {
                                             console.log('document(s) updated');
 
@@ -496,7 +496,7 @@ var addSession = function (req, res) {
                                                 }
                                                 else {
                                                     console.log('Error updating session: ' + err);
-                                                    res.send('500', { status: 500, error: err });
+                                                    res.status('500').send({ status: 500, error: err });
                                                 }
                                             });
                                         }
@@ -516,7 +516,7 @@ var addSession = function (req, res) {
             }
             else {
                 console.log(err);
-                res.send('500', { status: 500, error: err });
+                res.status('500').send({ status: 500, error: err });
             }
 
         });
@@ -525,7 +525,7 @@ var addSession = function (req, res) {
 
 var uptSession = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
     }
     else {
 
@@ -574,7 +574,7 @@ var uptSession = function (req, res) {
 
                 } else {
                     console.log('Error updating session: ' + err);
-                    res.send('500', { status: 500, error: err });
+                    res.status('500').send({ status: 500, error: err });
                 }
             });
         }
@@ -583,7 +583,7 @@ var uptSession = function (req, res) {
 
 var delSession = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
     }
     else {
         var idPatient = req.params.idPatient;
@@ -605,7 +605,7 @@ var delSession = function (req, res) {
                 }
             }
             else {
-                return res.send('500', { status: 500, error: 'Sessao nao encontrada' });
+                return res.status('500').send({ status: 500, error: 'Sessao nao encontrada' });
             }
         });
     }
@@ -613,7 +613,7 @@ var delSession = function (req, res) {
 
 var putSession = function (req, res) {
     if (!accountRoute.isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
     }
     else {
 

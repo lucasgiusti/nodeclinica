@@ -53,7 +53,7 @@ function registerAccount(res, accountNew) {
     AccountModel.register(new AccountModel({ username: accountNew.username, dateInclusion: new Date(), type: accountNew.type }), accountNew.password, function (err, account) {
         if (err) {
             console.log('Error updating account: ' + err);
-            res.send('500', { status: 500, error: err });
+            res.status('500').send({ status: 500, error: err });
         }
         else {
             console.log('document(s) updated');
@@ -67,7 +67,7 @@ function registerAccount(res, accountNew) {
 //************************************************************
 var auth = function (req, res, next) {
     if (!req.isAuthenticated())
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
     else
         next();
 };
@@ -89,7 +89,7 @@ var loggedtest = function (req, res) {
     if (req.user)
         res.send({ 'username': req.user.username, 'type': req.user.type });
     else
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
 };
 
 var login = passport.authenticate('local', { successRedirect: '/', failureRedirect: '/signin.html?return=false' });
@@ -113,7 +113,7 @@ var findByUserName = function (req, res) {
 
 var putAccount = function (req, res) {
     if (!isAuthorized(req.user.type, 'MANUTENCAO_CADASTRO')) {
-        res.send('401', { status: 401, error: 'Acesso Negado' });
+        res.status('401').send({ status: 401, error: 'Acesso Negado' });
     }
     else {
 
@@ -122,12 +122,12 @@ var putAccount = function (req, res) {
 
         if (accountNew.password.length < 6) {
             console.log('Error updating account: a senha deve ter mais de 5 caracteres');
-            res.send('500', { status: 500, error: 'A senha deve ter mais de 5 caracteres' });
+            res.status('500').send({ status: 500, error: 'A senha deve ter mais de 5 caracteres' });
         }
         else {
             if (accountNew.password != accountNew.passwordconfirm) {
                 console.log('Error updating account: confirmacao de senha invalida');
-                res.send('500', { status: 500, error: 'Confirmação de senha inválida' });
+                res.status('500').send({ status: 500, error: 'Confirmação de senha inválida' });
             }
             else {
 
@@ -144,7 +144,7 @@ var putAccount = function (req, res) {
 
                     } else {
                         console.log('Error updating account: ' + err);
-                        res.send('500', { status: 500, error: err });
+                        res.status('500').send({ status: 500, error: err });
                     }
                 });
             }

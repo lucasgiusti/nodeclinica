@@ -31,10 +31,11 @@ var application_root = __dirname,
 
 // Config
         app.set('port', process.env.PORT || 3000);
+        app.use(bodyParser.urlencoded({ extended: false }));
+        app.use(bodyParser.json());
+        app.use(session({ secret: 'nodeclinicakey', resave: true, saveUninitialized: true }));
         app.use(express.static(path.join(__dirname, 'public')));
         app.use(cookieParser());
-        app.use(session({ secret: 'somesecrettokenhere' }));
-        app.use(bodyParser());
         app.use(function (req, res, next) {
             if (req.method == 'POST' && req.url == '/login') {
 
@@ -87,7 +88,7 @@ app.get('/students/registration/:registration', auth, studentRoute.getStudentsBy
 app.get('/students/:id', auth, studentRoute.getStudentsById);
 app.get('/studentsactive', auth, studentRoute.getStudentsActive);
 app.put('/students/:id', auth, studentRoute.putStudent);
-app.del('/students/:id', auth, studentRoute.delStudent);
+app.delete('/students/:id', auth, studentRoute.delStudent);
 app.post('/students', auth, studentRoute.postStudent);
 
 // TEACHERS
@@ -98,7 +99,7 @@ app.get('/teachers/registration/:registration', auth, teacherRoute.getTeachersBy
 app.get('/teachers/:id', auth, teacherRoute.getTeachersById);
 app.get('/teachersactive', auth, teacherRoute.getTeachersActive);
 app.put('/teachers/:id', auth, teacherRoute.putTeacher);
-app.del('/teachers/:id', auth, teacherRoute.delTeacher);
+app.delete('/teachers/:id', auth, teacherRoute.delTeacher);
 app.post('/teachers', auth, teacherRoute.postTeacher);
 
 // ATTENDANTS
@@ -108,7 +109,7 @@ app.get('/attendants/cpf/:cpf', auth, attendantRoute.getAttendantsByCpf);
 app.get('/attendants/registration/:registration', auth, attendantRoute.getAttendantsByRegistration);
 app.get('/attendants/:id', auth, attendantRoute.getAttendantsById);
 app.put('/attendants/:id', auth, attendantRoute.putAttendant);
-app.del('/attendants/:id', auth, attendantRoute.delAttendant);
+app.delete('/attendants/:id', auth, attendantRoute.delAttendant);
 app.post('/attendants', auth, attendantRoute.postAttendant);
 
 // MANAGERS
@@ -118,7 +119,7 @@ app.get('/managers/cpf/:cpf', auth, managerRoute.getManagersByCpf);
 app.get('/managers/registration/:registration', auth, managerRoute.getManagersByRegistration);
 app.get('/managers/:id', auth, managerRoute.getManagersById);
 app.put('/managers/:id', auth, managerRoute.putManager);
-app.del('/managers/:id', auth, managerRoute.delManager);
+app.delete('/managers/:id', auth, managerRoute.delManager);
 app.post('/managers', auth, managerRoute.postManager);
 
 // PATIENTS
@@ -128,14 +129,14 @@ app.get('/patients/cpf/:cpf', auth, patientRoute.getPatientsByCpf);
 app.get('/patients/:id', auth, patientRoute.getPatientsById);
 app.get('/patients/painel/:type', auth, patientRoute.getPatientsByPainel);
 app.put('/patients/:id', auth, patientRoute.putPatient);
-app.del('/patients/:id', auth, patientRoute.delPatient);
+app.delete('/patients/:id', auth, patientRoute.delPatient);
 app.post('/patients', auth, patientRoute.postPatient);
 
 // TREATMENTS
 app.get('/patients/:idPatient/treatments', auth, treatmentRoute.getTreatmentsAll);
 app.get('/patients/:idPatient/treatments/:id', auth, treatmentRoute.getTreatmentsById);
 app.post('/patients/:idPatient/treatments', auth, treatmentRoute.postTreatment);
-app.del('/patients/:idPatient/treatments/:id', auth, treatmentRoute.delTreatment);
+app.delete('/patients/:idPatient/treatments/:id', auth, treatmentRoute.delTreatment);
 app.put('/patients/:idPatient/treatments/:id', auth, treatmentRoute.putTreatment);
 //************************************************************
 
@@ -144,7 +145,7 @@ app.get('/patients/:idPatient/treatments/:idTreatment/sessions', auth, sessionRo
 app.get('/patients/:idPatient/treatments/:idTreatment/sessions/:id', auth, sessionRoute.getSessionsById);
 app.get('/sessions/:id/type/:type', auth, sessionRoute.getSessionsByType);
 app.post('/patients/:idPatient/treatments/:idTreatment/sessions', auth, sessionRoute.postSession);
-app.del('/patients/:idPatient/treatments/:idTreatment/sessions/:id', auth, sessionRoute.delSession);
+app.delete('/patients/:idPatient/treatments/:idTreatment/sessions/:id', auth, sessionRoute.delSession);
 app.put('/patients/:idPatient/treatments/:idTreatment/sessions/:id', auth, sessionRoute.putSession);
 
 // PAINEL
@@ -164,5 +165,5 @@ app.get('/xmlcompleteusers', auth, userRoute.getXmlCompleteUsersAll);
 
 // Launch server
 http.createServer(app).listen(app.get('port'), function () {
-    console.log("Node Application server listening on port " + app.get('port'));
+    console.log("Node Clinica Application server listening on port " + app.get('port'));
 });
