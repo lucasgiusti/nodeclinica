@@ -9,6 +9,12 @@ mesmos.
 
 <br/>
 <br/>
+Acesse a aplicação:
+http://nodeclinica.azurewebsites.net/
+ usuário: admin
+ senha: admin
+<br/>
+<br/>
 Referências:
  - http://nodejs.org (linguagem javascript no servidor)
  - Restfull API
